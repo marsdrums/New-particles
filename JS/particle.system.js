@@ -6,9 +6,9 @@ var forces = [];
 var obstacles = [];
 
 //Textures and particle shader__________________________________________________________________________
-var emiMat = new JitterMatrix(4, "float32", 1,1);
-var forMat = new JitterMatrix(4, "float32", 1,1);
-var obsMat = new JitterMatrix(4, "float32", 1,1);
+var emiMat = new JitterMatrix(4, "float32", 1,2);
+var forMat = new JitterMatrix(4, "float32", 1,2);
+var obsMat = new JitterMatrix(4, "float32", 1,2);
 
 var emiTex = new JitterObject("jit.gl.texture", "part-ctx");
 var forTex = new JitterObject("jit.gl.texture", "part-ctx");
@@ -61,12 +61,15 @@ partShader.activeinput = 0;	partShader.jit_gl_texture(inPosAgeTex.name);
 var counter = 0;
 
 //utilities_______________________________________________________________________________________
-var defaultPosAgeTex = new JitterMatrix(4, "float32", 1,1);
+var defaultPosAgeTex = new JitterMatrix(4, "float32", 2000,2000);
 	defaultPosAgeTex.setall(0);
-var defaultVelMassTex = new JitterMatrix(4, "float32", 1,1);
+var defaultVelMassTex = new JitterMatrix(4, "float32", 2000,2000);
 	defaultVelMassTex.setall(1,0,0,0);
-var defaultAliveMatTex = new JitterMatrix(4, "float32", 1,1);
+var defaultAliveMatTex = new JitterMatrix(4, "float32", 2000,2000);
 	defaultAliveMatTex.setall(0);
+	inPosAgeTex.jit_matrix(defaultPosAgeTex.name);
+	inVelMassTex.jit_matrix(defaultVelMassTex.name);
+	inAliveMatTex.jit_matrix(defaultAliveMatTex.name);
 
 //rendering tools___________________________________________________________________________________
 var particle_rendering = new JitterObject("jit.gl.shader", "part-ctx");
@@ -77,10 +80,12 @@ var mesh = new JitterObject("jit.gl.mesh", "part-ctx");
 mesh.draw_mode = "points";
 mesh.shader = "particle.rendering";
 mesh.texture = ["inPosAgeTex", "inVelMassTex", "inAliveMatTex"];
+mesh.blend_enable = 1;
+mesh.depth_enable = 0;
 
 var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
-for(var x = 0; x < 2000; x++){
-	for(var y = 0; y < 2000; y++){
+for(var x = 0.5; x < 2000; x+=1){
+	for(var y = 0.5; y < 2000; y+=1){
 		uvMat.setcell(x, y, "val", x, y, 0);
 	}
 }
@@ -133,10 +138,10 @@ function read_and_parse(){
 
 			var thisSubpatcher = objs[k].srcobject.subpatcher();
 
-			//get the value of the object connected to the outlet
+			//get the value of the object connected to the outlet of that abstraction
 			var thisOutlet = findoutlet(thisSubpatcher);
 			var agent = thisOutlet.patchcords.inputs[0].srcobject.getattr('boxatoms');
-			agent.shift();
+			//agent.shift();
 
 			switch (agent[0]) {
 			  case "force":
@@ -172,12 +177,11 @@ function transfer_data_to_texture(){
 	if(emitters.length > 0){
 		emiMat.dim = [emitters.length, 2];
 		emiTex.dim = emiMat.dim;
-		var emit_from, emit_to;
+		var emit_to;
 		for(var i = 0; i < emitters.length; i++){
-			emit_from = counter;
-			emit_to = (counter + emitters[i].rate) % 4000000;;
+			emit_to = (counter + emitters[i].rate) % 4000000;
 			emiMat.setcell(i, 0, "val", emitters[i].mass, emitters[i].position);
-			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed, emit_from);
+			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed, counter);
 			counter = emit_to;
 		}	
 		emiTex.jit_matrix(emiMat.name);	
@@ -222,6 +226,8 @@ function feedback_textures(){
 	inAliveMatTex.jit_gl_texture(partShader.out_name[2]);
 	inVelMassTex.jit_gl_texture(partShader.out_name[1]);
 	inPosAgeTex.jit_gl_texture(partShader.out_name[0]); 
+	//outlet(2, "jit_gl_texture", inAliveMatTex.name);
+	//outlet(1, "jit_gl_texture", inVelMassTex.name);
 	//outlet(0, "jit_gl_texture", inPosAgeTex.name);
 }
 
@@ -230,7 +236,7 @@ function bang(){
 	read_and_parse();
 	transfer_data_to_texture();
 	process_particles();
-	draw_particles();
 	feedback_textures();
+	draw_particles();
 
 }

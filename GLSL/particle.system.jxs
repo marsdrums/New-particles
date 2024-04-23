@@ -130,7 +130,7 @@ vec3 randomUnitVector(inout uint seed){
 }
 
 void get_particle_current_state(inout particle p){ 
-	p.id = gl_FragCoord.x - 0.5 + (gl_FragCoord.y - 0.5)*texDim0.x; 
+	p.id = floor(jit_in.texcoord.x) + floor(jit_in.texcoord.y)*2000;//texDim0.x; 
 	p.rng = uint(gl_FragCoord.x*3772) * (uint(gl_FragCoord.y*78223) + uint(1)) + uint(time);
 	vec4 lookup0 = texture(posAgeTex, jit_in.texcoord);
 	vec4 lookup1 = texture(velMassTex, jit_in.texcoord);
@@ -146,9 +146,14 @@ void get_particle_current_state(inout particle p){
 
 void update_particle(inout particle p){
 
+	if(p.age <= 0){
+		p.alive = 0;
+		return;
+	} 
 	p.pos += p.vel;
 	p.age = max(0., p.age-0.01); //change with proper life expectancy
 	//also, use DELTA to control aging in ms and indipendently of frame rate
+	return;
 }
 
 void generate_particle(inout particle p, in new_particle newp){
@@ -158,20 +163,26 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.pos = newp.pos;
 	p.dir = randomUnitVector(p.rng);
 	p.vel = p.dir*newp.speed;
+	p.pos += p.vel * RandomFloat01(p.rng);
 	p.mass = newp.mass;
+}
+
+bool to_generate(float id, float emiFrom, float emiTo){
+
+	if(emiFrom < emiTo) { return id >= emiFrom && id < emiTo; }
+	else { return id >= emiFrom || id < emiTo; }
 }
 
 void emit_particles(inout particle p){
 
 	new_particle newp;
-	//int counter = mod(frame, texDim0.x*texDim0.y);
 
 	for(float f = 0.5; f < numEmitters; f+=1.0){
 		vec4 lookup1 = texture(emiTex, vec2(f, 1.5));
 		float emiFrom = lookup1.z;
 		float emiTo = lookup1.w;
 
-		if(p.id < emiFrom || p.id >= emiTo) continue;
+		if(!to_generate(p.id, emiFrom, emiTo)) continue;
 
 		newp.pos = texture(emiTex, vec2(f, 0.5)).xyz;
 		newp.mass = lookup1.x;

@@ -43,8 +43,7 @@
 					"id" : "obj-6",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
+					"numoutlets" : 0,
 					"patching_rect" : [ 113.0, 126.0, 113.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"filename" : "particle.system.js",
