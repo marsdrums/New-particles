@@ -73,12 +73,11 @@ var defaultAliveMatTex = new JitterMatrix(4, "float32", 2000,2000);
 
 //rendering tools___________________________________________________________________________________
 var particle_rendering = new JitterObject("jit.gl.shader", "part-ctx");
-particle_rendering.name = "particle.rendering";
 particle_rendering.file = "particle.rendering.jxs";
 
 var mesh = new JitterObject("jit.gl.mesh", "part-ctx");
 mesh.draw_mode = "points";
-mesh.shader = "particle.rendering";
+mesh.shader = particle_rendering.name;
 mesh.texture = ["inPosAgeTex", "inVelMassTex", "inAliveMatTex"];
 mesh.blend_enable = 1;
 mesh.depth_enable = 0;

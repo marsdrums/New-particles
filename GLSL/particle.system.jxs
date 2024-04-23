@@ -23,6 +23,7 @@
 	//time
 	<param name="time" type="float" state="TIME" />
 	<param name="frame" type="int" state="FRAME" />
+	<param name="deltaTime" type="float" state="DELTA_TIME" />
 
 	<language name="glsl" version="1.5">
 
@@ -45,6 +46,7 @@
 
 		<bind param="time" program="fp" />
 		<bind param="frame" program="fp" />
+		<bind param="deltaTime" program="fp" />
 
 		<program name="vp" type="vertex"  >
 <![CDATA[
@@ -81,7 +83,8 @@ layout (location = 2) out vec4 outAliveMat;
 
 uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, emiTex, forTex, obsTex;
 uniform vec2 texDim0;
-uniform float numEmitters, numForces, numObstacles, time, frame;
+uniform float numEmitters, numForces, numObstacles;
+uniform float time, frame, deltaTime;
 
 struct particle{
 	vec3 pos;

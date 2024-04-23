@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 73.0, 481.0, 640.0, 480.0 ],
+		"rect" : [ 73.0, 481.0, 852.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,6 +40,19 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-38",
+					"linecount" : 2,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 46.0, 436.0, 612.0, 33.0 ],
+					"presentation_linecount" : 3,
+					"text" : "open design questions:\nhow to make users implement thir own attractors/obstacles and rendering ? @output_texture + lambda inlet?"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"format" : 6,
 					"id" : "obj-34",
 					"maxclass" : "flonum",
@@ -60,7 +73,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 290.0, 135.0, 50.0, 22.0 ]
+					"patching_rect" : [ 291.0, 135.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -96,20 +109,20 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 195.0, 249.0, 331.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 2. 0. 0. @rate 400 @speed 0.03"
+					"patching_rect" : [ 233.0, 231.0, 337.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 2. 0. 0. @rate 2000 @speed 0.03"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-13",
-					"linecount" : 3,
+					"linecount" : 4,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 46.0, 367.0, 486.0, 47.0 ],
-					"text" : "JS related questions:\n- how can i use retrieve the auto-generated name of the rendering context?\n- how can i use jit.gl.node to capture jit.gl.particle to texture?"
+					"patching_rect" : [ 46.0, 367.0, 612.0, 60.0 ],
+					"text" : "JS related questions:\n- how can i retrieve the auto-generated name of the rendering context?\n- how to use incremental namix (#) to avoid conflicts between shader names (or other solutions)\n- how to use a jit.gl.node in the main patch to capture to texture jit.gl.particles?"
 				}
 
 			}
@@ -158,7 +171,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 222.0, 286.0, 337.0, 22.0 ],
+					"patching_rect" : [ 233.0, 275.0, 337.0, 22.0 ],
 					"text" : "jit.particle.emitter @position 0. 0. 0. @rate 2000 @speed 0.02"
 				}
 
