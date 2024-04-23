@@ -1,9 +1,9 @@
 <jittershader name="default">
 	<description>Default Slab </description>
 	//params
-	<param name="numEmitters" type="int" default="0" />
-	<param name="numForces" type="int" default="0" />
-	<param name="numObstacles" type="int" default="0" />
+	<param name="numEmitters" type="float" default="0." />
+	<param name="numForces" type="float" default="0." />
+	<param name="numObstacles" type="float" default="0." />
 
 	//textures
 	<param name="posAgeTex" type="int" default="0" />
@@ -80,9 +80,8 @@ layout (location = 1) out vec4 outVelMass;
 layout (location = 2) out vec4 outAliveMat;
 
 uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, emiTex, forTex, obsTex;
-uniform int numEmitters, numForces, numObstacles;
 uniform vec2 texDim0;
-uniform float time, frame;
+uniform float numEmitters, numForces, numObstacles, time, frame;
 
 struct particle{
 	vec3 pos;
@@ -147,18 +146,9 @@ void get_particle_current_state(inout particle p){
 
 void update_particle(inout particle p){
 
-	//if(p.alive == 0) return;
 	p.pos += p.vel;
-	p.age = max(0., p.age-0.0001); //change with proper life expectancy
-
-}
-
-void kill_particle(inout particle p){
-
-	if(p.alive > 0 && p.age <= 0){
-		p.age = 0;
-		p.alive = 0;
-	}
+	p.age = max(0., p.age-0.01); //change with proper life expectancy
+	//also, use DELTA to control aging in ms and indipendently of frame rate
 }
 
 void generate_particle(inout particle p, in new_particle newp){
@@ -175,19 +165,19 @@ void emit_particles(inout particle p){
 
 	new_particle newp;
 	//int counter = mod(frame, texDim0.x*texDim0.y);
-	float f;
-	for(int i = 0; i < numEmitters; i++){
-		f = 0.5 + float(i)*2;
-		newp.pos = texture(emiTex, vec2(f, 0.5)).xyz;
-		vec4 lookup1 = texture(emiTex, vec2(f+1, 0.5));
-		newp.mass = lookup1.x;
-		newp.speed = lookup1.y;
+
+	for(float f = 0.5; f < numEmitters; f+=1.0){
+		vec4 lookup1 = texture(emiTex, vec2(f, 1.5));
 		float emiFrom = lookup1.z;
 		float emiTo = lookup1.w;
-		if(p.id >= emiFrom && p.id < emiTo){
-			generate_particle(p, newp);
-			return;
-		}
+
+		if(p.id < emiFrom || p.id >= emiTo) continue;
+
+		newp.pos = texture(emiTex, vec2(f, 0.5)).xyz;
+		newp.mass = lookup1.x;
+		newp.speed = lookup1.y;
+		generate_particle(p, newp);
+		return;
 	}
 }
 
@@ -203,10 +193,8 @@ void main(void) {
 	particle p;
 
 	get_particle_current_state(p);
-	emit_particles(p);
-	//kill_particle(p);
 	update_particle(p);
-
+	emit_particles(p);
 	output_textures(p);
 }
 ]]>

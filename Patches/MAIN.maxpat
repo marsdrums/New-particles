@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 636.0, 372.0, 640.0, 480.0 ],
+		"rect" : [ 140.0, 481.0, 640.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -39,6 +39,18 @@
 		"subpatcher_template" : "",
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
+				"box" : 				{
+					"id" : "obj-13",
+					"linecount" : 3,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 46.0, 367.0, 486.0, 47.0 ],
+					"text" : "open questions:\n- how can i use retrieve the auto-generated name of the rendering context?\n- how can i use jit.gl.node to capture jit.gl.particle to texture?"
+				}
+
+			}
+, 			{
 				"box" : 				{
 					"fontface" : 0,
 					"fontname" : "Arial",
@@ -94,7 +106,7 @@
 						}
 ,
 						"classnamespace" : "box",
-						"rect" : [ 635.0, 197.0, 640.0, 480.0 ],
+						"rect" : [ 534.0, 571.0, 640.0, 480.0 ],
 						"bglocked" : 0,
 						"openinpresentation" : 0,
 						"default_fontsize" : 12.0,
@@ -122,6 +134,7 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"assistshowspatchername" : 0,
+						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-4",
@@ -188,7 +201,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 400.0, 126.0, 35.0, 22.0 ],
+					"patching_rect" : [ 399.0, 121.0, 35.0, 22.0 ],
 					"text" : "reset"
 				}
 
@@ -491,8 +504,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "jit_matrix", "bang", "" ],
-					"patching_rect" : [ 63.0, 70.0, 93.0, 22.0 ],
-					"text" : "jit.world part-ctx"
+					"patching_rect" : [ 63.0, 83.0, 292.0, 22.0 ],
+					"text" : "jit.world part-ctx @displaylink 0 @fps 400 @floating 1"
 				}
 
 			}
