@@ -1,0 +1,77 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="posAgeTex" type="int" default="0" />
+	<param name="velMassTex" type="int" default="1" />
+	<param name="aliveMatTex" type="int" default="2" />
+	<param name="uv" type="vec3" state="POSITION" />
+	<param name="MVP" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	<language name="glsl" version="1.5">
+		<bind param="posAgeTex" program="gp" />
+		<bind param="velMassTex" program="gp" />
+		<bind param="aliveMatTex" program="gp" />
+		<bind param="uv" program="vp" />
+		<bind param="MVP" program="gp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+in vec3 uv;
+
+out jit_PerVertex {
+	flat vec4 color;	
+} jit_out;
+
+void main() {	
+	gl_Position = vec4(uv, 1);	
+	jit_out.color = vec4(1);
+}
+]]>
+		</program>
+		<program name="gp" type="geometry">
+<![CDATA[
+#version 330 core
+
+layout (points) in;
+layout (points, max_vertices=1) out;
+
+uniform mat4 MVP;
+uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex;
+
+in jit_PerVertex {
+	flat vec4 color;	
+} jit_in[];
+
+out jit_PerVertex {
+	flat vec4 color;	
+};
+
+void main() {
+
+	vec4 lookup = texture(posAgeTex, gl_in[0].gl_Position.xy);
+
+	if(lookup.w <= 0) return;
+
+	gl_Position = MVP * vec4(lookup.xyz, 1);
+	color = jit_in[0].color;
+	EmitVertex();
+	
+	EndPrimitive();
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+in jit_PerVertex {
+	flat vec4 color;
+} jit_in;
+
+out vec4 color;
+
+void main() {
+	color = vec4(1);
+}	
+]]>
+		</program>
+	</language>
+</jittershader>

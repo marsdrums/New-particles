@@ -1,0 +1,215 @@
+<jittershader name="default">
+	<description>Default Slab </description>
+	//params
+	<param name="numEmitters" type="int" default="0" />
+	<param name="numForces" type="int" default="0" />
+	<param name="numObstacles" type="int" default="0" />
+
+	//textures
+	<param name="posAgeTex" type="int" default="0" />
+	<param name="velMassTex" type="int" default="1" />
+	<param name="aliveMatTex" type="int" default="2" />
+	<param name="emiTex" type="int" default="3" />
+	<param name="forTex" type="int" default="4" />
+	<param name="obsTex" type="int" default="5" />
+
+	//states
+	<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	<param name="textureMatrix0" type="mat4" state="TEXTURE0_MATRIX" />
+	<param name="position" type="vec3" state="POSITION" />
+	<param name="texcoord" type="vec2" state="TEXCOORD" />
+	<param name="texDim0" type="vec2" state="TEXDIM0" />
+
+	//time
+	<param name="time" type="float" state="TIME" />
+	<param name="frame" type="int" state="FRAME" />
+
+	<language name="glsl" version="1.5">
+
+		<bind param="numEmitters" program="fp" />
+		<bind param="numForces" program="fp" />
+		<bind param="numObstacles" program="fp" />
+
+		<bind param="posAgeTex" program="fp" />
+		<bind param="velMassTex" program="fp" />
+		<bind param="aliveMatTex" program="fp" />
+		<bind param="emiTex" program="fp" />
+		<bind param="forTex" program="fp" />
+		<bind param="obsTex" program="fp" />
+		<bind param="texDim0" program="fp" />
+
+		<bind param="modelViewProjectionMatrix" program="vp" />
+		<bind param="textureMatrix0" program="vp" />
+		<bind param="position" program="vp" />
+		<bind param="texcoord" program="vp" />
+
+		<bind param="time" program="fp" />
+		<bind param="frame" program="fp" />
+
+		<program name="vp" type="vertex"  >
+<![CDATA[
+	#version 330 core
+	
+	in vec3 position;
+	in vec2 texcoord;
+	out jit_PerVertex {
+		vec2 texcoord;
+	} jit_out;
+	uniform mat4 modelViewProjectionMatrix;
+	uniform mat4 textureMatrix0;
+	
+	void main(void) {
+		gl_Position = modelViewProjectionMatrix*vec4(position, 1.);
+		jit_out.texcoord = vec2(textureMatrix0*vec4(texcoord, 0., 1.));
+	}
+]]>
+</program>
+		
+<program name="fp" type="fragment"  >
+<![CDATA[
+#version 330 core
+#define TWOPI 6.28318530718
+
+in jit_PerVertex {
+	vec2 texcoord;
+
+} jit_in;
+
+layout (location = 0) out vec4 outPosAge;
+layout (location = 1) out vec4 outVelMass;
+layout (location = 2) out vec4 outAliveMat;
+
+uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, emiTex, forTex, obsTex;
+uniform int numEmitters, numForces, numObstacles;
+uniform vec2 texDim0;
+uniform float time, frame;
+
+struct particle{
+	vec3 pos;
+	vec3 dir;
+	vec3 vel;
+	float size;
+	float age;
+	float alive;
+	float mass;
+	float mat; //i need to pass material from JS
+	float id;
+	uint rng;
+};
+
+struct new_particle{
+	vec3 pos;
+	vec3 vel;
+	float size;
+	float type;
+	float speed;
+	float mass;
+	float mat;
+};
+
+//Random functions
+uint wang_hash(inout uint seed){
+
+    seed = uint(seed ^ uint(61)) ^ uint(seed >> uint(16));
+    seed *= uint(9);
+    seed = seed ^ (seed >> 4);
+    seed *= uint(0x27d4eb2d);
+    seed = seed ^ (seed >> 15);
+    return seed;
+}
+ 
+float RandomFloat01(inout uint seed) { return float(wang_hash(seed)) / 4294967296.0; }
+
+vec3 randomUnitVector(inout uint seed){
+
+    float z = RandomFloat01(seed) * 2.0f - 1.0f;
+    float a = RandomFloat01(seed) * TWOPI;
+    float r = sqrt(1.0f - z * z);
+    float x = r * cos(a);
+    float y = r * sin(a);
+    return vec3(x, y, z);
+}
+
+void get_particle_current_state(inout particle p){ 
+	p.id = gl_FragCoord.x - 0.5 + (gl_FragCoord.y - 0.5)*texDim0.x; 
+	p.rng = uint(gl_FragCoord.x*3772) * (uint(gl_FragCoord.y*78223) + uint(1)) + uint(time);
+	vec4 lookup0 = texture(posAgeTex, jit_in.texcoord);
+	vec4 lookup1 = texture(velMassTex, jit_in.texcoord);
+	vec4 lookup2 = texture(aliveMatTex, jit_in.texcoord);
+	p.pos = lookup0.xyz;
+	p.age = lookup0.w;
+	p.vel = lookup1.xyz;
+	p.mass = lookup1.w;
+	p.alive = lookup2.x;
+	p.mat = lookup2.y;
+	//*** p.dir is missing. Figure out where to compute it
+}
+
+void update_particle(inout particle p){
+
+	//if(p.alive == 0) return;
+	p.pos += p.vel;
+	p.age = max(0., p.age-0.0001); //change with proper life expectancy
+
+}
+
+void kill_particle(inout particle p){
+
+	if(p.alive > 0 && p.age <= 0){
+		p.age = 0;
+		p.alive = 0;
+	}
+}
+
+void generate_particle(inout particle p, in new_particle newp){
+
+	p.alive = 1;
+	p.age = 1;
+	p.pos = newp.pos;
+	p.dir = randomUnitVector(p.rng);
+	p.vel = p.dir*newp.speed;
+	p.mass = newp.mass;
+}
+
+void emit_particles(inout particle p){
+
+	new_particle newp;
+	//int counter = mod(frame, texDim0.x*texDim0.y);
+	float f;
+	for(int i = 0; i < numEmitters; i++){
+		f = 0.5 + float(i)*2;
+		newp.pos = texture(emiTex, vec2(f, 0.5)).xyz;
+		vec4 lookup1 = texture(emiTex, vec2(f+1, 0.5));
+		newp.mass = lookup1.x;
+		newp.speed = lookup1.y;
+		float emiFrom = lookup1.z;
+		float emiTo = lookup1.w;
+		if(p.id >= emiFrom && p.id < emiTo){
+			generate_particle(p, newp);
+			return;
+		}
+	}
+}
+
+void output_textures(in particle p){
+
+	outPosAge = vec4(p.pos, p.age);
+	outVelMass = vec4(p.vel, p.mass);
+	outAliveMat = vec4(p.alive, p.mat, 0, 0);
+}
+
+void main(void) {
+
+	particle p;
+
+	get_particle_current_state(p);
+	emit_particles(p);
+	//kill_particle(p);
+	update_particle(p);
+
+	output_textures(p);
+}
+]]>
+</program>
+</language>
+</jittershader>
