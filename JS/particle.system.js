@@ -1,4 +1,4 @@
-autowhatch = 1; inlets = 1; outlets = 1;
+autowhatch = 1; inlets = 1; outlets = 0;
 
 //Arrays________________________________________________________________________________________________
 var emitters = [];
