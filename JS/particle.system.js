@@ -83,11 +83,9 @@ mesh.blend_enable = 1;
 mesh.depth_enable = 0;
 
 var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
-for(var x = 0.5; x < 2000; x+=1){
-	for(var y = 0.5; y < 2000; y+=1){
-		uvMat.setcell(x, y, "val", x, y, 0);
-	}
-}
+uvMat.exprfill(0, "cell[0]");
+uvMat.exprfill(1, "cell[1]");
+uvMat.op("+", 0.5, 0.5, 0.);
 
 mesh.jit_matrix(uvMat.name);
 

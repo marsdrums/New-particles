@@ -167,7 +167,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.age = 1;
 	p.dir = randomUnitVector(p.rng);
 	p.vel = p.dir*newp.speed;
-	p.vel -= newp.emivel*randomUnitVector(p.rng);
+	//p.vel += newp.emivel*randomUnitVector(p.rng);
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
 	p.mass = newp.mass;
@@ -190,10 +190,11 @@ void emit_particles(inout particle p){
 
 		if(!to_generate(p.id, emiFrom, emiTo)) continue;
 
-		newp.pos = texture(emiTex, vec2(f, 0.5)).xyz;
+		vec4 lookup0 = texture(emiTex, vec2(f, 0.5));
+		newp.mass = lookup0.w;
+		newp.pos = lookup0.xyz;
 		newp.prevpos = texture(emiTex, vec2(f, 2.5)).xyz;
 		newp.emivel = texture(emiTex, vec2(f, 3.5)).xyz;
-		newp.mass = lookup1.x;
 		newp.speed = lookup1.y;
 		generate_particle(p, newp);
 		return;
@@ -206,8 +207,8 @@ void apply_forces(inout particle p){
 
 	for(float f = 0.5; f < numForces; f+=1.0){
 		vec4 lookup0 = texture(forTex, vec2(f, 0.5));
-		float drag = 0.000001/p.mass;
-		//p.vel /= drag + 1; 
+		float drag = lookup0.y/p.mass;
+		p.vel /= drag + 1; 
 	}
 }
 

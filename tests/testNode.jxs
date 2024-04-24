@@ -1,0 +1,40 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="uv" type="vec4" state="POSITION" />
+	<language name="glsl" version="1.5">
+		<bind param="uv" program="vp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+in vec4 uv;
+
+out jit_PerVertex {
+	smooth vec4 color;	
+} jit_out;
+
+void main() {	
+	vec2 pos = (uv.xy/1999)*2 - 1;
+	gl_Position = vec4(pos,0,1);//modelViewProjectionMatrix * vec4(position, 1.);	
+	jit_out.color = vec4(uv.xy/1999, 0, 1);
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+in jit_PerVertex {
+	smooth vec4 color;
+} jit_in;
+
+out vec4 color[2];
+
+void main() {
+	color[0] = jit_in.color;
+	color[1] = jit_in.color.grba;
+
+}	
+]]>
+		</program>
+	</language>
+</jittershader>
