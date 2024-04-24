@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 73.0, 481.0, 852.0, 480.0 ],
+		"rect" : [ 34.0, 100.0, 1223.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,13 +40,108 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-18",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 663.0, 23.0, 68.0, 22.0 ],
+					"text" : "anim_reset"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-15",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "float" ],
+					"patching_rect" : [ 671.75, 122.0, 33.0, 22.0 ],
+					"text" : "* 0.1"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-12",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "float" ],
+					"patching_rect" : [ 677.0, 206.0, 29.5, 22.0 ],
+					"text" : "* 3."
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-14",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "float" ],
+					"patching_rect" : [ 676.0, 175.0, 24.0, 22.0 ],
+					"text" : "sin"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-8",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "float" ],
+					"patching_rect" : [ 606.0, 122.0, 40.0, 22.0 ],
+					"text" : "* 0.03"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-5",
+					"maxclass" : "newobj",
+					"numinlets" : 5,
+					"numoutlets" : 4,
+					"outlettype" : [ "int", "", "", "int" ],
+					"patching_rect" : [ 529.0, 80.0, 61.0, 22.0 ],
+					"text" : "counter"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-49",
+					"maxclass" : "newobj",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "float" ],
+					"patching_rect" : [ 452.666680157184601, 201.333339333534241, 29.5, 22.0 ],
+					"text" : "* 5."
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-48",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "float" ],
+					"patching_rect" : [ 452.0, 170.000005066394806, 24.0, 22.0 ],
+					"text" : "sin"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-38",
 					"linecount" : 2,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 46.0, 436.0, 612.0, 33.0 ],
-					"presentation_linecount" : 3,
+					"patching_rect" : [ 46.00000137090683, 514.000015318393707, 592.666684329509735, 33.0 ],
 					"text" : "open design questions:\nhow to make users implement thir own attractors/obstacles and rendering ? @output_texture + lambda inlet?"
 				}
 
@@ -60,7 +155,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 345.0, 135.0, 50.0, 22.0 ]
+					"patching_rect" : [ 374.333333333333314, 165.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -73,7 +168,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 291.0, 135.0, 50.0, 22.0 ]
+					"patching_rect" : [ 320.333333333333314, 165.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -86,7 +181,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 235.0, 135.0, 50.0, 22.0 ]
+					"patching_rect" : [ 264.333333333333314, 165.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -97,7 +192,7 @@
 					"numinlets" : 4,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 233.0, 182.0, 113.0, 22.0 ],
+					"patching_rect" : [ 233.0, 225.0, 113.0, 22.0 ],
 					"text" : "pak position 0. 0. 0."
 				}
 
@@ -109,8 +204,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 233.0, 231.0, 337.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 2. 0. 0. @rate 2000 @speed 0.03"
+					"patching_rect" : [ 233.0, 286.0, 337.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 2. 0. 0. @rate 6000 @speed 0.03"
 				}
 
 			}
@@ -121,8 +216,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 46.0, 367.0, 612.0, 60.0 ],
-					"text" : "JS related questions:\n- how can i retrieve the auto-generated name of the rendering context?\n- how to use incremental namix (#) to avoid conflicts between shader names (or other solutions)\n- how to use a jit.gl.node in the main patch to capture to texture jit.gl.particles?"
+					"patching_rect" : [ 46.00000137090683, 452.000013470649719, 592.666684329509735, 60.0 ],
+					"text" : "JS related questions:\n- how can i retrieve the auto-generated name of the rendering context?\n- how to use incremental naming (#) to avoid conflicts between shader names (or other solutions) ?\n- how to use a jit.gl.node in the main patch to capture to texture jit.gl.particles?"
 				}
 
 			}
@@ -166,18 +261,6 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-8",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 233.0, 275.0, 337.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 0. 0. @rate 2000 @speed 0.02"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-11",
 					"maxclass" : "message",
 					"numinlets" : 2,
@@ -195,89 +278,8 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patcher" : 					{
-						"fileversion" : 1,
-						"appversion" : 						{
-							"major" : 9,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64",
-							"modernui" : 1
-						}
-,
-						"classnamespace" : "box",
-						"rect" : [ 59.0, 119.0, 640.0, 480.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
-						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
-						"assistshowspatchername" : 0,
-						"boxes" : [ 							{
-								"box" : 								{
-									"id" : "obj-2",
-									"maxclass" : "newobj",
-									"numinlets" : 7,
-									"numoutlets" : 1,
-									"outlettype" : [ "" ],
-									"patching_rect" : [ 201.0, 165.0, 124.0, 22.0 ],
-									"text" : "pack force 1 1 1 1 1 1"
-								}
-
-							}
-, 							{
-								"box" : 								{
-									"comment" : "",
-									"id" : "obj-1",
-									"index" : 1,
-									"maxclass" : "outlet",
-									"numinlets" : 1,
-									"numoutlets" : 0,
-									"patching_rect" : [ 173.0, 270.0, 30.0, 30.0 ]
-								}
-
-							}
- ],
-						"lines" : [ 							{
-								"patchline" : 								{
-									"destination" : [ "obj-1", 0 ],
-									"source" : [ "obj-2", 0 ]
-								}
-
-							}
- ]
-					}
-,
-					"patching_rect" : [ 73.500000834465027, 207.0, 45.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
-					}
-,
-					"text" : "p force"
+					"patching_rect" : [ 73.500000834465027, 198.0, 89.0, 22.0 ],
+					"text" : "jit.particle.force"
 				}
 
 			}
@@ -362,7 +364,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 95.0, 236.0, 63.0, 22.0 ],
+					"patching_rect" : [ 104.0, 237.0, 63.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -420,7 +422,37 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-12", 0 ],
+					"source" : [ "obj-14", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-14", 0 ],
+					"source" : [ "obj-15", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-3", 0 ],
+					"source" : [ "obj-18", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-10", 0 ],
+					"order" : 1,
+					"source" : [ "obj-2", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"order" : 0,
 					"source" : [ "obj-2", 1 ]
 				}
 
@@ -469,6 +501,36 @@
 			}
 , 			{
 				"patchline" : 				{
+					"destination" : [ "obj-49", 0 ],
+					"source" : [ "obj-48", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-32", 0 ],
+					"source" : [ "obj-49", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-15", 0 ],
+					"order" : 0,
+					"source" : [ "obj-5", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-8", 0 ],
+					"order" : 1,
+					"source" : [ "obj-5", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-6", 0 ]
 				}
@@ -483,7 +545,7 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
+					"destination" : [ "obj-48", 0 ],
 					"source" : [ "obj-8", 0 ]
 				}
 
@@ -511,11 +573,14 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "jit.mo.time.mxo",
-				"type" : "iLaX"
+				"name" : "jit.particle.emitter.maxpat",
+				"bootpath" : "~/Documents/GitHub/New-particles/Patches",
+				"patcherrelativepath" : ".",
+				"type" : "JSON",
+				"implicit" : 1
 			}
 , 			{
-				"name" : "jit.particle.emitter.maxpat",
+				"name" : "jit.particle.force.maxpat",
 				"bootpath" : "~/Documents/GitHub/New-particles/Patches",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",

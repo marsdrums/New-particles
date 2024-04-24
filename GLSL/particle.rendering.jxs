@@ -51,7 +51,7 @@ void main() {
 	if(lookup.w <= 0) return;
 
 	gl_Position = MVP * vec4(lookup.xyz, 1);
-	color = jit_in[0].color;
+	color = vec4(1,1,1,0.3*lookup.w);
 	EmitVertex();
 	EndPrimitive();
 }
@@ -68,7 +68,7 @@ in jit_PerVertex {
 out vec4 color;
 
 void main() {
-	color = vec4(1,1,1,0.1);
+	color = jit_in.color;
 }	
 ]]>
 		</program>

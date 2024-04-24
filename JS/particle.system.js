@@ -143,26 +143,28 @@ function read_and_parse(){
 			//agent.shift();
 
 			switch (agent[0]) {
-			  case "force":
+			  	case "force":
 			    forces.push({	type: agent[1], 
-			    				position: [agent[2], agent[3], agent[4]], 
-			    				amount: agent[5]
+			    				amount: agent[2]
 			    			});
 			    break;
 
-			  case "obstacle":
+			  	case "obstacle":
 			    obstacles.push({	type: agent[1], 
 			    					position: [agent[2], agent[3], agent[4]], 
 			    					amount: agent[5]
 			    				});
 			    break;
 
-			  case "emitter": 
+			  	case "emitter": 
 			    emitters.push({	type: agent[1], 
 			    				rate: agent[2],
 			    				position: [agent[3], agent[4], agent[5]], 
 			    				speed: agent[6],
-			    				mass: agent[7]
+			    				mass: agent[7],
+			    				prevposition: [agent[8], agent[9], agent[10]],
+			    				velocity: [agent[3]-agent[8], agent[4]-agent[9], agent[5]-agent[10]],
+			    				matrix: agent[11]
 			    			});
 			    break;
 			}
@@ -174,13 +176,15 @@ function read_and_parse(){
 function transfer_data_to_texture(){
 
 	if(emitters.length > 0){
-		emiMat.dim = [emitters.length, 2];
+		emiMat.dim = [emitters.length, 4];
 		emiTex.dim = emiMat.dim;
 		var emit_to;
 		for(var i = 0; i < emitters.length; i++){
 			emit_to = (counter + emitters[i].rate) % 4000000;
 			emiMat.setcell(i, 0, "val", emitters[i].mass, emitters[i].position);
 			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed, counter);
+			emiMat.setcell(i, 2, "val", 0., emitters[i].prevposition);
+			emiMat.setcell(i, 3, "val", 0., emitters[i].velocity);
 			counter = emit_to;
 		}	
 		emiTex.jit_matrix(emiMat.name);	
@@ -190,8 +194,8 @@ function transfer_data_to_texture(){
 		forMat.dim = [forces.length, 2];
 		forTex.dim = forMat.dim;
 		for(var i = 0; i < forces.length; i++){
-			forMat.setcell(i, 0, "val", forces[i].rate, forces[i].position);
-			forMat.setcell(i, 1, "val", 1, forces[i].type, forces[i].speed, 0);
+			forMat.setcell(i, 0, "val", 0, forces[i].type, forces[i].amount, 0);
+			forMat.setcell(i, 1, "val", 0,0,0,0);
 		}	
 		forTex.jit_matrix(forMat.name);	
 	}
@@ -225,9 +229,6 @@ function feedback_textures(){
 	inAliveMatTex.jit_gl_texture(partShader.out_name[2]);
 	inVelMassTex.jit_gl_texture(partShader.out_name[1]);
 	inPosAgeTex.jit_gl_texture(partShader.out_name[0]); 
-	//outlet(2, "jit_gl_texture", inAliveMatTex.name);
-	//outlet(1, "jit_gl_texture", inVelMassTex.name);
-	//outlet(0, "jit_gl_texture", inPosAgeTex.name);
 }
 
 function bang(){
