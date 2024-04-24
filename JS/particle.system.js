@@ -99,9 +99,7 @@ function reset(){
 
 function findoutlet(patcher){
 
-	var inlets = new Array();
 	var obj = patcher.firstobject;
-	
 	while (obj) {
 		if (obj.maxclass == "outlet") {
 			return obj;
