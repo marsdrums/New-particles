@@ -126,6 +126,18 @@ struct force{
 	vec3 field_scale;
 	float field_octaves;
 };
+
+struct obstacle{
+	int shape;
+	vec3 position;
+	vec3 direction;
+	vec3 scale;
+	int mode;
+	float roughness;
+	float softness;
+	float radius;
+};
+
 /*
 //Random functions
 uint wang_hash(inout uint seed){
@@ -171,11 +183,15 @@ void update_particle(inout particle p){
 		p.alive = 0;
 		return;
 	} 
+	if(p.alive == 0.5) return;
+
 	p.pos += p.vel;
 	p.age = max(0., p.age-0.01); //change with proper life expectancy
 	//also, use DELTA to control aging in ms and indipendently of frame rate
 	return;
 }
+
+//______ EMITTERS __________________________________________________________________________________________
 
 void generate_particle(inout particle p, in new_particle newp){
 
@@ -220,6 +236,8 @@ void emit_particles(inout particle p){
 		return;
 	}
 }
+
+//______ FORCES __________________________________________________________________________________________
 
 void point_attractor_force(inout particle p, in force f){
 	vec3 diff = f.pos - p.pos;
@@ -360,7 +378,8 @@ void field_force(inout particle p, in force f){
 
 void apply_forces(inout particle p){
 
-	if(p.age <= 0) return;
+	if(p.alive < 1) return;
+
 	force f;
 
 	for(float i = 0.5; i < numForces; i+=1.0){
@@ -398,6 +417,81 @@ void apply_forces(inout particle p){
 	}
 }
 
+//______ OBSTACLES __________________________________________________________________________________________
+
+float sphere_intersect(in particle p, in obstacle o, out vec3 hit_normal){
+
+    vec3 oc = p.pos - o.position;
+    float b = dot( oc, p.dir );
+    float c = dot( oc, oc ) - o.radius*o.radius;
+    float h = b*b - c;
+    if( h<0.0 ) return -1; // no intersection
+	h = sqrt(h);
+	float t0 = -b-h;
+	if(c <= 0) t0 = -b+h;
+	hit_normal = normalize(oc + p.dir*t0); 
+	return t0;
+	//if(c > 0) return -b-h;
+    //return -b-h;
+}
+
+float plane_intersect(in particle p, in obstacle o, out vec3 hit_normal){
+	
+    float denom = dot(o.direction, p.dir);
+    if(denom <= 1e-6) return -1;
+    vec3 p0l0 = o.position - p.pos;
+    hit_normal = o.direction;
+    return dot(p0l0, o.direction) / denom; 
+}
+
+void apply_obstacles(inout particle p){
+
+	if(p.alive < 1) return;
+
+	float vel_length = length(p.vel);
+	p.dir = p.vel / vel_length;
+
+	obstacle o;
+
+	for(float i = 0.5; i < numObstacles; i+=1.0){
+		vec4 lookup1 = texture(obsTex, vec2(i, 1.5));
+		if(lookup1.w == 0) continue;
+		vec4 lookup0 = texture(obsTex, vec2(i, 0.5));
+		vec4 lookup2 = texture(obsTex, vec2(i, 2.5));
+		vec4 lookup3 = texture(obsTex, vec2(i, 3.5));
+		o.shape = int(lookup0.w);
+		o.position = lookup0.xyz;
+		o.direction = lookup1.xyz;
+		o.mode = int(lookup2.w);
+		o.scale = lookup2.xyz;
+		o.roughness = lookup3.x;
+		o.softness = lookup3.y;
+		o.radius = lookup3.z;
+
+		float t0;
+		vec3 hit_normal;
+
+		switch (o.shape) {
+			case 0:	
+			    t0 = plane_intersect(p, o, hit_normal);
+			    break;
+			case 1:
+			    t0 = sphere_intersect(p, o, hit_normal);
+			    break;
+		} 
+
+		if(t0 > vel_length || t0 < 0) continue; //not intersected
+		p.pos += p.dir*t0;
+		p.alive = 0;//o.mode;
+		p.dir = reflect(p.dir, hit_normal);
+		p.vel = p.dir*(vel_length - t0);
+		p.vel /= o.softness + 1;
+		//p.pos += p.vel;
+		return; //*** now it quits after any intersection is found. consider evaluating mutiple obstacles to pick the closest
+
+	}
+}
+
 void output_textures(in particle p){
 
 	outPosAge = vec4(p.pos, p.age);
@@ -413,6 +507,7 @@ void main(void) {
 	update_particle(p);
 	emit_particles(p);
 	apply_forces(p);
+	apply_obstacles(p);
 	output_textures(p);
 }
 ]]>

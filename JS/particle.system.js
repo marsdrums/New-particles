@@ -156,9 +156,15 @@ function read_and_parse(){
 			    break;
 
 			  	case "obstacle":
-			    obstacles.push({	type: agent[1], 
+			    obstacles.push({	shape: agent[1], 
 			    					position: [agent[2], agent[3], agent[4]], 
-			    					amount: agent[5]
+			    					direction: [agent[5], agent[6], agent[7]],
+			    					scale: [agent[8], agent[9], agent[10]],
+			    					mode: agent[11],
+			    					roughness: agent[12],
+			    					softness: agent[13],
+			    					enable: agent[14],
+			    					radius: agent[15]
 			    				});
 			    break;
 
@@ -211,11 +217,13 @@ function transfer_data_to_texture(){
 	}
 
 	if(obstacles.length > 0){
-		obsMat.dim = [obstacles.length, 2];
+		obsMat.dim = [obstacles.length, 4];
 		obsTex.dim = obsMat.dim;
 		for(var i = 0; i < obstacles.length; i++){
-			obsMat.setcell(i, 0, "val", obstacles[i].rate, obstacles[i].position);
-			obsMat.setcell(i, 1, "val", 1, obstacles[i].type, obstacles[i].speed, 0);
+			obsMat.setcell(i, 0, "val", obstacles[i].shape, obstacles[i].position);
+			obsMat.setcell(i, 1, "val", obstacles[i].enable, obstacles[i].direction);
+			obsMat.setcell(i, 2, "val", obstacles[i].mode, obstacles[i].scale);
+			obsMat.setcell(i, 3, "val", 0, obstacles[i].roughness, obstacles[i].softness, obstacles[i].radius);
 		}	
 		obsTex.jit_matrix(obsMat.name);
 	}
@@ -229,17 +237,18 @@ function process_particles(){
 	partShader.draw();
 }
 
-function draw_particles(){
-
-	mesh.draw();
-}
-
 function feedback_textures(){
 
 	inAliveMatTex.jit_gl_texture(partShader.out_name[2]);
 	inVelMassTex.jit_gl_texture(partShader.out_name[1]);
 	inPosAgeTex.jit_gl_texture(partShader.out_name[0]); 
 }
+
+function draw_particles(){
+
+	mesh.draw();
+}
+
 
 function bang(){
 

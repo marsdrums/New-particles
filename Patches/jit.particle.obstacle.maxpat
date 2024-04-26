@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 403.0, 210.0, 640.0, 480.0 ],
+		"rect" : [ 70.0, 356.0, 640.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -118,25 +118,25 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 94.0, 166.0, 59.0, 22.0 ],
+					"patching_rect" : [ 94.0, 166.0, 77.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"filename" : "force.js",
+						"filename" : "obstacle.js",
 						"parameter_enable" : 0
 					}
 ,
-					"text" : "js force.js"
+					"text" : "js obstacle.js"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 11,
+					"linecount" : 9,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 185.0, 215.0, 150.0, 154.0 ],
-					"text" : "force:\ntype\namount\nradius\nposition\ndirection\nfield type\nnoise function\nfield offset\nfield scale\nenable"
+					"patching_rect" : [ 185.0, 215.0, 150.0, 127.0 ],
+					"text" : "_shape = 0;\n_position = [0,0,0];\n_direction = [0,1,0];\n_scale = [1,1,1];\n_mode = 0;\n_roughness = 0;\n_softness = 0;\n_enable = 1;\n_radius = 1;"
 				}
 
 			}
@@ -149,7 +149,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 41.0, 209.0, 94.0, 49.0 ],
-					"text" : "force 2 0.1 1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1"
+					"text" : "obstacle 0 0 0 0 0 1 0 1 1 1 0 0 0"
 				}
 
 			}

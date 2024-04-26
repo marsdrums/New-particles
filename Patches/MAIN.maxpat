@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 100.0, 1660.0, 901.0 ],
+		"rect" : [ 34.0, 100.0, 1202.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,6 +40,18 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-58",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 471.0, 421.0, 268.0, 22.0 ],
+					"text" : "jit.particle.force @type directional @amount 0.01"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"format" : 6,
 					"id" : "obj-24",
 					"maxclass" : "flonum",
@@ -47,7 +59,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1454.0, 862.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1126.0, 610.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -58,7 +70,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1447.0, 893.0, 96.0, 22.0 ],
+					"patching_rect" : [ 1119.0, 641.0, 96.0, 22.0 ],
 					"text" : "prepend amount"
 				}
 
@@ -70,7 +82,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1132.0, 789.0, 133.0, 22.0 ],
+					"patching_rect" : [ 804.0, 537.0, 133.0, 22.0 ],
 					"text" : "prepend noise_function"
 				}
 
@@ -78,13 +90,13 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-28",
-					"items" : [ "simplex", ",", "perlin", ",", "ridged_multifractal", ",", "hybrid_multifractal", ",", "procedural_multifractal", ",", "heterogeneous_procedural", ",", "fractional_brownian_motion", ",", "voronoi_crackle" ],
+					"items" : [ "simplex", ",", "perlin", ",", "ridget_multifractal", ",", "hybrid_multifractal", ",", "procedural_multifractal", ",", "heterogeneous_procedural", ",", "fractional_brownian_motion", ",", "voronoi_crackle" ],
 					"maxclass" : "umenu",
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "int", "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1132.0, 737.0, 164.0, 22.0 ]
+					"patching_rect" : [ 804.0, 498.0, 164.0, 22.0 ]
 				}
 
 			}
@@ -95,7 +107,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1447.0, 686.0, 77.0, 22.0 ],
+					"patching_rect" : [ 1119.0, 434.0, 77.0, 22.0 ],
 					"text" : "loadmess 10"
 				}
 
@@ -107,7 +119,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 951.0, 789.0, 107.0, 22.0 ],
+					"patching_rect" : [ 623.0, 537.0, 107.0, 22.0 ],
 					"text" : "prepend field_type"
 				}
 
@@ -121,7 +133,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "int", "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 951.0, 686.0, 164.0, 22.0 ]
+					"patching_rect" : [ 623.0, 498.0, 164.0, 22.0 ]
 				}
 
 			}
@@ -133,7 +145,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1424.0, 728.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1096.0, 476.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -144,7 +156,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1424.0, 761.0, 126.0, 22.0 ],
+					"patching_rect" : [ 1096.0, 509.0, 126.0, 22.0 ],
 					"text" : "prepend field_octaves"
 				}
 
@@ -158,7 +170,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1317.0, 564.0, 50.0, 22.0 ]
+					"patching_rect" : [ 989.0, 312.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -169,7 +181,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1350.0, 599.0, 70.0, 22.0 ],
+					"patching_rect" : [ 1022.0, 347.0, 70.0, 22.0 ],
 					"text" : "loadmess 3"
 				}
 
@@ -183,7 +195,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1447.0, 635.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1119.0, 383.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -196,7 +208,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1395.0, 635.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1067.0, 383.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -209,7 +221,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1344.0, 635.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1016.0, 383.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -220,7 +232,7 @@
 					"numinlets" : 4,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1290.0, 686.0, 128.0, 22.0 ],
+					"patching_rect" : [ 962.0, 434.0, 128.0, 22.0 ],
 					"text" : "pak field_scale 0. 0. 0."
 				}
 
@@ -234,7 +246,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1259.0, 635.0, 50.0, 22.0 ]
+					"patching_rect" : [ 931.0, 383.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -247,7 +259,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1207.0, 635.0, 50.0, 22.0 ]
+					"patching_rect" : [ 879.0, 383.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -260,7 +272,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1156.0, 635.0, 50.0, 22.0 ]
+					"patching_rect" : [ 828.0, 383.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -271,7 +283,7 @@
 					"numinlets" : 4,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1125.0, 686.0, 129.0, 22.0 ],
+					"patching_rect" : [ 797.0, 434.0, 129.0, 22.0 ],
 					"text" : "pak field_offset 0. 0. 0."
 				}
 
@@ -283,7 +295,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 931.0, 921.0, 481.0, 22.0 ],
+					"patching_rect" : [ 623.0, 683.0, 481.0, 22.0 ],
 					"text" : "jit.particle.force @type field @amount 0.001 @field_scale 3 3 3 @noise_function simplex"
 				}
 
@@ -295,7 +307,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 631.0, 387.0, 381.0, 22.0 ],
+					"patching_rect" : [ 471.0, 330.0, 381.0, 22.0 ],
 					"text" : "jit.particle.force @type point_attractor @amount -0.01 @position 0 0 0"
 				}
 
@@ -307,33 +319,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 363.0, 335.0, 230.0, 22.0 ],
+					"patching_rect" : [ 471.0, 379.0, 230.0, 22.0 ],
 					"text" : "jit.particle.force @type drag @amount 0.1"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-14",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 207.0, 189.0, 130.0, 22.0 ],
-					"presentation_linecount" : 2,
-					"text" : "noise_function simplex"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-12",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 73.500000834465027, 189.0, 127.0, 22.0 ],
-					"text" : "field_type accelerative"
 				}
 
 			}
@@ -620,7 +607,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 568.0, 163.0, 107.0, 22.0 ],
+					"patching_rect" : [ 471.0, 246.0, 107.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -646,37 +633,13 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-38",
-					"linecount" : 2,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 46.00000137090683, 514.000015318393707, 592.666684329509735, 33.0 ],
-					"text" : "open design questions:\nhow to make users implement thir own attractors/obstacles and rendering ? @output_texture + lambda inlet?"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-27",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 568.0, 201.0, 337.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 0. 0. @rate 4000 @speed 0.03"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-13",
-					"linecount" : 4,
-					"maxclass" : "comment",
-					"numinlets" : 1,
-					"numoutlets" : 0,
-					"patching_rect" : [ 46.00000137090683, 452.000013470649719, 592.666684329509735, 60.0 ],
-					"text" : "JS related questions:\n- how can i retrieve the auto-generated name of the rendering context?\n- how to use incremental naming (#) to avoid conflicts between shader names (or other solutions) ?\n- how to use a jit.gl.node in the main patch to capture to texture jit.gl.particles?"
+					"patching_rect" : [ 471.0, 277.0, 337.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 0. 0. 0. @rate 5000 @speed 0.01"
 				}
 
 			}
@@ -734,92 +697,11 @@
 				"box" : 				{
 					"id" : "obj-6",
 					"maxclass" : "newobj",
-					"numinlets" : 0,
+					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patcher" : 					{
-						"fileversion" : 1,
-						"appversion" : 						{
-							"major" : 9,
-							"minor" : 0,
-							"revision" : 0,
-							"architecture" : "x64",
-							"modernui" : 1
-						}
-,
-						"classnamespace" : "box",
-						"rect" : [ 59.0, 119.0, 640.0, 480.0 ],
-						"bglocked" : 0,
-						"openinpresentation" : 0,
-						"default_fontsize" : 12.0,
-						"default_fontface" : 0,
-						"default_fontname" : "Arial",
-						"gridonopen" : 1,
-						"gridsize" : [ 15.0, 15.0 ],
-						"gridsnaponopen" : 1,
-						"objectsnaponopen" : 1,
-						"statusbarvisible" : 2,
-						"toolbarvisible" : 1,
-						"lefttoolbarpinned" : 0,
-						"toptoolbarpinned" : 0,
-						"righttoolbarpinned" : 0,
-						"bottomtoolbarpinned" : 0,
-						"toolbars_unpinned_last_save" : 0,
-						"tallnewobj" : 0,
-						"boxanimatetime" : 200,
-						"enablehscroll" : 1,
-						"enablevscroll" : 1,
-						"devicewidth" : 0.0,
-						"description" : "",
-						"digest" : "",
-						"tags" : "",
-						"style" : "",
-						"subpatcher_template" : "",
-						"assistshowspatchername" : 0,
-						"boxes" : [ 							{
-								"box" : 								{
-									"id" : "obj-2",
-									"maxclass" : "newobj",
-									"numinlets" : 7,
-									"numoutlets" : 1,
-									"outlettype" : [ "" ],
-									"patching_rect" : [ 201.0, 165.0, 142.0, 22.0 ],
-									"text" : "pack obstacle 2 2 2 2 2 2"
-								}
-
-							}
-, 							{
-								"box" : 								{
-									"comment" : "",
-									"id" : "obj-1",
-									"index" : 1,
-									"maxclass" : "outlet",
-									"numinlets" : 1,
-									"numoutlets" : 0,
-									"patching_rect" : [ 173.0, 270.0, 30.0, 30.0 ]
-								}
-
-							}
- ],
-						"lines" : [ 							{
-								"patchline" : 								{
-									"destination" : [ "obj-1", 0 ],
-									"source" : [ "obj-2", 0 ]
-								}
-
-							}
- ]
-					}
-,
-					"patching_rect" : [ 187.0, 410.0, 63.0, 22.0 ],
-					"saved_object_attributes" : 					{
-						"description" : "",
-						"digest" : "",
-						"globalpatchername" : "",
-						"tags" : ""
-					}
-,
-					"text" : "p obstacle"
+					"patching_rect" : [ 96.0, 205.0, 513.0, 22.0 ],
+					"text" : "jit.particle.obstacle @shape sphere @mode bounce @position 0 -8 0 @radius 5 @softness 10."
 				}
 
 			}
@@ -854,7 +736,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 73.500000834465027, 326.0, 78.0, 22.0 ],
+					"patching_rect" : [ 96.0, 474.0, 78.0, 22.0 ],
 					"text" : "jit.gl.particles"
 				}
 
@@ -864,13 +746,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-11", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-15", 0 ]
 				}
 
 			}
@@ -892,13 +767,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-10", 0 ],
 					"source" : [ "obj-2", 1 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-23", 0 ]
 				}
 
 			}
@@ -933,7 +801,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-26", 0 ],
-					"source" : [ "obj-28", 1 ]
+					"source" : [ "obj-28", 0 ]
 				}
 
 			}
@@ -954,7 +822,7 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-30", 0 ],
-					"source" : [ "obj-31", 1 ]
+					"source" : [ "obj-31", 0 ]
 				}
 
 			}
@@ -1093,6 +961,13 @@
 , 			{
 				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-58", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-6", 0 ]
 				}
 
@@ -1138,6 +1013,20 @@
 				"bootpath" : "~/Documents/GitHub/New-particles/Patches",
 				"patcherrelativepath" : ".",
 				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "jit.particle.obstacle.maxpat",
+				"bootpath" : "~/Documents/GitHub/New-particles/Patches",
+				"patcherrelativepath" : ".",
+				"type" : "JSON",
+				"implicit" : 1
+			}
+, 			{
+				"name" : "obstacle.js",
+				"bootpath" : "~/Documents/GitHub/New-particles/JS",
+				"patcherrelativepath" : "../JS",
+				"type" : "TEXT",
 				"implicit" : 1
 			}
 , 			{
