@@ -44,14 +44,17 @@ function type(){
 
 	switch (arguments[0]) {
 	  	case "point":
+	  	case 0:
 	  		_type = 0;
 	    break;
 
 	  	case "matrix":
+	  	case 1:
 	  		_type = 1;
 	    break;
 
 	  	case "geometry": 
+	  	case 2:
 	  		_type = 2;
 	    break;
 	}

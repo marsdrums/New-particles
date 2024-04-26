@@ -41,18 +41,22 @@ function type(){
 
 	switch (arguments[0]) {
 	  	case "point_attractor":
+	  	case 0:
 	  		_type = 0;
 	    break;
 
 	  	case "directional":
+	  	case 1:
 	  		_type = 1;
 	    break;
 
 	  	case "drag": 
+	  	case 2:
 	  		_type = 2;
 	    break;
 
 	  	case "field": 
+	  	case 3:
 	  		_type = 3;
 	    break;
 	}
@@ -62,18 +66,22 @@ function field_type(){
 
 	switch (arguments[0]) {
 	  	case "forcefield":
+	  	case 0:
 	  		_field_type = 0;
 	    break;
 
 	  	case "rotational":
+	  	case 1:
 	  		_field_type = 1;
 	    break;
 
 	  	case "accelerative": 
+	  	case 2:
 	  		_field_type = 2;
 	    break;
 
 	  	case "dragging": 
+	  	case 3:
 	  		_field_type = 3;
 	    break;
 	}
@@ -83,34 +91,42 @@ function noise_function(){
 
 	switch (arguments[0]) {
 	  	case "simplex":
+	  	case 0:
 	  		_noise_function = 0;
 	    break;
 
 	  	case "perlin":
+	  	case 1:
 	  		_noise_function = 1;
 	    break;
 
 	  	case "ridget_multifractal": 
+	  	case 2:
 	  		_noise_function = 2;
 	    break;
 
 	  	case "hybrid_multifractal": 
+	  	case 3:
 	  		_noise_function = 3;
 	    break;
 
 	  	case "procedural_multifractal": 
+	  	case 4:
 	  		_noise_function = 4;
 	    break;
 
 	  	case "heterogeneous_procedural": 
+	  	case 5:
 	  		_noise_function = 5;
 	    break;
 
 	  	case "fractional_brownian_motion": 
+	  	case 6:
 	  		_noise_function = 6;
 	    break;
 
 	  	case "voronoi_crackle": 
+	  	case 7:
 	  		_noise_function = 7;
 	    break;
 	}
