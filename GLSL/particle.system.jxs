@@ -164,7 +164,7 @@ vec3 randomUnitVector(inout uint seed){
 
 void get_particle_current_state(inout particle p){ 
 	p.id = floor(jit_in.texcoord.x) + floor(jit_in.texcoord.y)*2000;//texDim0.x; 
-	p.rng = uint(gl_FragCoord.x*3772) * (uint(gl_FragCoord.y*78223) + uint(1)) + uint(time);
+	p.rng = uint(gl_FragCoord.x*3772) * uint(gl_FragCoord.y*78223) + uint(time);
 	vec4 lookup0 = texture(posAgeTex, jit_in.texcoord);
 	vec4 lookup1 = texture(velMassTex, jit_in.texcoord);
 	vec4 lookup2 = texture(aliveMatTex, jit_in.texcoord);
@@ -201,7 +201,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.age = 1;
 	p.dir = randomUnitVector(p.rng);
 	p.vel = p.dir*newp.speed;
-	//p.vel += newp.emivel*randomUnitVector(p.rng);
+	//p.vel -= newp.emivel*randomUnitVector(p.rng);
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
 	p.mass = newp.mass;
@@ -486,6 +486,7 @@ void apply_obstacles(inout particle p){
 		p.pos += p.dir*t0;
 		p.alive = o.mode;
 		p.dir = reflect(p.dir, hit_normal);
+		p.dir = o.roughness <= 0 ? p.dir : normalize(p.dir + randomUnitVector(p.rng)*o.roughness);
 		p.vel = p.dir*(vel_length - t0);
 		p.vel /= o.softness + 1;
 		//p.pos += p.vel;
