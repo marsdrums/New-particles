@@ -486,7 +486,7 @@ void apply_obstacles(inout particle p){
 		p.pos += p.dir*t0;
 		p.alive = o.mode;
 		p.dir = reflect(p.dir, hit_normal);
-		p.dir = o.roughness <= 0 ? p.dir : normalize(p.dir + randomUnitVector(p.rng)*o.roughness);
+		p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
 		p.vel = p.dir*(vel_length - t0);
 		p.vel /= o.softness + 1;
 		//p.pos += p.vel;
