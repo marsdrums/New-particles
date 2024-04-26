@@ -132,7 +132,7 @@ struct obstacle{
 	vec3 position;
 	vec3 direction;
 	vec3 scale;
-	int mode;
+	float mode;
 	float roughness;
 	float softness;
 	float radius;
@@ -179,16 +179,18 @@ void get_particle_current_state(inout particle p){
 
 void update_particle(inout particle p){
 
+
+	p.age = p.alive != 0 ? max(0., p.age-0.005) : 0; //change with proper life expectancy
+
 	if(p.age <= 0){
 		p.alive = 0;
 		return;
 	} 
+
 	if(p.alive == 0.5) return;
 
 	p.pos += p.vel;
-	p.age = max(0., p.age-0.01); //change with proper life expectancy
 	//also, use DELTA to control aging in ms and indipendently of frame rate
-	return;
 }
 
 //______ EMITTERS __________________________________________________________________________________________
@@ -462,7 +464,7 @@ void apply_obstacles(inout particle p){
 		o.shape = int(lookup0.w);
 		o.position = lookup0.xyz;
 		o.direction = lookup1.xyz;
-		o.mode = int(lookup2.w);
+		o.mode = lookup2.w;
 		o.scale = lookup2.xyz;
 		o.roughness = lookup3.x;
 		o.softness = lookup3.y;
@@ -482,7 +484,7 @@ void apply_obstacles(inout particle p){
 
 		if(t0 > vel_length || t0 < 0) continue; //not intersected
 		p.pos += p.dir*t0;
-		p.alive = 0;//o.mode;
+		p.alive = o.mode;
 		p.dir = reflect(p.dir, hit_normal);
 		p.vel = p.dir*(vel_length - t0);
 		p.vel /= o.softness + 1;
