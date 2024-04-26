@@ -1,0 +1,145 @@
+autowhatch = 1; inlets = 1; outlets = 1;
+
+var _position = [0,0,0];
+var _direction = [0,-1,0];
+var _amount = 0.;
+var _radius = 1;
+var _radius_softness = 0;
+var _type = 0;
+var _field_type = 0;
+var _noise_function = 0;
+var _field_octaves = 5;
+var _field_offset = [0,0,0];
+var _field_scale = [3,3,3];
+var _enable = 1;
+//var _field_function = 0; //*** add field function selection
+
+function normalize(x){ 
+	var len = Math.sqrt( x[0]*x[0] + x[1]*x[1] + x[2]*x[2] ); 
+	return [x[0]/len, x[1]/len, x[2]/len];
+}
+function enable(){
+	_enable = arguments[0];
+}
+function position(){
+	_position = [arguments[0], arguments[1], arguments[2]];
+}
+function direction(){
+	_direction = normalize([arguments[0], arguments[1], arguments[2]]);
+}
+function amount(){
+	_amount = arguments[0];
+}
+function radius(){
+	_radius = arguments[0];
+}
+function radius_softness(){
+	_radius_softness = arguments[0];
+}
+
+function type(){
+
+	switch (arguments[0]) {
+	  	case "point_attractor":
+	  		_type = 0;
+	    break;
+
+	  	case "directional":
+	  		_type = 1;
+	    break;
+
+	  	case "drag": 
+	  		_type = 2;
+	    break;
+
+	  	case "field": 
+	  		_type = 3;
+	    break;
+	}
+}
+
+function field_type(){
+
+	switch (arguments[0]) {
+	  	case "forcefield":
+	  		_field_type = 0;
+	    break;
+
+	  	case "rotational":
+	  		_field_type = 1;
+	    break;
+
+	  	case "accelerative": 
+	  		_field_type = 2;
+	    break;
+
+	  	case "dragging": 
+	  		_field_type = 3;
+	    break;
+	}
+}
+
+function noise_function(){
+
+	switch (arguments[0]) {
+	  	case "simplex":
+	  		_noise_function = 0;
+	    break;
+
+	  	case "perlin":
+	  		_noise_function = 1;
+	    break;
+
+	  	case "ridget_multifractal": 
+	  		_noise_function = 2;
+	    break;
+
+	  	case "hybrid_multifractal": 
+	  		_noise_function = 3;
+	    break;
+
+	  	case "procedural_multifractal": 
+	  		_noise_function = 4;
+	    break;
+
+	  	case "heterogeneous_procedural": 
+	  		_noise_function = 5;
+	    break;
+
+	  	case "fractional_brownian_motion": 
+	  		_noise_function = 6;
+	    break;
+
+	  	case "voronoi_crackle": 
+	  		_noise_function = 7;
+	    break;
+	}
+}
+
+function field_octaves(){
+	_field_octaves = arguments[0];
+}
+function field_offset(){
+	_field_offset = [arguments[0], arguments[1], arguments[2]];
+}
+function field_scale(){
+	_field_scale = [arguments[0], arguments[1], arguments[2]];
+}
+
+function bang(){
+
+	outlet(	0,	"force", 
+				_type, 
+				_amount, 
+				_radius,
+				_radius_softness,
+				_position, 
+				_direction,
+				_field_type,
+				_noise_function,
+				_field_offset,
+				_field_scale,
+				_field_octaves,
+				_enable
+			);
+}

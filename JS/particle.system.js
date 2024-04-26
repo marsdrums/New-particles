@@ -141,7 +141,17 @@ function read_and_parse(){
 			switch (agent[0]) {
 			  	case "force":
 			    forces.push({	type: agent[1], 
-			    				amount: agent[2]
+			    				amount: agent[2],
+			    				radius: agent[3],
+			    				radius_softness: agent[4],
+			    				position: [agent[5], agent[6], agent[7]],
+			    				direction: [agent[8], agent[9], agent[10]],
+			    				field_type: agent[11],
+			    				noise_function: agent[12],
+			    				field_offset: [agent[13], agent[14], agent[15]],
+			    				field_scale: [agent[16], agent[17], agent[18]],
+			    				field_octaves: agent[19],
+			    				enable: agent[20]
 			    			});
 			    break;
 
@@ -160,7 +170,8 @@ function read_and_parse(){
 			    				mass: agent[7],
 			    				prevposition: [agent[8], agent[9], agent[10]],
 			    				velocity: [agent[3]-agent[8], agent[4]-agent[9], agent[5]-agent[10]],
-			    				matrix: agent[11]
+			    				matrix: agent[11],
+			    				enable: agent[12]
 			    			});
 			    break;
 			}
@@ -179,7 +190,7 @@ function transfer_data_to_texture(){
 			emit_to = (counter + emitters[i].rate) % 4000000;
 			emiMat.setcell(i, 0, "val", emitters[i].mass, emitters[i].position);
 			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed, counter);
-			emiMat.setcell(i, 2, "val", 0., emitters[i].prevposition);
+			emiMat.setcell(i, 2, "val", emitters[i].enable, emitters[i].prevposition);
 			emiMat.setcell(i, 3, "val", 0., emitters[i].velocity);
 			counter = emit_to;
 		}	
@@ -187,11 +198,14 @@ function transfer_data_to_texture(){
 	}
 
 	if(forces.length > 0){
-		forMat.dim = [forces.length, 2];
+		forMat.dim = [forces.length, 5];
 		forTex.dim = forMat.dim;
 		for(var i = 0; i < forces.length; i++){
-			forMat.setcell(i, 0, "val", 0, forces[i].type, forces[i].amount, 0);
-			forMat.setcell(i, 1, "val", 0,0,0,0);
+			forMat.setcell(i, 0, "val", forces[i].radius_softness, forces[i].type, forces[i].amount, forces[i].radius);
+			forMat.setcell(i, 1, "val", forces[i].enable, forces[i].position);
+			forMat.setcell(i, 2, "val", forces[i].field_octaves, forces[i].direction);
+			forMat.setcell(i, 3, "val", forces[i].field_type, forces[i].field_offset);
+			forMat.setcell(i, 4, "val", forces[i].noise_function, forces[i].field_scale);
 		}	
 		forTex.jit_matrix(forMat.name);	
 	}

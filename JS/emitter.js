@@ -6,6 +6,7 @@ var _speed = 0.01;
 var _type = 0;
 var _mass = 1;
 var _prev_position = [0,0,0];
+var _enable = 1;
 
 var matrix_emitter = new JitterMatrix(3, "float32", 1,1);
 
@@ -32,7 +33,11 @@ function jit_matrix(inname){
 
 function output_list(){
 
-	outlet(0, "emitter", _type, _rate, _position, _speed, _mass, _prev_position, matrix_emitter.name);
+	outlet(0, "emitter", _type, _rate, _position, _speed, _mass, _prev_position, matrix_emitter.name, _enable);
+}
+
+function enable(){
+	_enable = arguments[0];
 }
 
 function type(){

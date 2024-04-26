@@ -48,6 +48,8 @@
 		<bind param="frame" program="fp" />
 		<bind param="deltaTime" program="fp" />
 
+		<include source="noise_functions.glsl" program="fp" />
+
 		<program name="vp" type="vertex"  >
 <![CDATA[
 	#version 330 core
@@ -111,6 +113,20 @@ struct new_particle{
 	float mat;
 };
 
+struct force{
+	int type;
+	float amt;
+	float rad;
+	float soft;
+	vec3 pos;
+	vec3 dir;
+	int field_type;
+	int noise_func;
+	vec3 field_offset;
+	vec3 field_scale;
+	float field_octaves;
+};
+/*
 //Random functions
 uint wang_hash(inout uint seed){
 
@@ -123,7 +139,7 @@ uint wang_hash(inout uint seed){
 }
  
 float RandomFloat01(inout uint seed) { return float(wang_hash(seed)) / 4294967296.0; }
-
+*/
 vec3 randomUnitVector(inout uint seed){
 
     float z = RandomFloat01(seed) * 2.0f - 1.0f;
@@ -185,6 +201,10 @@ void emit_particles(inout particle p){
 
 	for(float f = 0.5; f < numEmitters; f+=1.0){
 		vec4 lookup1 = texture(emiTex, vec2(f, 1.5));
+		vec4 lookup2 = texture(emiTex, vec2(f, 2.5));
+
+		if(lookup2.w == 0) continue; //enable
+
 		float emiFrom = lookup1.z;
 		float emiTo = lookup1.w;
 
@@ -193,7 +213,7 @@ void emit_particles(inout particle p){
 		vec4 lookup0 = texture(emiTex, vec2(f, 0.5));
 		newp.mass = lookup0.w;
 		newp.pos = lookup0.xyz;
-		newp.prevpos = texture(emiTex, vec2(f, 2.5)).xyz;
+		newp.prevpos = lookup2.xyz;
 		newp.emivel = texture(emiTex, vec2(f, 3.5)).xyz;
 		newp.speed = lookup1.y;
 		generate_particle(p, newp);
@@ -201,14 +221,180 @@ void emit_particles(inout particle p){
 	}
 }
 
+void point_attractor_force(inout particle p, in force f){
+	vec3 diff = f.pos - p.pos;
+	float dist = length(diff);
+	if(dist > f.rad) return;
+	diff *= f.amt / (dist*dist + 0.01);
+	diff *= smoothstep(0., f.soft, 1 - dist/f.rad);
+	p.vel += diff / p.mass;
+}
+void directional_force(inout particle p, in force f){ p.vel += f.dir * f.amt / p.mass; }
+void drag_force(inout particle p, in force f){ p.vel /= f.amt/p.mass + 1; }
+
+float hashfloat(float h){
+	return fract(sin(h) * 43758.5453123);
+}
+
+float noisefloat(vec3 x) {
+	vec3 p = floor(x);
+	vec3 f = fract(x);
+	f = f * f * (3.0 - 2.0 * f);
+
+	float n = p.x + p.y * 157.0 + 113.0 * p.z;
+	return mix(
+			mix(mix(hashfloat(n + 0.0), hashfloat(n + 1.0), f.x),
+					mix(hashfloat(n + 157.0), hashfloat(n + 158.0), f.x), f.y),
+			mix(mix(hashfloat(n + 113.0), hashfloat(n + 114.0), f.x),
+					mix(hashfloat(n + 270.0), hashfloat(n + 271.0), f.x), f.y), f.z);
+}
+
+float fbmfloat(in particle p, in force f) {
+	vec3 pos = p.pos * f.field_scale + f.field_offset;
+	float s = 0.0;
+	float q = 0.5;
+	float g = 2.02;
+	for(int i = 0; i < f.field_octaves; i++){
+		s += q * (noisefloat(pos)*2 - 1);
+		q *= 0.5;
+		pos *= g;
+	}
+	return s;
+}
+
+vec3 fbm(in particle p, in force f) {
+
+	vec3 pos = p.pos*f.field_scale + f.field_offset;
+	float H = 0.6;
+	float lacunarity = 1;
+	float frequency = 3;
+	float offset = 0;
+
+	switch (f.noise_func) {
+		case 0:	//simplex
+			return snoise3(pos); 
+		    //break;
+		case 1: //perlin
+			vec3 rep = vec3(1);
+			return pnoise3(pos, rep); 
+		    //break;
+		case 2: //Ridged multifractal terrain
+			float gain = 1;
+			return ridgedMultiFractal3(pos, H, lacunarity, frequency, f.field_octaves, offset, gain);
+			//break;
+		case 3: //Hybrid additive/multiplicative multifractal
+			return hybridMultiFractal3(pos, H, lacunarity, frequency, f.field_octaves, offset);
+			//break;
+		case 4: // Procedural multifractal 
+			return multifractalA3(pos, H, lacunarity, frequency, f.field_octaves, offset);
+			//break;
+		case 5: // Heterogeneous procedural terrain
+			return heteroTerrainA3(pos, H, lacunarity, frequency, f.field_octaves, offset);
+			//break;
+		case 6: // Procedural fBm 
+			return fBmA3(pos, H, lacunarity, frequency, f.field_octaves);
+			//break;
+		case 7: //voronoi crackle
+			float multiply = 1;
+			float reduce = 1;
+			float jitter = 0;
+			return VoronoiCrackle3(pos, multiply, reduce, offset, jitter);
+			//break;
+	} 
+}
+
+void force_field(inout particle p, in force f){
+
+	p.vel += f.amt*fbm(p, f) / p.mass;
+}
+
+void rotational_field(inout particle p, in force f){
+
+	vec3 a = fbm(p, f);
+	//a *= field_intensity;
+	//return length(p.vel)*rotateVector(normalize(p.vel), a.x, a.y, a.z);
+
+	a *= f.amt;
+	a *= PI;
+	vec3 cosa = cos(a);
+	vec3 sina = sin(a);
+	float vel_length = length(p.vel);
+	p.dir = p.vel / vel_length;
+
+	p.dir.x = p.dir.x*cosa.z - p.dir.y*sina.z;
+	p.dir.y = p.dir.x*sina.z + p.dir.y*cosa.z;
+
+	p.dir.x = p.dir.x*cosa.y - p.dir.z*sina.y;
+	p.dir.z = -p.dir.x*sina.y + p.dir.z*cosa.y;
+
+	p.dir.y = p.dir.y*cosa.x - p.dir.z*sina.x;
+	p.dir.z = p.dir.y*sina.x + p.dir.z*cosa.x;
+
+	p.vel = p.dir * vel_length;
+}
+
+void acceleration_field(inout particle p, in force f){
+	p.vel += p.vel * fbmfloat(p, f)*f.amt / p.mass;
+}
+void drag_field(inout particle p, in force f){
+	p.vel /= (abs(fbmfloat(p, f))*f.amt / p.mass + 1);
+}
+
+void field_force(inout particle p, in force f){
+
+	switch (f.field_type) {
+		case 0:	
+			force_field(p, f);
+		    return;
+		case 1:
+			rotational_field(p, f);
+		    return;
+		case 2:
+			acceleration_field(p, f);
+			return;
+		case 3:
+			drag_field(p, f);
+			return;
+	} 
+}
+
 void apply_forces(inout particle p){
 
 	if(p.age <= 0) return;
+	force f;
 
-	for(float f = 0.5; f < numForces; f+=1.0){
-		vec4 lookup0 = texture(forTex, vec2(f, 0.5));
-		float drag = lookup0.y/p.mass;
-		p.vel /= drag + 1; 
+	for(float i = 0.5; i < numForces; i+=1.0){
+		vec4 lookup0 = texture(forTex, vec2(i, 0.5));
+		vec4 lookup1 = texture(forTex, vec2(i, 1.5));
+		if(lookup1.w == 0) continue;
+		f.type = int(lookup0.x);
+		f.amt = lookup0.y;
+
+		switch (f.type) {
+			case 0:	
+				f.rad = lookup0.z;
+				f.soft = lookup0.w;
+				f.pos = lookup1.xyz;
+			    point_attractor_force(p, f);
+			    break;
+			case 1:
+				f.dir = texture(forTex, vec2(i, 2.5)).xyz;
+			    directional_force(p, f);
+			    break;
+			case 2:
+				drag_force(p, f);
+				break;
+			case 3:
+				vec4 lookup3 = texture(forTex, vec2(i, 3.5));
+				vec4 lookup4 = texture(forTex, vec2(i, 4.5));
+				f.field_octaves = texture(forTex, vec2(i, 2.5)).w;
+				f.field_type = int(lookup3.w);
+				f.noise_func = int(lookup4.w);
+				f.field_offset = lookup3.xyz;
+				f.field_scale = lookup4.xyz;
+				field_force(p, f);
+				break;
+		} 
 	}
 }
 
