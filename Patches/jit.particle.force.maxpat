@@ -43,22 +43,10 @@
 					"id" : "obj-9",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 207.0, 117.0, 22.0, 22.0 ],
-					"text" : "t b"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-7",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 207.0, 82.0, 43.0, 22.0 ],
-					"text" : "jit.time"
+					"patching_rect" : [ 207.0, 117.0, 47.0, 22.0 ],
+					"text" : "jit.bang"
 				}
 
 			}
@@ -149,7 +137,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 41.0, 209.0, 94.0, 49.0 ],
-					"text" : "force 2 0.1 1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1"
+					"text" : "force 1 0.3 1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1"
 				}
 
 			}
@@ -205,13 +193,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-2", 1 ],
 					"source" : [ "obj-3", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-9", 0 ],
-					"source" : [ "obj-7", 0 ]
 				}
 
 			}

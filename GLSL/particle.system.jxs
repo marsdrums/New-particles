@@ -164,7 +164,7 @@ vec3 randomUnitVector(inout uint seed){
 
 void get_particle_current_state(inout particle p){ 
 	p.id = floor(jit_in.texcoord.x) + floor(jit_in.texcoord.y)*2000;//texDim0.x; 
-	p.rng = uint(gl_FragCoord.x*3772) * uint(gl_FragCoord.y*78223) + uint(time);
+	p.rng = uint(gl_FragCoord.x*3772) + uint(gl_FragCoord.y*78223) + uint(time);
 	vec4 lookup0 = texture(posAgeTex, jit_in.texcoord);
 	vec4 lookup1 = texture(velMassTex, jit_in.texcoord);
 	vec4 lookup2 = texture(aliveMatTex, jit_in.texcoord);
@@ -180,7 +180,7 @@ void get_particle_current_state(inout particle p){
 void update_particle(inout particle p){
 
 
-	p.age = p.alive != 0 ? max(0., p.age-0.005) : 0; //change with proper life expectancy
+	p.age = p.alive != 0 ? max(0., p.age-0.001) : 0; //change with proper life expectancy
 
 	if(p.age <= 0){
 		p.alive = 0;
@@ -189,7 +189,7 @@ void update_particle(inout particle p){
 
 	if(p.alive == 0.5) return;
 
-	p.pos += p.vel;
+	p.pos += p.vel;// * RandomFloat01(p.rng);
 	//also, use DELTA to control aging in ms and indipendently of frame rate
 }
 
@@ -200,10 +200,11 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.alive = 1;
 	p.age = 1;
 	p.dir = randomUnitVector(p.rng);
-	p.vel = p.dir*newp.speed;
+	p.vel = p.dir*newp.speed;//
 	//p.vel -= newp.emivel*randomUnitVector(p.rng);
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
+	p.vel *= RandomFloat01(p.rng);
 	p.mass = newp.mass;
 }
 
