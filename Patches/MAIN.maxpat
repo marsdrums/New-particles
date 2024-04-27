@@ -40,12 +40,26 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-52",
+					"linecount" : 6,
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 475.0, 113.0, 111.0, 89.0 ],
+					"presentation_linecount" : 6,
+					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 -9 0 @radius 5 @softness 1"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-17",
 					"linecount" : 11,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 329.0, 779.0, 227.0, 154.0 ],
+					"patching_rect" : [ 325.0, 630.0, 227.0, 154.0 ],
 					"presentation_linecount" : 11,
 					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\nother shapes"
 				}
@@ -58,7 +72,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 90.0, 779.0, 227.0, 221.0 ],
+					"patching_rect" : [ 86.0, 630.0, 227.0, 221.0 ],
 					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float\n@speed float\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3"
 				}
 
@@ -332,8 +346,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 387.0, 334.0, 237.0, 22.0 ],
-					"text" : "jit.particle.force @type drag @amount 0.05"
+					"patching_rect" : [ 387.0, 334.0, 230.0, 22.0 ],
+					"text" : "jit.particle.force @type drag @amount 0.1"
 				}
 
 			}
@@ -372,7 +386,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 78.0, 139.0, 80.0, 35.0 ]
+					"patching_rect" : [ 154.0, 140.0, 80.0, 35.0 ]
 				}
 
 			}
@@ -415,13 +429,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-6",
-					"linecount" : 6,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 227.0, 253.0, 111.0, 89.0 ],
-					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 -9 0 @radius 5 @softness 1"
+					"patching_rect" : [ 227.0, 253.0, 554.0, 22.0 ],
+					"text" : "jit.particle.obstacle @shape sphere @action 1 @position 0 -8 0 @radius 5 @softness 1 @roughness 1"
 				}
 
 			}
@@ -433,7 +446,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 30.0, 22.0, 24.0, 24.0 ]
+					"patching_rect" : [ 14.0, 30.0, 24.0, 24.0 ]
 				}
 
 			}

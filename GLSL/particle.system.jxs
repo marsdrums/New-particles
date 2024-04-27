@@ -184,28 +184,47 @@ void get_particle_current_state(inout particle p){
 	p.mat = lookup2.y;
 	p.life_step = lookup2.z;
 	p.bounced = lookup2.w;
+	if(p.bounced == 1) p.bounced_pos = texture(bounceTex, jit_in.texcoord).xyz;
+
 	//*** p.dir is missing. Figure out where to compute it
 }
 
-void update_particle(inout particle p){
+void update_age(inout particle p){
 
+	if(p.alive == 0) return;
 
-	p.age = p.alive != 0 ? max(0., p.age - p.life_step) : 0; //change with proper life expectancy
+	p.age -= p.life_step; //change with proper life expectancy
 
 	if(p.age <= 0){
+		p.age = 0;
 		p.alive = 0;
-		return;
 	} 
+}
 
-	if(p.alive == 0.5) return;
+void update_particle_position(inout particle p){
 
-	if(p.bounced == 1){
-		p.bounced = 0;
-		p.pos = p.bounced_pos;
-		return;
+	if(p.alive == 0) return;
+
+	if(p.alive == 0.5){
+		if(p.bounced == 1){
+			p.bounced = 0;
+			p.pos = p.bounced_pos;
+			return;		
+		} else {
+			return;
+		}
+	} else {
+
+		if(p.bounced == 1){
+			p.bounced = 0;
+			p.pos = p.bounced_pos;
+			return;	
+		} else {
+			p.pos += p.vel;
+			return;
+		}
 	}
 
-	p.pos += p.vel;//*(RandomFloat01(p.rng)*0.4 + 0.8);//*RandomVec301(p.rng);
 	//also, use DELTA to control aging in ms and indipendently of frame rate
 }
 
@@ -224,6 +243,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.mass = newp.mass;
 	p.life_step = newp.life_step;
 	p.mat = newp.mat;
+	p.bounced = 0;
 }
 
 bool to_generate(float id, float emiFrom, float emiTo){
@@ -475,13 +495,6 @@ float plane_intersect(in particle p, in obstacle o, out vec3 hit_normal){
 	    } 
 	}
 	return -1;
-/*
-    float denom = dot(o.direction, p.dir);
-    if(denom <= 1e-6) return -1;
-    vec3 p0l0 = o.position - p.pos;
-    hit_normal = o.direction;
-    return dot(p0l0, o.direction) / denom; 
-*/
 }
 
 void apply_obstacles(inout particle p){
@@ -524,14 +537,15 @@ void apply_obstacles(inout particle p){
 		//p.pos += p.dir*t0;
 		p.bounced = 1;
 		p.bounced_pos = p.pos+p.dir*t0;
+		p.alive = o.action;
+
+		if(p.alive < 1) return;
+
 		p.dir = reflect(p.dir, hit_normal);
 		p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
 		p.bounced_pos += p.dir*(vel_length - t0);
-		p.alive = o.action;
-
 		p.vel = p.dir*vel_length;
 		p.vel /= o.softness + 1;
-		//p.pos += p.vel;
 		return; //*** now it quits after any intersection is found. consider evaluating mutiple obstacles to pick the closest
 
 	}
@@ -550,7 +564,8 @@ void main(void) {
 	particle p;
 
 	get_particle_current_state(p);
-	update_particle(p);
+	update_age(p);
+	update_particle_position(p);
 	emit_particles(p);
 	apply_forces(p);
 	apply_obstacles(p);
