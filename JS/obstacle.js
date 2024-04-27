@@ -51,13 +51,13 @@ function action(){
 	}
 }
 function roughness(){
-	_roughness = arguments[0];
+	_roughness = Math.max(0, Math.min(1, arguments[0]));
 }
 function softness(){
-	_softness = arguments[0];
+	_softness = Math.max(0, arguments[0]);
 }
 function enable(){
-	_enable = arguments[0];
+	_enable = Math.max(0, Math.min(1, Math.floor(arguments[0])));
 }
 function radius(){
 	_radius = arguments[0];

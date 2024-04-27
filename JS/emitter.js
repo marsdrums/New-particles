@@ -84,22 +84,22 @@ function speed(){
 
 function mass(){
 	if(arguments.length == 1){
-		_mass_lo = arguments[0];
+		_mass_lo = Math.max(0.000001, arguments[0]);
 		_mass_hi = _mass_lo;
 		return;
 	}
-	_mass_lo = arguments[0];
-	_mass_hi = arguments[1];
+	_mass_lo = Math.max(0.000001, arguments[0]);
+	_mass_hi = Math.max(0.000001, arguments[1]);
 }
 
 function life(){
 	if(arguments.length == 1){
-		_life_lo = 1 / arguments[0];
+		_life_lo = 1 / Math.max(0, arguments[0]);
 		_life_hi = _life_lo;
 		return;
 	}
-	_life_lo = 1 / arguments[0];
-	_life_hi = 1 / arguments[1];
+	_life_lo = 1 / Math.max(0, arguments[0]);
+	_life_hi = 1 / Math.max(0, arguments[1]);
 }
 
 function material(){
@@ -107,7 +107,7 @@ function material(){
 }
 
 function rate(){
-	_rate = arguments[0];
+	_rate = Math.max(0, arguments[0]);
 	_rate_mem = _rate;
 }
 

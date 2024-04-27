@@ -19,7 +19,7 @@ function normalize(x){
 	return [x[0]/len, x[1]/len, x[2]/len];
 }
 function enable(){
-	_enable = arguments[0];
+	_enable = Math.max(0, Math.min(1, Math.floor(arguments[0])));
 }
 function position(){
 	_position = [arguments[0], arguments[1], arguments[2]];
@@ -31,10 +31,10 @@ function amount(){
 	_amount = arguments[0];
 }
 function radius(){
-	_radius = arguments[0];
+	_radius = Math.max(0, arguments[0]);
 }
 function radius_softness(){
-	_radius_softness = arguments[0];
+	_radius_softness = Math.max(0, Math.min(1, arguments[0]));
 }
 
 function type(){
@@ -133,7 +133,7 @@ function noise_function(){
 }
 
 function field_octaves(){
-	_field_octaves = arguments[0];
+	_field_octaves = Math.max(0, arguments[0]);
 }
 function field_offset(){
 	_field_offset = [arguments[0], arguments[1], arguments[2]];
