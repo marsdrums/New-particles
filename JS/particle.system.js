@@ -180,7 +180,8 @@ function read_and_parse(){
 			    				matrix: agent[12],
 			    				enable: agent[13],
 			    				life_lo: agent[14],
-			    				life_hi: agent[15]
+			    				life_hi: agent[15],
+			    				material: agent[16]
 			    			});
 			    break;
 			}
@@ -201,7 +202,7 @@ function transfer_data_to_texture(){
 			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed, counter);
 			emiMat.setcell(i, 2, "val", emitters[i].enable, emitters[i].prevposition);
 			emiMat.setcell(i, 3, "val", emitters[i].mass_hi, emitters[i].velocity);
-			emiMat.setcell(i, 4, "val", 0, emitters[i].life_lo, emitters[i].life_hi, 0);
+			emiMat.setcell(i, 4, "val", 0, emitters[i].life_lo, emitters[i].life_hi, emitters[i].material);
 			counter = emit_to;
 		}	
 		emiTex.jit_matrix(emiMat.name);	

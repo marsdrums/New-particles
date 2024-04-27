@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 34.0, 440.0, 866.0, 557.0 ],
+		"rect" : [ 810.0, 349.0, 866.0, 557.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -119,25 +119,25 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-5",
-					"linecount" : 8,
+					"linecount" : 4,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 92.0, 192.0, 116.0, 116.0 ],
-					"text" : "emitter 0 3421 -3.943419 -1.211208 -1.633894 0.1 4 -3.976994 -1.119993 -1.599534 u347002047 1"
+					"patching_rect" : [ 92.0, 192.0, 116.0, 62.0 ],
+					"text" : "emitter 0 3421 0. 4. 0. 0.05 1 6 0. 4. 0. u354007440 1 0.01 0.001"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 6,
+					"linecount" : 12,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 283.0, 101.0, 72.0, 87.0 ],
-					"text" : "Emitter:\ntype\nrate\nposition\ninitial speed\nmass"
+					"patching_rect" : [ 283.0, 101.0, 318.0, 167.0 ],
+					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi"
 				}
 
 			}

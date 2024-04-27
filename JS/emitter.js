@@ -10,6 +10,7 @@ var _prev_position = [0,0,0];
 var _enable = 1;
 var _life_lo = 100;
 var _life_hi = 100;
+var _material = 0;
 
 var matrix_emitter = new JitterMatrix(3, "float32", 1,1);
 
@@ -47,7 +48,8 @@ function output_list(){
 				matrix_emitter.name, 
 				_enable,
 				_life_lo,
-				_life_hi);
+				_life_hi,
+				_material);
 }
 
 function enable(){
@@ -78,20 +80,28 @@ function speed(){
 	_speed = arguments[0];
 }
 
-function mass_lo(){
+function mass(){
+	if(arguments.length == 1){
+		_mass_lo = arguments[0];
+		_mass_hi = _mass_lo;
+		return;
+	}
 	_mass_lo = arguments[0];
+	_mass_hi = arguments[1];
 }
 
-function mass_hi(){
-	_mass_hi = arguments[0];
-}
-
-function life_lo(){
+function life(){
+	if(arguments.length == 1){
+		_life_lo = 1 / arguments[0];
+		_life_hi = _life_lo;
+		return;
+	}
 	_life_lo = 1 / arguments[0];
+	_life_hi = 1 / arguments[1];
 }
 
-function life_hi(){
-	_life_hi = 1 / arguments[0];
+function material(){
+	_material = arguments[0];
 }
 
 function rate(){
