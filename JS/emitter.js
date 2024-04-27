@@ -2,6 +2,7 @@ autowhatch = 1;
 
 var _position = [0,0,0];
 var _rate = 1000;
+var _rate_mem = 1000;
 var _speed = 0.01;
 var _type = 0;
 var _mass_lo = 1;
@@ -11,6 +12,7 @@ var _enable = 1;
 var _life_lo = 100;
 var _life_hi = 100;
 var _material = 0;
+var _mode = 0;
 
 var matrix_emitter = new JitterMatrix(3, "float32", 1,1);
 
@@ -106,14 +108,39 @@ function material(){
 
 function rate(){
 	_rate = arguments[0];
+	_rate_mem = _rate;
 }
 
 function position(){
 	_position = [arguments[0], arguments[1], arguments[2]];
 }
 
-function bang(){
+function mode(){
+
+	switch (arguments[0]) {
+	  	case "constant":
+	  	case 0:
+	  		_mode = 0;
+	  		_rate = _rate_mem;
+	    break;
+
+	  	case "trigger":
+	  	case 1:
+	  		_mode = 1;
+	  		_rate = 0;
+	    break;
+	}	
+}
+
+function compute(){
 	output_list();
 	_prev_position = _position;
+	if(_mode == 1){
+		_rate = 0;
+	}
+}
+
+function bang(){
+	_rate = _rate_mem;
 }
 
