@@ -141,6 +141,7 @@ function compute(){
 }
 
 function bang(){
+	if(_mode == 0) return;
 	_rate = _rate_mem;
 }
 
