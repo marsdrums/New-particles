@@ -1,5 +1,109 @@
 autowhatch = 1; inlets = 1; outlets = 0;
 
+//______ GRAB CONTEXT ______________________________________________________________________
+// This file is only included inside the canvas code
+
+var drawto = "";
+declareattribute("drawto", null, "dosetdrawto", 0);
+
+var implicitdrawto = "";
+var swaplisten = null; // The listener for the jit.world
+var explicitdrawto = false;
+var proxy = null;
+var swapListener = null;
+
+if(max.version >= 820) {
+    proxy = new JitterObject("jit.proxy");
+}
+
+var implicit_tracker = new JitterObject("jit_gl_implicit"); // dummy oggetto gl
+var implicit_lstnr = new JitterListener(implicit_tracker.name, implicit_callback);
+
+function implicit_callback(event) { 
+	// se non stai mettendo ctx a mano e se implicitdrawto != dal nome di implicit
+	if(!explicitdrawto && implicitdrawto != implicit_tracker.drawto[0]) {
+		// important! drawto is an array so get first element
+		implicitdrawto = implicit_tracker.drawto[0];
+        FF_Utils.Print("IMPLICIT CLL", implicitdrawto);
+		dosetdrawto(implicitdrawto);
+	}
+}
+implicit_callback.local = 1;
+
+function setDrawto(val) {
+	explicitdrawto = true;
+	dosetdrawto(val);
+};
+
+function dosetdrawto(newdrawto) {
+	if(newdrawto == drawto || !newdrawto) {
+		// bounce
+        FF_Utils.Print("bouncer");
+		return;
+	}
+	if(proxy !== undefined) {
+		proxy.name = newdrawto;
+        // viene chiamato quando abbiamo classe
+        if(proxy.class !== undefined && proxy.class != "") {
+			// drawto may be root render or sub-node
+			// if root the class will return jit_gl_context_view
+			if(proxy.class != "jit_gl_context_view") { // jit_gl_context_view = node dentro world
+				// class is a sub-node, get the drawto on that
+				proxydrawto = proxy.send("getdrawto"); // prendi drawto di world che sarebbe nome del node
+				// recurse until we get root
+				// important! drawto is an array so get first element
+                FF_Utils.Print("proxy class", proxy.class);
+                FF_Utils.Print("DIVERSo da contxt_view", implicitdrawto);
+
+				return dosetdrawto(proxydrawto[0]);
+			}
+		}
+		else {
+            // viene chiamato se non abbiamo classe
+			proxydrawto = proxy.send("getdrawto");
+			if(proxydrawto !== null && proxydrawto !== undefined) {
+                FF_Utils.Print("SE E NODE??", proxydrawto[0]);
+
+				return dosetdrawto(proxydrawto[0]);  // name of the internal node
+			}
+		}
+	}
+    FF_Utils.Print("ASSEGNA drawto", newdrawto);
+    drawto = newdrawto;
+    // chiama cose che vanno inizializzate quando c'è il drawto
+    // assegna listener per ctx
+    swapListener = new JitterListener(drawto, swapCallback);
+}
+dosetdrawto.local = 1;
+
+function destroyFindCTX() {
+	implicit_lstnr.subjectname = ""
+	implicit_tracker.freepeer();
+}
+destroyFindCTX.local = 1;
+
+function notifydeleted() {
+    destroyFindCTX();
+}
+
+// ___ GRAB JIT.WORLD BANG____________________________________________
+var swapCallback = function(event) {
+    switch (event.eventname) {
+        case ("swap" || "draw"):
+        	bang();
+            // FF_Utils.Print("BANG")
+            break;
+        //case "mouse": case "mouseidle": 
+        //    FF_Utils.Print("MOUSE", event.args)
+        //    break;
+        case "willfree":
+            FF_Utils.Print("DESTROY")
+            break;
+        default: 
+            break;
+    }
+}
+
 //Arrays________________________________________________________________________________________________
 var emitters = [];
 var forces = [];
@@ -10,15 +114,15 @@ var emiMat = new JitterMatrix(4, "float32", 1,2);
 var forMat = new JitterMatrix(4, "float32", 1,2);
 var obsMat = new JitterMatrix(4, "float32", 1,2);
 
-var emiTex = new JitterObject("jit.gl.texture", "part-ctx");
-var forTex = new JitterObject("jit.gl.texture", "part-ctx");
-var obsTex = new JitterObject("jit.gl.texture", "part-ctx");
+var emiTex = new JitterObject("jit.gl.texture", drawto);
+var forTex = new JitterObject("jit.gl.texture", drawto);
+var obsTex = new JitterObject("jit.gl.texture", drawto);
 
 emiTex.adapt = 0;	emiTex.type = "float32";	emiTex.rectangle = 1;	emiTex.filter = "nearest";
 forTex.adapt = 0;	forTex.type = "float32";	forTex.rectangle = 1;	forTex.filter = "nearest";
 obsTex.adapt = 0;	obsTex.type = "float32";	obsTex.rectangle = 1;	obsTex.filter = "nearest";
 
-var partShader = new JitterObject("jit.gl.slab", "part-ctx");
+var partShader = new JitterObject("jit.gl.slab", drawto);
 partShader.inputs = 6;
 partShader.outputs = 3;
 partShader.file = "particle.system.jxs";
@@ -26,7 +130,7 @@ partShader.adapt = 0;
 partShader.type = "float32";
 partShader.dim = [2000, 2000];
 
-var inPosAgeTex = new JitterObject("jit.gl.texture", "part-ctx");
+var inPosAgeTex = new JitterObject("jit.gl.texture", drawto);
 inPosAgeTex.adapt = 0;
 inPosAgeTex.type = "float32";
 inPosAgeTex.dim = [2000, 2000];
@@ -34,7 +138,7 @@ inPosAgeTex.rectangle = 1;
 inPosAgeTex.defaultimage = "black";
 inPosAgeTex.filter = "nearest";
 
-var inVelMassTex = new JitterObject("jit.gl.texture", "part-ctx");
+var inVelMassTex = new JitterObject("jit.gl.texture", drawto);
 inVelMassTex.adapt = 0;
 inVelMassTex.type = "float32";
 inVelMassTex.dim = [2000, 2000];
@@ -42,7 +146,7 @@ inVelMassTex.rectangle = 1;
 inVelMassTex.defaultimage = "black";
 inVelMassTex.filter = "nearest";
 
-var inAliveMatTex = new JitterObject("jit.gl.texture", "part-ctx");
+var inAliveMatTex = new JitterObject("jit.gl.texture", drawto);
 inAliveMatTex.adapt = 0;
 inAliveMatTex.type = "float32";
 inAliveMatTex.dim = [2000, 2000];
@@ -72,10 +176,10 @@ var defaultAliveMatTex = new JitterMatrix(4, "float32", 2000,2000);
 	inAliveMatTex.jit_matrix(defaultAliveMatTex.name);
 
 //rendering tools___________________________________________________________________________________
-var particle_rendering = new JitterObject("jit.gl.shader", "part-ctx");
+var particle_rendering = new JitterObject("jit.gl.shader", drawto);
 particle_rendering.file = "particle.rendering.jxs";
 
-var mesh = new JitterObject("jit.gl.mesh", "part-ctx");
+var mesh = new JitterObject("jit.gl.mesh", drawto);
 mesh.draw_mode = "points";
 mesh.shader = particle_rendering.name;
 mesh.texture = ["inPosAgeTex", "inVelMassTex", "inAliveMatTex"];

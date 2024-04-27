@@ -453,11 +453,23 @@ float sphere_intersect(in particle p, in obstacle o, out vec3 hit_normal){
 
 float plane_intersect(in particle p, in obstacle o, out vec3 hit_normal){
 	
+	float denom = dot(p.dir, o.direction);
+	if (abs(denom) > 0.0001f) // your favorite epsilon
+	{
+	    float t = dot(o.position - p.pos, o.direction) / denom;
+	    if (t >= 0){
+	    	hit_normal = o.direction;
+	    	return t; // you might want to allow an epsilon here too
+	    } 
+	}
+	return -1;
+/*
     float denom = dot(o.direction, p.dir);
     if(denom <= 1e-6) return -1;
     vec3 p0l0 = o.position - p.pos;
     hit_normal = o.direction;
     return dot(p0l0, o.direction) / denom; 
+*/
 }
 
 void apply_obstacles(inout particle p){
