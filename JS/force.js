@@ -19,7 +19,7 @@ function normalize(x){
 	return [x[0]/len, x[1]/len, x[2]/len];
 }
 function enable(){
-	_enable = Math.max(0, Math.min(1, Math.floor(arguments[0])));
+	_enable = arguments[0];
 }
 function position(){
 	_position = [arguments[0], arguments[1], arguments[2]];

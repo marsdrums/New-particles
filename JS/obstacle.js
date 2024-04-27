@@ -57,7 +57,7 @@ function softness(){
 	_softness = Math.max(0, arguments[0]);
 }
 function enable(){
-	_enable = Math.max(0, Math.min(1, Math.floor(arguments[0])));
+	_enable = arguments[0];
 }
 function radius(){
 	_radius = arguments[0];
