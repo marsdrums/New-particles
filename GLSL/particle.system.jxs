@@ -12,6 +12,7 @@
 	<param name="emiTex" type="int" default="3" />
 	<param name="forTex" type="int" default="4" />
 	<param name="obsTex" type="int" default="5" />
+	<param name="bounceTex" type="int" default="6" />
 
 	//states
 	<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
@@ -37,6 +38,7 @@
 		<bind param="emiTex" program="fp" />
 		<bind param="forTex" program="fp" />
 		<bind param="obsTex" program="fp" />
+		<bind param="bounceTex" program="fp" />
 		<bind param="texDim0" program="fp" />
 
 		<bind param="modelViewProjectionMatrix" program="vp" />
@@ -82,8 +84,9 @@ in jit_PerVertex {
 layout (location = 0) out vec4 outPosAge;
 layout (location = 1) out vec4 outVelMass;
 layout (location = 2) out vec4 outAliveMat;
+layout (location = 3) out vec4 outBounce;
 
-uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, emiTex, forTex, obsTex;
+uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, emiTex, forTex, obsTex, bounceTex;
 uniform vec2 texDim0;
 uniform float numEmitters, numForces, numObstacles;
 uniform float time, frame, deltaTime;
@@ -100,6 +103,8 @@ struct particle{
 	float id;
 	uint rng;
 	float life_step;
+	float bounced;
+	vec3 bounced_pos;
 };
 
 struct new_particle{
@@ -178,6 +183,7 @@ void get_particle_current_state(inout particle p){
 	p.alive = lookup2.x;
 	p.mat = lookup2.y;
 	p.life_step = lookup2.z;
+	p.bounced = lookup2.w;
 	//*** p.dir is missing. Figure out where to compute it
 }
 
@@ -192,6 +198,12 @@ void update_particle(inout particle p){
 	} 
 
 	if(p.alive == 0.5) return;
+
+	if(p.bounced == 1){
+		p.bounced = 0;
+		p.pos = p.bounced_pos;
+		return;
+	}
 
 	p.pos += p.vel;//*(RandomFloat01(p.rng)*0.4 + 0.8);//*RandomVec301(p.rng);
 	//also, use DELTA to control aging in ms and indipendently of frame rate
@@ -509,11 +521,15 @@ void apply_obstacles(inout particle p){
 		} 
 
 		if(t0 > vel_length || t0 < 0) continue; //not intersected
-		p.pos += p.dir*t0;
-		p.alive = o.action;
+		//p.pos += p.dir*t0;
+		p.bounced = 1;
+		p.bounced_pos = p.pos+p.dir*t0;
 		p.dir = reflect(p.dir, hit_normal);
 		p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
-		p.vel = p.dir*(vel_length - t0);
+		p.bounced_pos += p.dir*(vel_length - t0);
+		p.alive = o.action;
+
+		p.vel = p.dir*vel_length;
 		p.vel /= o.softness + 1;
 		//p.pos += p.vel;
 		return; //*** now it quits after any intersection is found. consider evaluating mutiple obstacles to pick the closest
@@ -525,7 +541,8 @@ void output_textures(in particle p){
 
 	outPosAge = vec4(p.pos, p.age);
 	outVelMass = vec4(p.vel, p.mass);
-	outAliveMat = vec4(p.alive, p.mat, p.life_step, 0);
+	outAliveMat = vec4(p.alive, p.mat, p.life_step, p.bounced);
+	outBounce = vec4(p.bounced_pos,0);
 }
 
 void main(void) {

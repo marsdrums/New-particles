@@ -123,8 +123,8 @@ forTex.adapt = 0;	forTex.type = "float32";	forTex.rectangle = 1;	forTex.filter =
 obsTex.adapt = 0;	obsTex.type = "float32";	obsTex.rectangle = 1;	obsTex.filter = "nearest";
 
 var partShader = new JitterObject("jit.gl.slab", drawto);
-partShader.inputs = 6;
-partShader.outputs = 3;
+partShader.inputs = 7;
+partShader.outputs = 4;
 partShader.file = "particle.system.jxs";
 partShader.adapt = 0;
 partShader.type = "float32";
@@ -154,6 +154,15 @@ inAliveMatTex.rectangle = 1;
 inAliveMatTex.defaultimage = "black";
 inAliveMatTex.filter = "nearest";
 
+var inBounceTex = new JitterObject("jit.gl.texture", drawto);
+inBounceTex.adapt = 0;
+inBounceTex.type = "float32";
+inBounceTex.dim = [2000, 2000];
+inBounceTex.rectangle = 1;
+inBounceTex.defaultimage = "black";
+inBounceTex.filter = "nearest";
+
+partShader.activeinput = 6; partShader.jit_gl_texture(inBounceTex.name);
 partShader.activeinput = 5;	partShader.jit_gl_texture(obsTex.name);
 partShader.activeinput = 4;	partShader.jit_gl_texture(forTex.name);
 partShader.activeinput = 3;	partShader.jit_gl_texture(emiTex.name);
@@ -199,6 +208,7 @@ function reset(){
 	inPosAgeTex.jit_matrix(defaultPosAgeTex.name);
 	inVelMassTex.jit_matrix(defaultVelMassTex.name);
 	inAliveMatTex.jit_matrix(defaultAliveMatTex.name);
+	inBounceTex.jit_matrix(defaultPosAgeTex.name);
 }
 
 function findoutlet(patcher){
@@ -348,6 +358,7 @@ function process_particles(){
 
 function feedback_textures(){
 
+	inBounceTex.jit_gl_texture(partShader.out_name[3]);
 	inAliveMatTex.jit_gl_texture(partShader.out_name[2]);
 	inVelMassTex.jit_gl_texture(partShader.out_name[1]);
 	inPosAgeTex.jit_gl_texture(partShader.out_name[0]); 
