@@ -99,6 +99,7 @@ struct particle{
 	float mat; //i need to pass material from JS
 	float id;
 	uint rng;
+	float life_step;
 };
 
 struct new_particle{
@@ -111,6 +112,7 @@ struct new_particle{
 	float speed;
 	float mass;
 	float mat;
+	float life_step;
 };
 
 struct force{
@@ -132,7 +134,7 @@ struct obstacle{
 	vec3 position;
 	vec3 direction;
 	vec3 scale;
-	float mode;
+	float action;
 	float roughness;
 	float softness;
 	float radius;
@@ -163,8 +165,9 @@ vec3 randomUnitVector(inout uint seed){
 }
 
 void get_particle_current_state(inout particle p){ 
+	//return  uint(uv.x*3772) + uint(uv.y*78223) + uint(frame)*uint(26699);
 	p.id = floor(jit_in.texcoord.x) + floor(jit_in.texcoord.y)*2000;//texDim0.x; 
-	p.rng = uint(gl_FragCoord.x*3772) + uint(gl_FragCoord.y*78223) + uint(time);
+	p.rng = uint(gl_FragCoord.x*3772) + uint(gl_FragCoord.y*78223) + uint(frame)*uint(26699);
 	vec4 lookup0 = texture(posAgeTex, jit_in.texcoord);
 	vec4 lookup1 = texture(velMassTex, jit_in.texcoord);
 	vec4 lookup2 = texture(aliveMatTex, jit_in.texcoord);
@@ -174,13 +177,14 @@ void get_particle_current_state(inout particle p){
 	p.mass = lookup1.w;
 	p.alive = lookup2.x;
 	p.mat = lookup2.y;
+	p.life_step = lookup2.z;
 	//*** p.dir is missing. Figure out where to compute it
 }
 
 void update_particle(inout particle p){
 
 
-	p.age = p.alive != 0 ? max(0., p.age-0.001) : 0; //change with proper life expectancy
+	p.age = p.alive != 0 ? max(0., p.age - p.life_step) : 0; //change with proper life expectancy
 
 	if(p.age <= 0){
 		p.alive = 0;
@@ -189,7 +193,7 @@ void update_particle(inout particle p){
 
 	if(p.alive == 0.5) return;
 
-	p.pos += p.vel;// * RandomFloat01(p.rng);
+	p.pos += p.vel;//*(RandomFloat01(p.rng)*0.4 + 0.8);//*RandomVec301(p.rng);
 	//also, use DELTA to control aging in ms and indipendently of frame rate
 }
 
@@ -203,9 +207,10 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.vel = p.dir*newp.speed;//
 	//p.vel -= newp.emivel*randomUnitVector(p.rng);
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
-	p.pos += p.vel * RandomFloat01(p.rng);
-	p.vel *= RandomFloat01(p.rng);
+	p.pos += p.vel * RandomVec301(p.rng);
+	p.vel *= RandomVec301(p.rng);//RandomFloat01(p.rng);
 	p.mass = newp.mass;
+	p.life_step = newp.life_step;
 }
 
 bool to_generate(float id, float emiFrom, float emiTo){
@@ -219,22 +224,27 @@ void emit_particles(inout particle p){
 	new_particle newp;
 
 	for(float f = 0.5; f < numEmitters; f+=1.0){
-		vec4 lookup1 = texture(emiTex, vec2(f, 1.5));
+		
 		vec4 lookup2 = texture(emiTex, vec2(f, 2.5));
 
 		if(lookup2.w == 0) continue; //enable
+
+		vec4 lookup1 = texture(emiTex, vec2(f, 1.5));
 
 		float emiFrom = lookup1.z;
 		float emiTo = lookup1.w;
 
 		if(!to_generate(p.id, emiFrom, emiTo)) continue;
 
+		vec4 lookup3 = texture(emiTex, vec2(f, 3.5));
 		vec4 lookup0 = texture(emiTex, vec2(f, 0.5));
-		newp.mass = lookup0.w;
+		vec4 lookup4 = texture(emiTex, vec2(f, 4.5));
+		newp.mass = mix(lookup0.w, lookup3.w, RandomFloat01(p.rng));
 		newp.pos = lookup0.xyz;
 		newp.prevpos = lookup2.xyz;
-		newp.emivel = texture(emiTex, vec2(f, 3.5)).xyz;
+		newp.emivel = lookup3.xyz;
 		newp.speed = lookup1.y;
+		newp.life_step = mix(lookup4.x, lookup4.y, RandomFloat01(p.rng));
 		generate_particle(p, newp);
 		return;
 	}
@@ -465,7 +475,7 @@ void apply_obstacles(inout particle p){
 		o.shape = int(lookup0.w);
 		o.position = lookup0.xyz;
 		o.direction = lookup1.xyz;
-		o.mode = lookup2.w;
+		o.action = lookup2.w;
 		o.scale = lookup2.xyz;
 		o.roughness = lookup3.x;
 		o.softness = lookup3.y;
@@ -485,7 +495,7 @@ void apply_obstacles(inout particle p){
 
 		if(t0 > vel_length || t0 < 0) continue; //not intersected
 		p.pos += p.dir*t0;
-		p.alive = o.mode;
+		p.alive = o.action;
 		p.dir = reflect(p.dir, hit_normal);
 		p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
 		p.vel = p.dir*(vel_length - t0);
@@ -500,7 +510,7 @@ void output_textures(in particle p){
 
 	outPosAge = vec4(p.pos, p.age);
 	outVelMass = vec4(p.vel, p.mass);
-	outAliveMat = vec4(p.alive, p.mat, 0, 0);
+	outAliveMat = vec4(p.alive, p.mat, p.life_step, 0);
 }
 
 void main(void) {

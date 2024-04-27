@@ -4,7 +4,7 @@ var _shape = 0;
 var _position = [0,0,0];
 var _direction = [0,1,0];
 var _scale = [1,1,1];
-var _mode = 0;
+var _action = 0;
 var _roughness = 0;
 var _softness = 0;
 var _enable = 1;
@@ -32,21 +32,21 @@ function direction(){
 function scale(){
 	_scale = [arguments[0], arguments[1], arguments[2]];
 }
-function mode(){
+function action(){
 	switch (arguments[0]) {
 	  	case "kill":
 	  	case 0:
-	  		_mode = 0;
+	  		_action = 0;
 	    break;
 
 	  	case "stick":
 	  	case 1:
-	  		_mode = 0.5;
+	  		_action = 0.5;
 	    break;
 
 	  	case "bounce": 
 	  	case 2:
-	  		_mode = 1;
+	  		_action = 1;
 	    break;
 	}
 }
@@ -63,5 +63,5 @@ function radius(){
 	_radius = arguments[0];
 }
 function bang(){
-	outlet(0, "obstacle", _shape, _position, _direction, _scale, _mode, _roughness, _softness, _enable, _radius);
+	outlet(0, "obstacle", _shape, _position, _direction, _scale, _action, _roughness, _softness, _enable, _radius);
 }
