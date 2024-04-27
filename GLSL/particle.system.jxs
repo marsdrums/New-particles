@@ -207,8 +207,8 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.vel = p.dir*newp.speed;//
 	//p.vel -= newp.emivel*randomUnitVector(p.rng);
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
-	p.pos += p.vel * RandomVec301(p.rng);
-	p.vel *= RandomVec301(p.rng);//RandomFloat01(p.rng);
+	p.pos += p.vel * RandomFloat01(p.rng);
+	p.vel *= RandomFloat01(p.rng);
 	p.mass = newp.mass;
 	p.life_step = newp.life_step;
 	p.mat = newp.mat;

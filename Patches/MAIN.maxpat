@@ -40,6 +40,18 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-8",
+					"linecount" : 13,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 865.0, 26.0, 227.0, 181.0 ],
+					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float\n@speed float\n@mass float / vec2\n@life float / vec2\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-52",
 					"maxclass" : "newobj",
 					"numinlets" : 2,
@@ -217,8 +229,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 492.0, 159.0, 66.0, 22.0 ],
-					"text" : "mode stick"
+					"patching_rect" : [ 492.0, 159.0, 83.0, 22.0 ],
+					"text" : "action bounce"
 				}
 
 			}
@@ -548,12 +560,13 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-27",
+					"linecount" : 6,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 471.0, 276.0, 625.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 3421 @speed 0.05 @mass_lo 1 @mass_hi 6 @life_hi 1000 @life_lo 100"
+					"patching_rect" : [ 659.0, 121.5, 105.0, 89.0 ],
+					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 3421 @speed 0.05 @mass 1 6 @life 100 1000"
 				}
 
 			}
@@ -610,11 +623,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-6",
+					"linecount" : 6,
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 205.0, 505.0, 22.0 ],
+					"patching_rect" : [ 96.0, 205.0, 115.0, 89.0 ],
 					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 -9 0 @radius 5 @softness 0"
 				}
 
