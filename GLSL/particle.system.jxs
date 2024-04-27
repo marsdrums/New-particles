@@ -191,21 +191,31 @@ void get_particle_current_state(inout particle p){
 
 void update_age(inout particle p){
 
-	if(p.alive == 0) return;
-
 	p.age -= p.life_step; //change with proper life expectancy
 
-	if(p.age <= 0){
+	if(p.age <= 0 || p.alive == 0){
 		p.age = 0;
 		p.alive = 0;
+		return;
 	} 
 }
 
 void update_particle_position(inout particle p){
 
-	if(p.alive == 0) return;
+	if(p.bounced == 1){
+		p.bounced = 0;
+		p.pos = p.bounced_pos;
+		return;
+	} else {
 
-	if(p.alive == 0.5){
+		if(p.alive < 1) return;
+		else {
+			p.pos += p.vel;
+			return;
+		}
+	}
+/*
+	if(p.alive == 0){
 		if(p.bounced == 1){
 			p.bounced = 0;
 			p.pos = p.bounced_pos;
@@ -213,7 +223,19 @@ void update_particle_position(inout particle p){
 		} else {
 			return;
 		}
-	} else {
+	}
+
+	else if(p.alive == 0.5){
+		if(p.bounced == 1){
+			p.bounced = 0;
+			p.pos = p.bounced_pos;
+			return;		
+		} else {
+			return;
+		}
+	} 
+
+	else {
 
 		if(p.bounced == 1){
 			p.bounced = 0;
@@ -224,7 +246,7 @@ void update_particle_position(inout particle p){
 			return;
 		}
 	}
-
+*/
 	//also, use DELTA to control aging in ms and indipendently of frame rate
 }
 
