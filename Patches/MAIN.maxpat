@@ -45,9 +45,9 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 243.0, 768.0, 253.0, 234.0 ],
+					"patching_rect" : [ 243.0, 779.0, 253.0, 234.0 ],
 					"presentation_linecount" : 18,
-					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n\n__still to add:\n- add 4th dimesio to fields (evolution)\n- material interaction\n- add draw/debug force"
+					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n\n__still to add:\n- add 4th dimension to fields (evolution)\n- material interaction\n- add draw/debug force"
 				}
 
 			}
@@ -401,8 +401,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 221.0, 434.0, 501.0, 22.0 ],
-					"text" : "jit.particle.force @type point @position 0. 0. 0. @amount 0.1 @radius -1 @radius_softness 1"
+					"patching_rect" : [ 221.0, 434.0, 530.0, 22.0 ],
+					"text" : "jit.particle.force @type directional @position 0. 0. 0. @amount 0.1 @radius -1 @radius_softness 1"
 				}
 
 			}
@@ -713,7 +713,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 96.0, 210.0, 111.0, 22.0 ],
+					"patching_rect" : [ 96.0, 189.0, 111.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -740,12 +740,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-17",
-					"linecount" : 13,
+					"linecount" : 14,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 243.0, 577.0, 227.0, 181.0 ],
-					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\n- other shapes\n- material interaction\n- jit.gl.gridshape render"
+					"patching_rect" : [ 243.0, 577.0, 227.0, 194.0 ],
+					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\n- other shapes\n- material interaction\n- intersection from inside/outside\n- jit.gl.gridshape render"
 				}
 
 			}
@@ -756,8 +756,8 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 3.0, 577.0, 227.0, 234.0 ],
-					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3\n"
+					"patching_rect" : [ 7.0, 639.0, 227.0, 234.0 ],
+					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float / vec2\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3\n"
 				}
 
 			}
@@ -768,7 +768,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 506.0, 394.0, 265.0, 22.0 ],
+					"patching_rect" : [ 476.0, 342.0, 265.0, 22.0 ],
 					"text" : "jit.particle.force @type directional @amount -0.1"
 				}
 
@@ -1054,8 +1054,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 253.0, 482.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 5000 @speed 0.02 @mass 10 @life 100 1000"
+					"patching_rect" : [ 96.0, 253.0, 502.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 4000 @speed 0.02 0.1 @mass 10 @life 100 1000"
 				}
 
 			}
@@ -1363,13 +1363,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-45", 0 ],
 					"source" : [ "obj-44", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-27", 0 ],
-					"source" : [ "obj-55", 0 ]
 				}
 
 			}

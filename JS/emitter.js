@@ -7,7 +7,8 @@ var _rate_lo = 1000;
 var _rate_hi = 1000;
 var _rate_mem_lo = 1000;
 var _rate_mem_hi = 1000;
-var _speed = 0.01;
+var _speed_lo = 0.01;
+var _speed_hi = 0.01;
 var _type = 0;
 var _mass_lo = 1;
 var _enable = 1;
@@ -50,7 +51,8 @@ function output_list(){
 				_type, 
 				randintmix(_rate_lo, _rate_hi), 
 				_position, 
-				_speed, 
+				_speed_lo, 
+				_speed_hi,
 				_mass_lo, 
 				_mass_hi, 
 				_prev_position, 
@@ -86,7 +88,14 @@ function type(){
 }
 
 function speed(){
-	_speed = arguments[0];
+
+	if(arguments.length == 1){
+		_speed_lo = arguments[0];
+		_speed_hi = _speed_lo;
+		return;
+	}
+	_speed_lo = arguments[0];
+	_speed_hi = arguments[1];
 }
 
 function mass(){

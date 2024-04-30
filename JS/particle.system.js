@@ -286,16 +286,17 @@ function read_and_parse(){
 			    emitters.push({	type: agent[1], 
 			    				rate: agent[2],
 			    				position: [agent[3], agent[4], agent[5]], 
-			    				speed: agent[6],
-			    				mass_lo: agent[7],
-			    				mass_hi: agent[8],
-			    				prevposition: [agent[9], agent[10], agent[11]],
-			    				velocity: [agent[3]-agent[9], agent[4]-agent[10], agent[5]-agent[11]],
-			    				matrix: agent[12],
-			    				enable: agent[13],
-			    				life_lo: agent[14],
-			    				life_hi: agent[15],
-			    				material: agent[16]
+			    				speed_lo: agent[6],
+			    				speed_hi: agent[7],
+			    				mass_lo: agent[8],
+			    				mass_hi: agent[9],
+			    				prevposition: [agent[10], agent[11], agent[12]],
+			    				velocity: [agent[3]-agent[10], agent[4]-agent[11], agent[5]-agent[12]],
+			    				matrix: agent[13],
+			    				enable: agent[14],
+			    				life_lo: agent[15],
+			    				life_hi: agent[16],
+			    				material: agent[17]
 			    			});
 			    break;
 			}
@@ -313,10 +314,10 @@ function transfer_data_to_texture(){
 		for(var i = 0; i < emitters.length; i++){
 			emit_to = (counter + emitters[i].rate) % 4000000;
 			emiMat.setcell(i, 0, "val", emitters[i].mass_lo, emitters[i].position);
-			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed, counter);
+			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed_lo, counter);
 			emiMat.setcell(i, 2, "val", emitters[i].enable, emitters[i].prevposition);
 			emiMat.setcell(i, 3, "val", emitters[i].mass_hi, emitters[i].velocity);
-			emiMat.setcell(i, 4, "val", 0, emitters[i].life_lo, emitters[i].life_hi, emitters[i].material);
+			emiMat.setcell(i, 4, "val", emitters[i].speed_hi, emitters[i].life_lo, emitters[i].life_hi, emitters[i].material);
 			counter = emit_to;
 		}	
 		emiTex.jit_matrix(emiMat.name);	

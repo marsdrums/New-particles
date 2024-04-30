@@ -263,7 +263,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	//p.vel -= newp.emivel*randomUnitVector(p.rng);
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
-	p.vel *= RandomFloat01(p.rng);
+	//p.vel *= RandomFloat01(p.rng);
 	p.mass = newp.mass;
 	p.life_step = newp.life_step;
 	p.mat = newp.mat;
@@ -301,7 +301,7 @@ void emit_particles(inout particle p){
 		newp.pos = lookup0.xyz;
 		newp.prevpos = lookup2.xyz;
 		newp.emivel = lookup3.xyz;
-		newp.speed = lookup1.y;
+		newp.speed = mix(lookup1.y, lookup4.w, RandomFloat01(p.rng));
 		newp.life_step = mix(lookup4.x, lookup4.y, RandomFloat01(p.rng));
 		newp.mat = lookup4.z;
 		generate_particle(p, newp);
@@ -470,7 +470,7 @@ void apply_forces(inout particle p){
 		f.diff = f.pos - p.pos;
 		f.dist = length(f.diff);
 
-		if(f.rad > 0){ // if the radius isn't infinite
+		if(f.rad > 0){ // if the radius isn't infinite (-1 is used to set infinite radius);
 			if(f.dist > f.rad) return;
 			f.amt *= smoothstep(0., f.soft, 1 - f.dist/f.rad);		
 		}

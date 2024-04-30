@@ -106,7 +106,7 @@
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
-					"outlettype" : [ "" ],
+					"outlettype" : [ "bang" ],
 					"patching_rect" : [ 156.0, 107.0, 30.0, 30.0 ]
 				}
 
@@ -136,20 +136,20 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 92.0, 192.0, 116.0, 62.0 ],
-					"text" : "emitter 0 3421 0. 4. 0. 0.05 1 6 0. 4. 0. u312009266 1 0.01 0.001 0"
+					"patching_rect" : [ 92.0, 192.0, 170.0, 62.0 ],
+					"text" : "emitter 0 14223 0.46251 1.793977 -0.40252 0.02 10 10 0.300473 1.820366 -0.303347 u039003624 1 0.01 0.001 0"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 12,
+					"linecount" : 13,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 283.0, 101.0, 318.0, 167.0 ],
-					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi"
+					"patching_rect" : [ 283.0, 101.0, 318.0, 181.0 ],
+					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed_lo,\n_speed_hi, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi"
 				}
 
 			}
