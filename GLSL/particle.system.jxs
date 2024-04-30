@@ -132,6 +132,8 @@ struct force{
 	vec3 field_offset;
 	vec3 field_scale;
 	float field_octaves;
+	vec3 diff;
+	float dist;
 };
 
 struct obstacle{
@@ -309,16 +311,20 @@ void emit_particles(inout particle p){
 
 //______ FORCES __________________________________________________________________________________________
 
+
 void point_attractor_force(inout particle p, in force f){
-	vec3 diff = f.pos - p.pos;
-	float dist = length(diff);
-	if(dist > f.rad) return;
-	diff *= f.amt / (dist*dist + 0.01);
-	diff *= smoothstep(0., f.soft, 1 - dist/f.rad);
-	p.vel += diff / p.mass;
+
+	f.diff *= f.amt / (f.dist*f.dist + 0.01);
+	p.vel += f.diff / p.mass;
 }
-void directional_force(inout particle p, in force f){ p.vel += f.dir * f.amt / p.mass; }
-void drag_force(inout particle p, in force f){ p.vel /= f.amt/p.mass + 1; }
+void directional_force(inout particle p, in force f){ 
+
+	p.vel += f.dir * f.amt / p.mass; 
+}
+void drag_force(inout particle p, in force f){ 
+
+	p.vel /= f.amt/p.mass + 1; 
+}
 
 float hashfloat(float h){
 	return fract(sin(h) * 43758.5453123);
@@ -458,12 +464,19 @@ void apply_forces(inout particle p){
 		if(lookup1.w == 0) continue;
 		f.type = int(lookup0.x);
 		f.amt = lookup0.y;
+		f.rad = lookup0.z;
+		f.soft = lookup0.w;
+		f.pos = lookup1.xyz;
+		f.diff = f.pos - p.pos;
+		f.dist = length(f.diff);
+
+		if(f.rad > 0){ // if the radius isn't infinite
+			if(f.dist > f.rad) return;
+			f.amt *= smoothstep(0., f.soft, 1 - f.dist/f.rad);		
+		}
 
 		switch (f.type) {
 			case 0:	
-				f.rad = lookup0.z;
-				f.soft = lookup0.w;
-				f.pos = lookup1.xyz;
 			    point_attractor_force(p, f);
 			    break;
 			case 1:

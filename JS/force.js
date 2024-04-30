@@ -3,7 +3,7 @@ autowhatch = 1; inlets = 1; outlets = 1;
 var _position = [0,0,0];
 var _direction = [0,-1,0];
 var _amount = 0.;
-var _radius = 1;
+var _radius = -1;
 var _radius_softness = 0;
 var _type = 0;
 var _field_type = 0;
@@ -32,7 +32,7 @@ function amount(){
 }
 function radius(){
 	if(arguments[0] < 0 || arguments[0] == "inf"){
-		_radius = 50000000;
+		_radius = -1;
 		return;
 	}
 	_radius = arguments[0];

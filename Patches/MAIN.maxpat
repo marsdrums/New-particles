@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 314.0, 100.0, 952.0, 898.0 ],
+		"rect" : [ 129.0, 100.0, 952.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -47,7 +47,7 @@
 					"numoutlets" : 0,
 					"patching_rect" : [ 243.0, 768.0, 253.0, 234.0 ],
 					"presentation_linecount" : 18,
-					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n\n__still to add:\n- link radius to all forces\n- material interaction\n- add draw/debug force"
+					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n\n__still to add:\n- add 4th dimesio to fields (evolution)\n- material interaction\n- add draw/debug force"
 				}
 
 			}
@@ -401,8 +401,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 232.0, 434.0, 539.0, 22.0 ],
-					"text" : "jit.particle.force @type point_attractor position 0. 0. 0. @amount -0.1 @radius 3 @radius_softness 0"
+					"patching_rect" : [ 221.0, 434.0, 501.0, 22.0 ],
+					"text" : "jit.particle.force @type point @position 0. 0. 0. @amount 0.1 @radius -1 @radius_softness 1"
 				}
 
 			}
@@ -728,12 +728,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-54",
-					"linecount" : 7,
+					"linecount" : 5,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 656.0, 81.0, 150.0, 114.0 ],
-					"text" : "TODO:\n\n-add density maps\n-add self-attracting forces\n-use mfi\n-add field radius\n\n"
+					"patching_rect" : [ 904.0, 69.0, 150.0, 74.0 ],
+					"text" : "TODO:\n\n-add density maps\n-add self-attracting forces\n-use mfi"
 				}
 
 			}
@@ -782,7 +782,7 @@
 					"numoutlets" : 2,
 					"outlettype" : [ "", "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 1126.0, 610.0, 50.0, 22.0 ]
+					"patching_rect" : [ 1095.0, 598.0, 50.0, 22.0 ]
 				}
 
 			}
@@ -793,7 +793,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 1119.0, 641.0, 96.0, 22.0 ],
+					"patching_rect" : [ 1088.0, 629.0, 96.0, 22.0 ],
 					"text" : "prepend amount"
 				}
 
@@ -1018,8 +1018,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 623.0, 683.0, 481.0, 22.0 ],
-					"text" : "jit.particle.force @type field @amount 0.001 @field_scale 3 3 3 @noise_function simplex"
+					"patching_rect" : [ 623.0, 708.0, 467.0, 22.0 ],
+					"text" : "jit.particle.force @type field @amount 0.1 @field_scale 3 3 3 @noise_function simplex"
 				}
 
 			}
@@ -1030,7 +1030,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 213.0, 333.0, 230.0, 22.0 ],
+					"patching_rect" : [ 213.0, 342.0, 230.0, 22.0 ],
 					"text" : "jit.particle.force @type drag @amount 0.6"
 				}
 
@@ -1054,8 +1054,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 253.0, 489.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 10000 @speed 0.02 @mass 10 @life 100 1000"
+					"patching_rect" : [ 96.0, 253.0, 482.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 5000 @speed 0.02 @mass 10 @life 100 1000"
 				}
 
 			}
@@ -1168,13 +1168,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-27", 0 ],
 					"source" : [ "obj-13", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-15", 0 ]
 				}
 
 			}
@@ -1370,13 +1363,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-45", 0 ],
 					"source" : [ "obj-44", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-45", 0 ]
 				}
 
 			}
