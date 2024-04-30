@@ -364,7 +364,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 255.0, 444.0, 549.0, 22.0 ],
+					"patching_rect" : [ 238.0, 444.0, 549.0, 22.0 ],
 					"text" : "jit.particle.force @type point_attractor position 0. 0. 0. @amount 0.1 @radius 200 @radius_softness 0"
 				}
 
@@ -702,27 +702,12 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-52",
-					"linecount" : 6,
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 475.0, 113.0, 111.0, 89.0 ],
-					"presentation_linecount" : 6,
-					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 -9 0 @radius 5 @softness 1"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-17",
 					"linecount" : 13,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 326.0, 577.0, 227.0, 181.0 ],
-					"presentation_linecount" : 13,
 					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\nother shapes\n\n-jit.gl.gridshape render"
 				}
 
@@ -1008,7 +993,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 387.0, 334.0, 230.0, 22.0 ],
+					"patching_rect" : [ 290.0, 340.0, 230.0, 22.0 ],
 					"text" : "jit.particle.force @type drag @amount 0.1"
 				}
 
@@ -1094,7 +1079,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 244.0, 308.0, 583.0, 22.0 ],
+					"patching_rect" : [ 238.0, 292.0, 583.0, 22.0 ],
 					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 0 0 @radius 3 @softness 1 @roughness 1"
 				}
 
@@ -1139,13 +1124,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-11", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-15", 0 ]
 				}
 
 			}

@@ -1,13 +1,15 @@
 autowhatch = 1; 
 
 var _position = [0,0,0];
-var _rate = 1000;
-var _rate_mem = 1000;
+var _mass_hi = 1;
+var _prev_position = [0,0,0];
+var _rate_lo = 1000;
+var _rate_hi = 1000;
+var _rate_mem_lo = 1000;
+var _rate_mem_hi = 1000;
 var _speed = 0.01;
 var _type = 0;
 var _mass_lo = 1;
-var _mass_hi = 1;
-var _prev_position = [0,0,0];
 var _enable = 1;
 var _life_lo = 100;
 var _life_hi = 100;
@@ -37,11 +39,16 @@ function jit_matrix(inname){
 
 }
 
+function randintmix(a, b){ 
+	var rand = Math.random();
+	return Math.floor(a*(1-rand) + b*rand);
+}
+
 function output_list(){
 
 	outlet(0,	"emitter", 
 				_type, 
-				_rate, 
+				randintmix(_rate_lo, _rate_hi), 
 				_position, 
 				_speed, 
 				_mass_lo, 
@@ -107,8 +114,20 @@ function material(){
 }
 
 function rate(){
-	_rate = Math.max(0, arguments[0]);
-	_rate_mem = _rate;
+
+	if(arguments.length == 1){
+		_rate_lo = arguments[0];
+		_rate_hi = _rate_lo;
+		_rate_mem_lo = _rate_lo;
+		_rate_mem_hi = _rate_hi;
+		return;
+	}
+
+	_rate_lo = arguments[0];
+	_rate_hi = arguments[1];
+	_rate_mem_lo = _rate_lo;
+	_rate_mem_hi = _rate_hi;
+	return;
 }
 
 function position(){
@@ -121,13 +140,15 @@ function mode(){
 	  	case "constant":
 	  	case 0:
 	  		_mode = 0;
-	  		_rate = _rate_mem;
+	  		_rate_lo = _rate_mem_lo;
+	  		_rate_hi = _rate_mem_hi;
 	    break;
 
 	  	case "trigger":
 	  	case 1:
 	  		_mode = 1;
-	  		_rate = 0;
+	  		_rate_hi = 0;
+	  		_rate_lo = 0;
 	    break;
 	}	
 }
@@ -136,12 +157,14 @@ function compute(){
 	output_list();
 	_prev_position = _position;
 	if(_mode == 1){
-		_rate = 0;
+		_rate_lo = 0;
+		_rate_hi = 0;
 	}
 }
 
 function bang(){
 	if(_mode == 0) return;
-	_rate = _rate_mem;
+	_rate_lo = _rate_mem_lo;
+	_rate_hi = _rate_mem_hi;
 }
 

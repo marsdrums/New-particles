@@ -1,0 +1,82 @@
+<jittershader name="fillMap">
+	<description> </description>
+	<param name="uv" type="vec3" state="POSITION" />
+	<param name="posAgeTex" type="int" default="0" />
+	<language name="glsl" version="1.5">
+		<bind param="uv" program="vp" />
+		<bind param="posAgeTex" program="vp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+uniform sampler2DRect posAgeTex;
+in vec3 uv;
+
+void main() {	
+	gl_Position = texture(posAgeTex, uv.xy);
+}
+]]>
+		</program>
+		<program name="gp" type="geometry">
+<![CDATA[
+#version 330 core
+
+layout (points) in;
+layout (points, max_vertices=1) out;
+
+out jit_PerVertex {
+	flat vec4 color;	
+};
+
+void main() {
+
+	//if dead, quit
+	//if(gl_in[0].gl_Position.w < 0 || gl_in[0].gl_Position.w >= 1) return;
+
+	vec3 pos = gl_in[0].gl_Position.xyz;
+
+	//if outside the box, quit
+	if(	pos.x <= -1 || pos.x >= 1 ||
+		pos.y <= -1 || pos.y >= 1 ||
+		pos.z <= -1 || pos.z >= 1) return;
+
+	// [-1; 1] to [0; 256]
+	pos = floor((pos+1)*128);
+
+	//assign chunks of 64 z layers to each color channel
+	color.r = pos.z >= 0 && pos.z < 64 ? 1 : 0;
+	color.g = pos.z >= 64 && pos.z < 128 ? 1 : 0;
+	color.b = pos.z >= 128 && pos.z < 192 ? 1 : 0;
+	color.a = pos.z >= 192 ? 1 : 0;
+
+	//tile z slices
+	pos.z = mod(pos.z, 64);
+	pos.x += 256 * mod(pos.z, 8);
+	pos.y += 256 * floor(pos.z / 8);
+
+	//[0; 2048] to [-1; 1]
+	pos.xy /= 1024;
+	pos.xy -= 1;
+
+	gl_Position = vec4(pos.xy, 0, 1);
+	EmitVertex();
+	EndPrimitive();
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+in jit_PerVertex {
+	flat vec4 color;
+} jit_in;
+
+out vec4 color;
+
+void main() {
+	color = jit_in.color;
+}	
+]]>
+		</program>
+	</language>
+</jittershader>
