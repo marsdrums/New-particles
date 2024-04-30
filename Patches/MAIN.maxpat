@@ -377,7 +377,6 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 403.0, 210.0, 87.0, 22.0 ],
-					"presentation_linecount" : 2,
 					"text" : "mode constant"
 				}
 
@@ -389,9 +388,9 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 243.0, 779.0, 253.0, 234.0 ],
+					"patching_rect" : [ 243.0, 791.0, 253.0, 234.0 ],
 					"presentation_linecount" : 18,
-					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n\n__still to add:\n- add 4th dimension to fields (evolution)\n- material interaction\n- add draw/debug force"
+					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n@target_material list (int)\n\n__still to add:\n- add 4th dimension to fields (evolution)\n- add draw/debug force"
 				}
 
 			}
@@ -745,8 +744,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 213.0, 398.0, 530.0, 22.0 ],
-					"text" : "jit.particle.force @type directional @position 0. 0. 0. @amount 0.1 @radius -1 @radius_softness 1"
+					"patching_rect" : [ 213.0, 398.0, 261.0, 22.0 ],
+					"text" : "jit.particle.force @type directional @amount 0.1"
 				}
 
 			}
@@ -1084,12 +1083,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-17",
-					"linecount" : 14,
+					"linecount" : 16,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 243.0, 577.0, 227.0, 194.0 ],
-					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\n- other shapes\n- material interaction\n- intersection from inside/outside\n- jit.gl.gridshape render"
+					"patching_rect" : [ 243.0, 522.0, 227.0, 221.0 ],
+					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n@target_material list (int)\n\n__still to add:\n- other shapes\n- intersection from inside/outside\n- jit.gl.gridshape render\n- \"accurate mode\" for evaluating all possible intersections"
 				}
 
 			}
@@ -1374,7 +1373,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 201.5, 342.0, 230.0, 22.0 ],
+					"patching_rect" : [ 213.0, 342.0, 230.0, 22.0 ],
 					"text" : "jit.particle.force @type drag @amount 0.6"
 				}
 
@@ -1460,8 +1459,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 213.0, 297.0, 583.0, 22.0 ],
-					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 0 0 @radius 3 @softness 1 @roughness 1"
+					"patching_rect" : [ 175.0, 297.0, 587.0, 22.0 ],
+					"text" : "jit.particle.obstacle @shape sphere @action bounce @position 0 -8 0 @radius 3 @softness 1 @roughness 1"
 				}
 
 			}
@@ -1749,6 +1748,20 @@
 				"patchline" : 				{
 					"destination" : [ "obj-27", 0 ],
 					"source" : [ "obj-55", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-56", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-6", 0 ]
 				}
 
 			}
