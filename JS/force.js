@@ -12,6 +12,8 @@ var _field_octaves = 5;
 var _field_offset = [0,0,0];
 var _field_scale = [3,3,3];
 var _enable = 1;
+var _target_material_amt = -1;
+var _target_material = [-1,-1,-1,-1,-1,-1];
 //var _field_function = 0; //*** add field function selection
 
 function normalize(x){ 
@@ -146,6 +148,17 @@ function field_scale(){
 	_field_scale = [arguments[0], arguments[1], arguments[2]];
 }
 
+function target_material(){
+	if(arguments[0] == -1){
+		_target_material_amt = -1;
+		return;
+	}
+	_target_material_amt = arguments.length;
+	for(var i = 0; i < _target_material_amt; i++){
+		_target_material[i] = arguments[i];
+	}
+}
+
 function bang(){
 
 	outlet(	0,	"force", 
@@ -160,6 +173,8 @@ function bang(){
 				_field_offset,
 				_field_scale,
 				_field_octaves,
-				_enable
+				_enable,
+				_target_material_amt,
+				_target_material
 			);
 }

@@ -265,7 +265,9 @@ function read_and_parse(){
 			    				field_offset: [agent[13], agent[14], agent[15]],
 			    				field_scale: [agent[16], agent[17], agent[18]],
 			    				field_octaves: agent[19],
-			    				enable: agent[20]
+			    				enable: agent[20],
+			    				target_material_amt: agent[21],
+			    				target_material: [agent[22], agent[23], agent[24], agent[25], agent[26], agent[27]]
 			    			});
 			    break;
 
@@ -324,7 +326,7 @@ function transfer_data_to_texture(){
 	}
 
 	if(forces.length > 0){
-		forMat.dim = [forces.length, 5];
+		forMat.dim = [forces.length, 7];
 		forTex.dim = forMat.dim;
 		for(var i = 0; i < forces.length; i++){
 			forMat.setcell(i, 0, "val", forces[i].radius_softness, forces[i].type, forces[i].amount, forces[i].radius);
@@ -332,6 +334,8 @@ function transfer_data_to_texture(){
 			forMat.setcell(i, 2, "val", forces[i].field_octaves, forces[i].direction);
 			forMat.setcell(i, 3, "val", forces[i].field_type, forces[i].field_offset);
 			forMat.setcell(i, 4, "val", forces[i].noise_function, forces[i].field_scale);
+			forMat.setcell(i, 5, "val", forces[i].target_material_amt,forces[i].target_material.slice(0, 3));
+			forMat.setcell(i, 6, "val", 0,forces[i].target_material.slice(3, 3));
 		}	
 		forTex.jit_matrix(forMat.name);	
 	}

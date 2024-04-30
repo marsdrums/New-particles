@@ -119,25 +119,25 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 11,
+					"linecount" : 13,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 185.0, 215.0, 150.0, 154.0 ],
-					"text" : "force:\ntype\namount\nradius\nposition\ndirection\nfield type\nnoise function\nfield offset\nfield scale\nenable"
+					"patching_rect" : [ 185.0, 215.0, 150.0, 181.0 ],
+					"text" : "force:\ntype\namount\nradius\nposition\ndirection\nfield type\nnoise function\nfield offset\nfield scale\nenable\ntarget_material_amt\ntarget_material"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-2",
-					"linecount" : 3,
+					"linecount" : 11,
 					"maxclass" : "message",
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 41.0, 209.0, 94.0, 49.0 ],
-					"text" : "force 1 0.3 1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1"
+					"patching_rect" : [ 41.0, 209.0, 96.0, 156.0 ],
+					"text" : "force 0 0 -1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1 -1 <undefined> <undefined> <undefined> <undefined> <undefined> <undefined> <undefined> <undefined>"
 				}
 
 			}

@@ -461,7 +461,30 @@ void apply_forces(inout particle p){
 	for(float i = 0.5; i < numForces; i+=1.0){
 		vec4 lookup0 = texture(forTex, vec2(i, 0.5));
 		vec4 lookup1 = texture(forTex, vec2(i, 1.5));
-		if(lookup1.w == 0) continue;
+		if(lookup1.w == 0) continue; //if not enabled
+
+		vec4 lookup5 = texture(forTex, vec2(i, 5.5));
+		int target_material_amt = int(lookup5.w);
+		if(target_material_amt > 0){
+			vec4 lookup6 = texture(forTex, vec2(i, 6.5));
+			float candidate_mat[6] = float[](	lookup5.x,
+												lookup5.y,
+												lookup5.z,
+												lookup6.x,
+												lookup6.y,
+												lookup6.z
+											);
+
+			bool target_material_found = false;
+			for(int m = 0; m < target_material_amt; m++){
+				if(p.mat == candidate_mat[m]){
+					target_material_found = true;
+					break;
+				}
+			}
+			if(!target_material_found) continue;
+		}
+
 		f.type = int(lookup0.x);
 		f.amt = lookup0.y;
 		f.rad = lookup0.z;
@@ -471,7 +494,7 @@ void apply_forces(inout particle p){
 		f.dist = length(f.diff);
 
 		if(f.rad > 0){ // if the radius isn't infinite (-1 is used to set infinite radius);
-			if(f.dist > f.rad) return;
+			if(f.dist > f.rad) continue;
 			f.amt *= smoothstep(0., f.soft, 1 - f.dist/f.rad);		
 		}
 
