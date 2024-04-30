@@ -31,7 +31,11 @@ function amount(){
 	_amount = arguments[0];
 }
 function radius(){
-	_radius = Math.max(0, arguments[0]);
+	if(arguments[0] < 0 || arguments[0] == "inf"){
+		_radius = 50000000;
+		return;
+	}
+	_radius = arguments[0];
 }
 function radius_softness(){
 	_radius_softness = Math.max(0, Math.min(1, arguments[0]));

@@ -40,6 +40,43 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-14",
+					"linecount" : 17,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 243.0, 768.0, 253.0, 234.0 ],
+					"presentation_linecount" : 18,
+					"text" : "Force\n@type \"point_attractor\" / \"directional\" / \"field\"\n@amount float\n@position vec3\n@direction vec3\n@radius float / \"inf\"\n@radius_softness float \n@field_type int / string\n@field_offset vec3\n@field_scale vec3\n@field_octaves int\n@noise_function int / string\n\n__still to add:\n- link radius to all forces\n- material interaction\n- add draw/debug force"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-13",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 254.0, 209.0, 24.0, 24.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-7",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 290.0, 210.0, 76.0, 22.0 ],
+					"text" : "mode trigger"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-59",
 					"maxclass" : "newobj",
 					"numinlets" : 0,
@@ -345,7 +382,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 409.0, 370.0, 111.0, 22.0 ],
+					"patching_rect" : [ 506.0, 51.0, 111.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -364,8 +401,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 238.0, 444.0, 549.0, 22.0 ],
-					"text" : "jit.particle.force @type point_attractor position 0. 0. 0. @amount 0.1 @radius 200 @radius_softness 0"
+					"patching_rect" : [ 232.0, 434.0, 539.0, 22.0 ],
+					"text" : "jit.particle.force @type point_attractor position 0. 0. 0. @amount -0.1 @radius 3 @radius_softness 0"
 				}
 
 			}
@@ -695,7 +732,7 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 654.0, 83.0, 150.0, 114.0 ],
+					"patching_rect" : [ 656.0, 81.0, 150.0, 114.0 ],
 					"text" : "TODO:\n\n-add density maps\n-add self-attracting forces\n-use mfi\n-add field radius\n\n"
 				}
 
@@ -707,20 +744,20 @@
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 326.0, 577.0, 227.0, 181.0 ],
-					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\nother shapes\n\n-jit.gl.gridshape render"
+					"patching_rect" : [ 243.0, 577.0, 227.0, 181.0 ],
+					"text" : "Obstacle\n@shape \"plane\" / \"sphere\"\n@action \"kill\" / \"stick\" / \"bounce\"\n@position vec3\n@direction vec3\n@radius float\n@softness float \n@roughness float\n\n__still to add:\n- other shapes\n- material interaction\n- jit.gl.gridshape render"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-8",
-					"linecount" : 19,
+					"linecount" : 16,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 86.0, 577.0, 227.0, 261.0 ],
-					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float\n@speed float\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3\n\n-add infinite radius for point attractors\n-add draw/debug atractors"
+					"patching_rect" : [ 3.0, 577.0, 227.0, 234.0 ],
+					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3\n"
 				}
 
 			}
@@ -993,8 +1030,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 290.0, 340.0, 230.0, 22.0 ],
-					"text" : "jit.particle.force @type drag @amount 0.1"
+					"patching_rect" : [ 213.0, 333.0, 230.0, 22.0 ],
+					"text" : "jit.particle.force @type drag @amount 0.6"
 				}
 
 			}
@@ -1017,8 +1054,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 253.0, 492.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 3000 @speed 0.05 @mass 1 20 @life 100 1000"
+					"patching_rect" : [ 96.0, 253.0, 489.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 10000 @speed 0.02 @mass 10 @life 100 1000"
 				}
 
 			}
@@ -1114,7 +1151,7 @@
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 96.0, 474.0, 78.0, 22.0 ],
+					"patching_rect" : [ 96.0, 512.0, 78.0, 22.0 ],
 					"text" : "jit.gl.particles"
 				}
 
@@ -1124,6 +1161,20 @@
 				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-11", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-27", 0 ],
+					"source" : [ "obj-13", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-1", 0 ],
+					"source" : [ "obj-15", 0 ]
 				}
 
 			}
@@ -1345,15 +1396,8 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-56", 0 ],
-					"source" : [ "obj-59", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-6", 0 ]
+					"destination" : [ "obj-27", 0 ],
+					"source" : [ "obj-7", 0 ]
 				}
 
 			}
