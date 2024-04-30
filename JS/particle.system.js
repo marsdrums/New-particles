@@ -191,9 +191,10 @@ particle_rendering.file = "particle.rendering.jxs";
 var mesh = new JitterObject("jit.gl.mesh", drawto);
 mesh.draw_mode = "points";
 mesh.shader = particle_rendering.name;
-mesh.texture = ["inPosAgeTex", "inVelMassTex", "inAliveMatTex"];
+mesh.texture = [inPosAgeTex.name, inVelMassTex.name, inAliveMatTex.name];
 mesh.blend_enable = 1;
 mesh.depth_enable = 0;
+//mesh.blend = "add";
 
 var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
 uvMat.exprfill(0, "cell[0]");
@@ -202,7 +203,13 @@ uvMat.op("+", 0.5, 0.5, 0.);
 
 mesh.jit_matrix(uvMat.name);
 
+//Uniforms_________________________________________
+
+var _point_size = 0.02;
+
 //Functions________________________________________________________________________________________
+function point_size(x){ _point_size = x; }
+
 function reset(){
 
 	inPosAgeTex.jit_matrix(defaultPosAgeTex.name);
@@ -377,6 +384,7 @@ function feedback_textures(){
 
 function draw_particles(){
 
+	particle_rendering.param("point_size", _point_size);
 	mesh.draw();
 }
 

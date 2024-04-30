@@ -214,7 +214,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.age = 1;
 	p.dir = randomUnitVector(p.rng);
 	p.vel = p.dir*newp.speed;//
-	//p.vel -= newp.emivel*randomUnitVector(p.rng);
+	//p.vel += newp.emivel;//*randomUnitVector(p.rng);
 	p.vel += newp.initial_vel;
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
