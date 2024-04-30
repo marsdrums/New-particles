@@ -364,8 +364,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 571.0, 204.0, 571.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 4000 @speed 0.02 0.1 @mass 10 @life 100 1000 @material 2"
+					"patching_rect" : [ 571.0, 204.0, 564.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 4000 @speed 0.02 0.1 @mass 10 @life 100 300 @material 2"
 				}
 
 			}
@@ -1095,12 +1095,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-8",
-					"linecount" : 16,
+					"linecount" : 18,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 7.0, 639.0, 227.0, 234.0 ],
-					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float / vec2\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3\n"
+					"patching_rect" : [ 7.0, 639.0, 227.0, 261.0 ],
+					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float / vec2\n@mass float / vec2\n@life float / vec2\n@material int\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@initial_velocity vec3\n@override bool (generate new part despite it's still alive)\n"
 				}
 
 			}
@@ -1397,8 +1397,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 253.0, 571.0, 22.0 ],
-					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 4000 @speed 0.02 0.1 @mass 10 @life 100 1000 @material 1"
+					"patching_rect" : [ 96.0, 253.0, 564.0, 22.0 ],
+					"text" : "jit.particle.emitter @position 0. 4. 0. @rate 4000 @speed 0.02 0.1 @mass 10 @life 100 300 @material 1"
 				}
 
 			}
@@ -1412,7 +1412,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "", "" ],
-					"patching_rect" : [ 154.0, 140.0, 80.0, 35.0 ]
+					"patching_rect" : [ 240.0, 132.0, 80.0, 35.0 ]
 				}
 
 			}

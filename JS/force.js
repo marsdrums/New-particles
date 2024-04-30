@@ -148,7 +148,7 @@ function field_scale(){
 }
 
 function target_material(){
-	if(arguments[0] == -1){
+	if(arguments[0] == -1 || arguments.length < 1){
 		_target_material_amt = -1;
 		return;
 	}
