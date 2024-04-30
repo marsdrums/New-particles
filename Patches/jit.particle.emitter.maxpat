@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 350.0, 331.0, 866.0, 557.0 ],
+		"rect" : [ 342.0, 366.0, 866.0, 557.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -136,20 +136,20 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 92.0, 192.0, 170.0, 62.0 ],
-					"text" : "emitter 0 14223 0.46251 1.793977 -0.40252 0.02 10 10 0.300473 1.820366 -0.303347 u039003624 1 0.01 0.001 0"
+					"patching_rect" : [ 92.0, 192.0, 194.0, 62.0 ],
+					"text" : "emitter 0 4000 -0.379628 -1.989537 -0.5505 0.01 0.04 10 10 -0.533642 -1.982637 -0.457057 u298008712 1 0.01 0.003333 1"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 13,
+					"linecount" : 14,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 283.0, 101.0, 318.0, 181.0 ],
-					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed_lo,\n_speed_hi, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi"
+					"patching_rect" : [ 319.0, 100.0, 318.0, 194.0 ],
+					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed_lo,\n_speed_hi, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi,\n_initial_velocity"
 				}
 
 			}

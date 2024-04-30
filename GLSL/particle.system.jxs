@@ -118,6 +118,7 @@ struct new_particle{
 	float mass;
 	float mat;
 	float life_step;
+	vec3 initial_vel;
 };
 
 struct force{
@@ -214,6 +215,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.dir = randomUnitVector(p.rng);
 	p.vel = p.dir*newp.speed;//
 	//p.vel -= newp.emivel*randomUnitVector(p.rng);
+	p.vel += newp.initial_vel;
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
 	//p.vel *= RandomFloat01(p.rng);
@@ -250,6 +252,8 @@ void emit_particles(inout particle p){
 		vec4 lookup3 = texture(emiTex, vec2(f, 3.5));
 		vec4 lookup0 = texture(emiTex, vec2(f, 0.5));
 		vec4 lookup4 = texture(emiTex, vec2(f, 4.5));
+		vec4 lookup5 = texture(emiTex, vec2(f, 5.5));
+		newp.initial_vel = lookup5.xyz;
 		newp.mass = mix(lookup0.w, lookup3.w, RandomFloat01(p.rng));
 		newp.pos = lookup0.xyz;
 		newp.prevpos = lookup2.xyz;

@@ -300,7 +300,8 @@ function read_and_parse(){
 			    				enable: agent[14],
 			    				life_lo: agent[15],
 			    				life_hi: agent[16],
-			    				material: agent[17]
+			    				material: agent[17],
+			    				initial_velocity: [agent[18], agent[19], agent[20]]
 			    			});
 			    break;
 			}
@@ -312,7 +313,7 @@ function read_and_parse(){
 function transfer_data_to_texture(){
 
 	if(emitters.length > 0){
-		emiMat.dim = [emitters.length, 5];
+		emiMat.dim = [emitters.length, 6];
 		emiTex.dim = emiMat.dim;
 		var emit_to;
 		for(var i = 0; i < emitters.length; i++){
@@ -322,6 +323,7 @@ function transfer_data_to_texture(){
 			emiMat.setcell(i, 2, "val", emitters[i].enable, emitters[i].prevposition);
 			emiMat.setcell(i, 3, "val", emitters[i].mass_hi, emitters[i].velocity);
 			emiMat.setcell(i, 4, "val", emitters[i].speed_hi, emitters[i].life_lo, emitters[i].life_hi, emitters[i].material);
+			emiMat.setcell(i, 5, "val", 0., emitters[i].initial_velocity);
 			counter = emit_to;
 		}	
 		emiTex.jit_matrix(emiMat.name);	
