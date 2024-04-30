@@ -119,12 +119,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 9,
+					"linecount" : 11,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 185.0, 215.0, 150.0, 127.0 ],
-					"text" : "_shape = 0;\n_position = [0,0,0];\n_direction = [0,1,0];\n_scale = [1,1,1];\n_mode = 0;\n_roughness = 0;\n_softness = 0;\n_enable = 1;\n_radius = 1;"
+					"patching_rect" : [ 185.0, 215.0, 150.0, 154.0 ],
+					"text" : "_shape = 0;\n_position = [0,0,0];\n_direction = [0,1,0];\n_scale = [1,1,1];\n_mode = 0;\n_roughness = 0;\n_softness = 0;\n_enable = 1;\n_radius = 1;\n_target_material_amt\n_target_material"
 				}
 
 			}
@@ -136,8 +136,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 41.0, 209.0, 94.0, 49.0 ],
-					"text" : "obstacle 1 0 -9 0 0 1 0 1 1 1 1 0 1 1 5"
+					"patching_rect" : [ 41.0, 209.0, 97.0, 49.0 ],
+					"text" : "obstacle 1 0 0 0 0 1 0 1 1 1 1 1 1 1 3"
 				}
 
 			}

@@ -280,7 +280,9 @@ function read_and_parse(){
 			    					roughness: agent[12],
 			    					softness: agent[13],
 			    					enable: agent[14],
-			    					radius: agent[15]
+			    					radius: agent[15],
+			    					target_material_amt: agent[16],
+			    					target_material: [agent[17], agent[18], agent[19], agent[20], agent[21], agent[21]]
 			    				});
 			    break;
 
@@ -334,20 +336,22 @@ function transfer_data_to_texture(){
 			forMat.setcell(i, 2, "val", forces[i].field_octaves, forces[i].direction);
 			forMat.setcell(i, 3, "val", forces[i].field_type, forces[i].field_offset);
 			forMat.setcell(i, 4, "val", forces[i].noise_function, forces[i].field_scale);
-			forMat.setcell(i, 5, "val", forces[i].target_material_amt,forces[i].target_material.slice(0, 3));
+			forMat.setcell(i, 5, "val", forces[i].target_material_amt, forces[i].target_material.slice(0, 3));
 			forMat.setcell(i, 6, "val", 0,forces[i].target_material.slice(3, 3));
 		}	
 		forTex.jit_matrix(forMat.name);	
 	}
 
 	if(obstacles.length > 0){
-		obsMat.dim = [obstacles.length, 4];
+		obsMat.dim = [obstacles.length, 6];
 		obsTex.dim = obsMat.dim;
 		for(var i = 0; i < obstacles.length; i++){
 			obsMat.setcell(i, 0, "val", obstacles[i].shape, obstacles[i].position);
 			obsMat.setcell(i, 1, "val", obstacles[i].enable, obstacles[i].direction);
 			obsMat.setcell(i, 2, "val", obstacles[i].action, obstacles[i].scale);
 			obsMat.setcell(i, 3, "val", 0, obstacles[i].roughness, obstacles[i].softness, obstacles[i].radius);
+			obsMat.setcell(i, 4, "val", obstacles[i].target_material_amt, obstacles[i].target_material.slice(0, 3));
+			obsMat.setcell(i, 5, "val", 0, obstacles[i].target_material.slice(3, 3));
 		}	
 		obsTex.jit_matrix(obsMat.name);
 	}

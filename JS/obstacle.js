@@ -9,6 +9,8 @@ var _roughness = 0;
 var _softness = 0;
 var _enable = 1;
 var _radius = 1;
+var _target_material_amt = -1;
+var _target_material = [-1,-1,-1,-1,-1,-1];
 
 function shape(){
 	switch (arguments[0]) {
@@ -62,6 +64,27 @@ function enable(){
 function radius(){
 	_radius = arguments[0];
 }
+function target_material(){
+	if(arguments[0] == -1){
+		_target_material_amt = -1;
+		return;
+	}
+	_target_material_amt = arguments.length;
+	for(var i = 0; i < _target_material_amt; i++){
+		_target_material[i] = arguments[i];
+	}
+}
 function bang(){
-	outlet(0, "obstacle", _shape, _position, _direction, _scale, _action, _roughness, _softness, _enable, _radius);
+	outlet(0, 	"obstacle", 
+				_shape, 
+				_position, 
+				_direction, 
+				_scale, 
+				_action, 
+				_roughness, 
+				_softness, 
+				_enable, 
+				_radius,
+				_target_material_amt,
+				_target_material);
 }

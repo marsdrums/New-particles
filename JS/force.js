@@ -14,7 +14,6 @@ var _field_scale = [3,3,3];
 var _enable = 1;
 var _target_material_amt = -1;
 var _target_material = [-1,-1,-1,-1,-1,-1];
-//var _field_function = 0; //*** add field function selection
 
 function normalize(x){ 
 	var len = Math.sqrt( x[0]*x[0] + x[1]*x[1] + x[2]*x[2] ); 
