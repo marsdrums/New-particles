@@ -409,7 +409,7 @@ void field_force(inout particle p, in force f){
 
 void apply_forces(inout particle p){
 
-	if(p.alive < 1) return;
+	if(p.alive < 1 || numForces < 1) return;
 
 	force f;
 
@@ -513,7 +513,7 @@ float plane_intersect(in particle p, in obstacle o, out vec3 hit_normal){
 
 void apply_obstacles(inout particle p){
 
-	if(p.alive < 1) return;
+	if(p.alive < 1 || numObstacles < 1) return;
 
 	float vel_length = length(p.vel);
 	p.dir = p.vel / vel_length;
@@ -591,6 +591,7 @@ void apply_obstacles(inout particle p){
 
 void output_textures(in particle p){
 
+	if(p.alive == 0) return;
 	outPosAge = vec4(p.pos, p.age);
 	outVelMass = vec4(p.vel, p.mass);
 	outAliveMat = vec4(p.alive, p.mat, p.life_step, p.bounced);

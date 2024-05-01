@@ -3,26 +3,37 @@
 	<param name="posAgeTex" type="int" default="0" />
 	<param name="velMassTex" type="int" default="1" />
 	<param name="aliveMatTex" type="int" default="2" />
+	<param name="densityMap" type="int" default="3" />
 	<param name="uv" type="vec3" state="POSITION" />
 	<param name="MVP" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	<param name="MV" type="mat4" state="MODELVIEW_MATRIX" />
+	<param name="P" type="mat4" state="PROJECTION_MATRIX" />
+	<param name="frame" type="int" state="FRAME" />
+	<param name="eye" type="vec3" state="CAMERA_POSITION" />
+	<param name="point_size" type="float" default="0.004" />
 	<language name="glsl" version="1.5">
 		<bind param="posAgeTex" program="gp" />
 		<bind param="velMassTex" program="gp" />
 		<bind param="aliveMatTex" program="gp" />
+		<bind param="densityMap" program="gp" />
 		<bind param="uv" program="vp" />
 		<bind param="MVP" program="gp" />
+		<bind param="MV" program="gp" />
+		<bind param="MV" program="fp" />
+		<bind param="P" program="gp" />
+		<bind param="frame" program="gp" />
+		<bind param="eye" program="gp" />
+		<bind param="point_size" program="gp" />
+
+		<include source="noise_functions.glsl" program="gp" />
+
 		<program name="vp" type="vertex">
 <![CDATA[
 #version 330 core
 in vec3 uv;
 
-out jit_PerVertex {
-	flat vec4 color;	
-} jit_out;
-
 void main() {	
 	gl_Position = vec4(uv, 1);	
-	jit_out.color = vec4(1);
 }
 ]]>
 		</program>
@@ -31,18 +42,157 @@ void main() {
 #version 330 core
 
 layout (points) in;
-layout (points, max_vertices=1) out;
+layout (triangle_strip, max_vertices=4) out;
 
-uniform mat4 MVP;
-uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex;
-
-in jit_PerVertex {
-	flat vec4 color;	
-} jit_in[];
+uniform mat4 MVP, MV, P;
+uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, densityMap;
+uniform float point_size;
+uniform vec3 eye;
+//uniform sampler2D densityMap;
+uniform int frame;
 
 out jit_PerVertex {
 	flat vec4 color;	
+	//flat vec3 vligDir;
 };
+
+float readDensity(vec3 pos){
+
+	if(	pos.x < 0 || pos.x >= 256 ||
+		pos.y < 0 || pos.y >= 256 ||		
+		pos.z < 0 || pos.z >= 256) return 0.;
+	//pos.z = 256 - pos.z;
+	float slice = pos.z;
+
+	//tile z slices
+	pos.z = mod(pos.z, 64);
+	pos.x += 256 * mod(pos.z, 8);
+	pos.y += 256 * floor(pos.z / 8);
+	//pos.xy += texelFetch(foldBuff, int(pos.z)).xy;
+
+	vec4 densities = texture(densityMap, vec2(pos.x,pos.y));
+	if(slice < 64) return densities.r;
+	if(slice >= 64 && slice < 128) return densities.g;
+	if(slice >= 128 && slice < 192) return densities.b;
+	return densities.a;
+}
+
+float calcAO(vec3 s, vec3 V){
+
+	uint seed = uint(s.x*3772*2000) + uint(s.y*78223*2000) + uint(26699);
+
+	s += 0.01*(vec3(RandomFloat01(seed), RandomFloat01(seed), RandomFloat01(seed))-0.5);
+
+	if(	s.x <= -1 || s.x >= 1 ||
+		s.y <= -1 || s.y >= 1 ||
+		s.z <= -1 || s.z >= 1){
+		return 1;
+	} 
+	s = 128*(s + 1);
+
+	float numDir = 15;
+	float occ = numDir;
+	float numSamps = 3;
+	float divisor = 4 / (numSamps*numDir);
+	vec3 p;
+
+	for(float f = 0; f < numDir; f+=1){
+		vec3 rd = randomUnitVector3(seed);
+		rd *= dot(rd, -V) > 0 ? 1 : -1;
+		float ra = RandomFloat01(seed)*5 + 0.3;
+
+		for(float k = 0; k < numSamps; k+=1){
+
+			p = floor(s + rd*ra);
+
+			if(	p.x <= 0 || p.x >= 255 ||
+				p.y <= 0 || p.y >= 255 ||
+				p.z <= 0 || p.z >= 255){
+				break;
+			}
+
+			if(readDensity(p) > 0){
+				occ -= 1; 
+				break;
+			}
+
+			if(occ <= 0){ return 0; }
+			ra += 5;
+		} 
+	}
+	return occ/numDir;
+}
+
+
+float calcShadow(vec3 s, vec3 rd){
+
+	if(	s.x <= -1 || s.x >= 1 ||
+		s.y <= -1 || s.y >= 1 ||
+		s.z <= -1 || s.z >= 1){
+		return 1;
+	} 
+	s = 128*(s + 1);
+	vec3 v = floor(s);
+	vec3 step, invDir, T;
+
+	if(rd.x != 0){
+		step.x = (rd.x < 0) ? -1 : 1;
+		invDir.x = 1 / rd.x;
+		T.x = fract(s.x);
+	} else {
+		invDir.x = 999999;
+		T.x = 999999;
+	}
+
+	if(rd.y != 0){
+		step.y = (rd.y < 0) ? -1 : 1;
+		invDir.y = 1 / rd.y;
+		T.y = fract(s.y);
+	} else {
+		invDir.y = 999999;
+		T.y = 999999;
+	}
+
+	if(rd.z != 0){
+		step.z = (rd.z < 0) ? -1 : 1;
+		invDir.z = 1 / rd.z;
+		T.z = fract(s.z);
+	} else {
+		invDir.z = 999999;
+		T.z = 999999;
+	}
+
+	vec3 voxSize = vec3(1);
+	vec3 deltaT = voxSize * invDir;
+	vec3 voxIncr;
+	float density = 1;
+
+	for(int i = 0; i < 5; i++){
+		voxIncr = vec3(	(T.x <= T.y) && (T.x <= T.z) ? 1 : 0,
+						(T.y <= T.x) && (T.y <= T.z) ? 1 : 0,
+						(T.z <= T.x) && (T.z <= T.y) ? 1 : 0);
+
+		T += voxIncr*deltaT;
+		v += voxIncr*step;		
+	}
+
+	while(	v.x >= 0 && v.x < 256 &&
+			v.y >= 0 && v.y < 256 &&
+			v.z >= 0 && v.z < 256){
+
+		voxIncr = vec3(	(T.x <= T.y) && (T.x <= T.z) ? 1 : 0,
+						(T.y <= T.x) && (T.y <= T.z) ? 1 : 0,
+						(T.z <= T.x) && (T.z <= T.y) ? 1 : 0);
+
+		vec3 dist = voxIncr*deltaT;
+		T += dist;
+		v += voxIncr*step;
+		density -= readDensity(v)*(dist.x + dist.y + dist.z)*0.05;
+		if(density <= 0) return 0.;
+	}
+	return density;
+
+}
 
 void main() {
 
@@ -50,12 +200,40 @@ void main() {
 
 	if(lookup.w <= 0) return;
 
-	vec3 vel = texture(velMassTex, gl_in[0].gl_Position.xy).xyz;
-	color.rgb = mix(vec3(1, 0.5, 0.1), vec3(0.1, 0.5, 1.)+cos(lookup.w*3.1415)*0.5 + 0.5, lookup.w);
-	color.a = 0.3*lookup.w;
+	//uint seed = uint(gl_in[0].gl_Position.x*3772*2000) + uint(gl_in[0].gl_Position.y*78223*2000) + uint(26699);
 
-	gl_Position = MVP * vec4(lookup.xyz, 1);
+	vec3 V = normalize(lookup.xyz - eye);
+	vec3 ligDir = normalize(vec3(1,1,1));
+	//vligDir = (MV * vec4(ligDir,0)).xyz;
+	//vec3 N = normalize(randomUnitVector3(seed) - V);
+	//float diff = max(0, dot(ligDir, N));
+	//ligDir = normalize(ligDir + randomUnitVector3(seed)*0.3);
+
+	color.rgb = vec3(0);
+	//vec3 vel = texture(velMassTex, gl_in[0].gl_Position.xy).xyz;
+	vec3 alb = vec3(0.5);//mix(vec3(0.1, 0.7, 0.1), vec3(0.8, 0.2, 0.1), min(1, length(vel)*1000))*0.3;
+
+	//color.rgb = vec3(calcAO(lookup.xyz));
+
+	//color.rgb += alb*vec3(1,2,3)*calcShadow(lookup.xyz, ligDir);
+	//color.rgb += alb*vec3(3,2,1)*calcShadow(lookup.xyz, ligDir)*5;
+	color.rgb += alb*calcAO(lookup.xyz, V)*vec3(1,2,3)*0.4;
+
+	color.a = 1;//0.3*lookup.w;
+
+	vec4 pos = MV * vec4(lookup.xyz, 1);
+	//float final_point_size = point_size * smoothstep(0., 0.2, lookup.w);
+	float final_point_size = point_size;// * (0.1 + length(vel)*2);//(1 - min(1, length(vel)*10));// * (cos(lookup.w*6.283185)*(-0.5) + 0.5);
+
+	gl_Position = P * (pos + vec4(-final_point_size, -final_point_size, 0, 0));
 	EmitVertex();
+	gl_Position = P * (pos + vec4(+final_point_size, -final_point_size, 0, 0));
+	EmitVertex();
+	gl_Position = P * (pos + vec4(-final_point_size, +final_point_size, 0, 0));
+	EmitVertex();
+	gl_Position = P * (pos + vec4(+final_point_size, +final_point_size, 0, 0));
+	EmitVertex();
+
 	EndPrimitive();
 }
 ]]>
@@ -66,11 +244,15 @@ void main() {
 
 in jit_PerVertex {
 	flat vec4 color;
+	//flat vec3 vligDir;
 } jit_in;
+
+uniform mat4 MV;
 
 out vec4 color;
 
 void main() {
+
 	color = jit_in.color;
 }	
 ]]>

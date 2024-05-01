@@ -1,7 +1,6 @@
-autowhatch = 1; inlets = 1; outlets = 0;
+autowhatch = 1; inlets = 1; outlets = 1;
 
 //______ GRAB CONTEXT ______________________________________________________________________
-// This file is only included inside the canvas code
 
 var drawto = "";
 declareattribute("drawto", null, "dosetdrawto", 0);
@@ -84,6 +83,11 @@ destroyFindCTX.local = 1;
 
 function notifydeleted() {
     destroyFindCTX();
+    mesh.freepeer();
+    partShader.freepeer();
+    //uvMat.freepeer();
+    //nodeDensity.freepeer();
+    //meshDensity.freepeer();
 }
 
 // ___ GRAB JIT.WORLD BANG____________________________________________
@@ -170,6 +174,32 @@ partShader.activeinput = 2;	partShader.jit_gl_texture(inAliveMatTex.name);
 partShader.activeinput = 1;	partShader.jit_gl_texture(inVelMassTex.name);
 partShader.activeinput = 0;	partShader.jit_gl_texture(inPosAgeTex.name);
 
+var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
+uvMat.exprfill(0, "cell[0]");
+uvMat.exprfill(1, "cell[1]");
+uvMat.op("+", 0.5, 0.5, 0.);
+
+//Density grid ____________________________________________________________________________________
+
+var nodeDensity = new JitterObject("jit.gl.node", drawto);
+nodeDensity.adapt = 0;
+nodeDensity.capture = 1;
+nodeDensity.type = "float16";
+nodeDensity.dim = [2048, 2048];
+nodeDensity.erase_color = [0,0,0,0];
+
+var shaderDensity = new JitterObject("jit.gl.shader");
+shaderDensity.file = "fill_density_grid.jxs";
+
+var meshDensity = new JitterObject("jit.gl.mesh", nodeDensity.name);
+meshDensity.draw_mode = "points";
+meshDensity.blend_enable = 1;
+meshDensity.depth_enable = 0;
+meshDensity.blend = "add";
+meshDensity.shader = shaderDensity.name;
+meshDensity.texture = inPosAgeTex.name;
+meshDensity.jit_matrix(uvMat.name);
+
 //Counter__________________________________________________________________________________________
 var counter = 0;
 
@@ -185,30 +215,32 @@ var defaultAliveMatTex = new JitterMatrix(4, "float32", 2000,2000);
 	inAliveMatTex.jit_matrix(defaultAliveMatTex.name);
 
 //rendering tools___________________________________________________________________________________
-var particle_rendering = new JitterObject("jit.gl.shader", drawto);
+var renderNode = new JitterObject("jit.gl.node", drawto);
+renderNode.capture = 1;
+renderNode.type = "float32";
+
+var particle_rendering = new JitterObject("jit.gl.shader");
 particle_rendering.file = "particle.rendering.jxs";
 
-var mesh = new JitterObject("jit.gl.mesh", drawto);
+var mesh = new JitterObject("jit.gl.mesh", renderNode.name);
 mesh.draw_mode = "points";
 mesh.shader = particle_rendering.name;
-mesh.texture = [inPosAgeTex.name, inVelMassTex.name, inAliveMatTex.name];
-mesh.blend_enable = 1;
-mesh.depth_enable = 0;
-mesh.blend = "add";
-
-var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
-uvMat.exprfill(0, "cell[0]");
-uvMat.exprfill(1, "cell[1]");
-uvMat.op("+", 0.5, 0.5, 0.);
+mesh.texture = [inPosAgeTex.name, inVelMassTex.name, inAliveMatTex.name, nodeDensity.out_name];
+mesh.blend_enable = 0;
+mesh.depth_enable = 1;
+//mesh.blend = "add";
 
 mesh.jit_matrix(uvMat.name);
 
-//Uniforms_________________________________________
+//Uniforms___________________________________________________________________________________________
 
-var _point_size = 0.02;
+var _point_size = 0.004;
 
 //Functions________________________________________________________________________________________
-function point_size(x){ _point_size = x; }
+function point_size(x){ 
+
+	_point_size = x; 
+}
 
 function reset(){
 
@@ -382,10 +414,18 @@ function feedback_textures(){
 	inPosAgeTex.jit_gl_texture(partShader.out_name[0]); 
 }
 
+function fill_density_grid(){
+
+	//meshDensity.draw();
+	//nodeDensity.draw();
+	//outlet(0, "jit_gl_texture", nodeDensity.out_name);
+}
+
 function draw_particles(){
 
 	particle_rendering.param("point_size", _point_size);
-	mesh.draw();
+	outlet(0, "jit_gl_texture", renderNode.out_name);
+	//mesh.draw();
 }
 
 
@@ -395,6 +435,7 @@ function bang(){
 	transfer_data_to_texture();
 	process_particles();
 	feedback_textures();
+	//fill_density_grid();
 	draw_particles();
 
 }
