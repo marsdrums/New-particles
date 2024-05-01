@@ -194,7 +194,7 @@ mesh.shader = particle_rendering.name;
 mesh.texture = [inPosAgeTex.name, inVelMassTex.name, inAliveMatTex.name];
 mesh.blend_enable = 1;
 mesh.depth_enable = 0;
-//mesh.blend = "add";
+mesh.blend = "add";
 
 var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
 uvMat.exprfill(0, "cell[0]");
@@ -273,8 +273,8 @@ function read_and_parse(){
 			    				field_scale: [agent[16], agent[17], agent[18]],
 			    				field_octaves: agent[19],
 			    				enable: agent[20],
-			    				target_material_amt: agent[21],
-			    				target_material: [agent[22], agent[23], agent[24], agent[25], agent[26], agent[27]]
+			    				materials_amt: agent[21],
+			    				materials: [agent[22], agent[23], agent[24], agent[25], agent[26], agent[27]]
 			    			});
 			    break;
 
@@ -288,8 +288,8 @@ function read_and_parse(){
 			    					softness: agent[13],
 			    					enable: agent[14],
 			    					radius: agent[15],
-			    					target_material_amt: agent[16],
-			    					target_material: [agent[17], agent[18], agent[19], agent[20], agent[21], agent[21]]
+			    					materials_amt: agent[16],
+			    					materials: [agent[17], agent[18], agent[19], agent[20], agent[21], agent[21]]
 			    				});
 			    break;
 
@@ -345,8 +345,8 @@ function transfer_data_to_texture(){
 			forMat.setcell(i, 2, "val", forces[i].field_octaves, forces[i].direction);
 			forMat.setcell(i, 3, "val", forces[i].field_type, forces[i].field_offset);
 			forMat.setcell(i, 4, "val", forces[i].noise_function, forces[i].field_scale);
-			forMat.setcell(i, 5, "val", forces[i].target_material_amt, forces[i].target_material.slice(0, 3));
-			forMat.setcell(i, 6, "val", 0,forces[i].target_material.slice(3, 3));
+			forMat.setcell(i, 5, "val", forces[i].materials_amt, forces[i].materials.slice(0, 3));
+			forMat.setcell(i, 6, "val", 0,forces[i].materials.slice(3, 3));
 		}	
 		forTex.jit_matrix(forMat.name);	
 	}
@@ -359,8 +359,8 @@ function transfer_data_to_texture(){
 			obsMat.setcell(i, 1, "val", obstacles[i].enable, obstacles[i].direction);
 			obsMat.setcell(i, 2, "val", obstacles[i].action, obstacles[i].scale);
 			obsMat.setcell(i, 3, "val", 0, obstacles[i].roughness, obstacles[i].softness, obstacles[i].radius);
-			obsMat.setcell(i, 4, "val", obstacles[i].target_material_amt, obstacles[i].target_material.slice(0, 3));
-			obsMat.setcell(i, 5, "val", 0, obstacles[i].target_material.slice(3, 3));
+			obsMat.setcell(i, 4, "val", obstacles[i].materials_amt, obstacles[i].materials.slice(0, 3));
+			obsMat.setcell(i, 5, "val", 0, obstacles[i].materials.slice(3, 3));
 		}	
 		obsTex.jit_matrix(obsMat.name);
 	}

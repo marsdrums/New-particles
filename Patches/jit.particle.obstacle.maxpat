@@ -124,7 +124,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 185.0, 215.0, 150.0, 154.0 ],
-					"text" : "_shape = 0;\n_position = [0,0,0];\n_direction = [0,1,0];\n_scale = [1,1,1];\n_mode = 0;\n_roughness = 0;\n_softness = 0;\n_enable = 1;\n_radius = 1;\n_target_material_amt\n_target_material"
+					"text" : "_shape = 0;\n_position = [0,0,0];\n_direction = [0,1,0];\n_scale = [1,1,1];\n_mode = 0;\n_roughness = 0;\n_softness = 0;\n_enable = 1;\n_radius = 1;\n_materials_amt\n_materials"
 				}
 
 			}
@@ -136,7 +136,7 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 41.0, 209.0, 97.0, 49.0 ],
+					"patching_rect" : [ 41.0, 209.0, 99.0, 49.0 ],
 					"text" : "obstacle 1 0 0 0 0 1 0 1 1 1 1 1 1 1 3"
 				}
 

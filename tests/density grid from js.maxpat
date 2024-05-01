@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 479.0, 371.0, 517.0, 764.0 ],
+		"rect" : [ 920.0, 100.0, 491.0, 896.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,24 +40,12 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
-					"id" : "obj-33",
-					"maxclass" : "jit.pwindow",
-					"numinlets" : 1,
-					"numoutlets" : 2,
-					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 386.0, 578.0, 173.0, 155.0 ],
-					"sync" : 1
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-32",
 					"maxclass" : "jit.pwindow",
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 280.0, 578.0, 80.0, 60.0 ],
+					"patching_rect" : [ 280.0, 577.0, 457.0, 415.0 ],
 					"sync" : 1
 				}
 
@@ -471,8 +459,8 @@
 					"id" : "obj-4",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
-					"numoutlets" : 2,
-					"outlettype" : [ "", "" ],
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
 					"patching_rect" : [ 280.0, 514.0, 125.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"filename" : "makeDensityGrid.js",
@@ -491,7 +479,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "int" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 179.5, 66.0, 24.0, 24.0 ]
+					"patching_rect" : [ 238.5, 89.0, 24.0, 24.0 ]
 				}
 
 			}
@@ -502,8 +490,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 3,
 					"outlettype" : [ "jit_matrix", "bang", "" ],
-					"patching_rect" : [ 179.5, 116.0, 186.0, 22.0 ],
-					"text" : "jit.world ctx @erase_color 0 0 0 0"
+					"patching_rect" : [ 238.5, 139.0, 68.0, 22.0 ],
+					"text" : "jit.world ctx"
 				}
 
 			}
@@ -643,13 +631,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-32", 0 ],
 					"source" : [ "obj-4", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-33", 0 ],
-					"source" : [ "obj-4", 1 ]
 				}
 
 			}

@@ -12,8 +12,8 @@ var _field_octaves = 5;
 var _field_offset = [0,0,0];
 var _field_scale = [3,3,3];
 var _enable = 1;
-var _target_material_amt = -1;
-var _target_material = [-1,-1,-1,-1,-1,-1];
+var _materials_amt = -1;
+var _materials = [-1,-1,-1,-1,-1,-1];
 
 function normalize(x){ 
 	var len = Math.sqrt( x[0]*x[0] + x[1]*x[1] + x[2]*x[2] ); 
@@ -147,14 +147,14 @@ function field_scale(){
 	_field_scale = [arguments[0], arguments[1], arguments[2]];
 }
 
-function target_material(){
+function materials(){
 	if(arguments[0] == -1 || arguments.length < 1){
-		_target_material_amt = -1;
+		_materials_amt = -1;
 		return;
 	}
-	_target_material_amt = arguments.length;
-	for(var i = 0; i < _target_material_amt; i++){
-		_target_material[i] = arguments[i];
+	_materials_amt = arguments.length;
+	for(var i = 0; i < _materials_amt; i++){
+		_materials[i] = arguments[i];
 	}
 }
 
@@ -173,7 +173,7 @@ function bang(){
 				_field_scale,
 				_field_octaves,
 				_enable,
-				_target_material_amt,
-				_target_material
+				_materials_amt,
+				_materials
 			);
 }

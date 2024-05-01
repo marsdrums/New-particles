@@ -124,7 +124,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 185.0, 215.0, 150.0, 181.0 ],
-					"text" : "force:\ntype\namount\nradius\nposition\ndirection\nfield type\nnoise function\nfield offset\nfield scale\nenable\ntarget_material_amt\ntarget_material"
+					"text" : "force:\ntype\namount\nradius\nposition\ndirection\nfield type\nnoise function\nfield offset\nfield scale\nenable\nmaterials_amt\nmaterials"
 				}
 
 			}
