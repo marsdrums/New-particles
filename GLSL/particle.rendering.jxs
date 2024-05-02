@@ -81,7 +81,7 @@ float calcAO(vec3 s, vec3 V){
 
 	uint seed = uint(s.x*3772*2000) + uint(s.y*78223*2000) + uint(26699);
 
-	s += 0.01*(vec3(RandomFloat01(seed), RandomFloat01(seed), RandomFloat01(seed))-0.5);
+	//s += 0.01*(vec3(RandomFloat01(seed), RandomFloat01(seed), RandomFloat01(seed))-0.5);
 
 	if(	s.x <= -1 || s.x >= 1 ||
 		s.y <= -1 || s.y >= 1 ||
@@ -90,10 +90,10 @@ float calcAO(vec3 s, vec3 V){
 	} 
 	s = 128*(s + 1);
 
-	float numDir = 15;
+	float numDir = 30;
 	float occ = numDir;
 	float numSamps = 3;
-	float divisor = 4 / (numSamps*numDir);
+	//float divisor = 8 / (numSamps*numDir);
 	vec3 p;
 
 	for(float f = 0; f < numDir; f+=1){
@@ -200,38 +200,49 @@ void main() {
 
 	if(lookup.w <= 0) return;
 
-	//uint seed = uint(gl_in[0].gl_Position.x*3772*2000) + uint(gl_in[0].gl_Position.y*78223*2000) + uint(26699);
+	uint seed = uint(gl_in[0].gl_Position.x*3772*2000) + uint(gl_in[0].gl_Position.y*78223*2000) + uint(26699 + lookup.x*2000 + lookup.z*4493 + lookup.y*4431);
 
 	vec3 V = normalize(lookup.xyz - eye);
 	vec3 ligDir = normalize(vec3(1,1,1));
-	//vligDir = (MV * vec4(ligDir,0)).xyz;
-	//vec3 N = normalize(randomUnitVector3(seed) - V);
-	//float diff = max(0, dot(ligDir, N));
+
+	float diff = 0;
+	vec3 N;
+	for(int i = 0; i < 10; i++){
+		N = randomUnitVector3(seed);
+		N *= dot(N, V) < 0 ? 1 : -1;
+		diff += max(0, dot(ligDir, N));	
+	}
+	diff /= 10;
+
 	//ligDir = normalize(ligDir + randomUnitVector3(seed)*0.3);
 
 	color.rgb = vec3(0);
-	//vec3 vel = texture(velMassTex, gl_in[0].gl_Position.xy).xyz;
-	vec3 alb = vec3(0.5);//mix(vec3(0.1, 0.7, 0.1), vec3(0.8, 0.2, 0.1), min(1, length(vel)*1000))*0.3;
+	vec3 vel = texture(velMassTex, gl_in[0].gl_Position.xy).xyz;
+	vec3 alb = vec3(0.5);// + min(vec3(1), 20*abs(texture(velMassTex, gl_in[0].gl_Position.xy).xyz));//mix(vec3(0.1, 0.7, 0.1), vec3(0.8, 0.2, 0.1), min(1, length(vel)*1000))*0.3;
 
-	//color.rgb = vec3(calcAO(lookup.xyz));
-
-	//color.rgb += alb*vec3(1,2,3)*calcShadow(lookup.xyz, ligDir);
-	//color.rgb += alb*vec3(3,2,1)*calcShadow(lookup.xyz, ligDir)*5;
+	color.rgb += alb*vec3(3)*calcShadow(lookup.xyz, ligDir)*diff*4;
 	color.rgb += alb*calcAO(lookup.xyz, V)*vec3(1,2,3)*0.4;
+
+	//color.rgb = vec3(diff);
 
 	color.a = 1;//0.3*lookup.w;
 
 	vec4 pos = MV * vec4(lookup.xyz, 1);
-	//float final_point_size = point_size * smoothstep(0., 0.2, lookup.w);
-	float final_point_size = point_size;// * (0.1 + length(vel)*2);//(1 - min(1, length(vel)*10));// * (cos(lookup.w*6.283185)*(-0.5) + 0.5);
+	vec4 prevPos = MV * vec4(lookup.xyz - vel, 1);
+	vec4 Ppos = P * pos;
+	vec4 PprevPos = P * prevPos;
+	vec2 off1 = normalize(pos.xy - prevPos.xy)*point_size;
+	vec2 off2 = vec2(off1.y, -off1.x);
 
-	gl_Position = P * (pos + vec4(-final_point_size, -final_point_size, 0, 0));
+	float final_point_size = point_size;// * lookup.w;// * (0.1 + length(vel)*2);//(1 - min(1, length(vel)*10));// * (cos(lookup.w*6.283185)*(-0.5) + 0.5);
+
+	gl_Position = P * (pos + vec4(-off2 + off1, 0, 0));
 	EmitVertex();
-	gl_Position = P * (pos + vec4(+final_point_size, -final_point_size, 0, 0));
+	gl_Position = P * (pos + vec4(+off2 + off1, 0, 0));
 	EmitVertex();
-	gl_Position = P * (pos + vec4(-final_point_size, +final_point_size, 0, 0));
+	gl_Position = P * (prevPos + vec4(-off2 - off1, 0, 0));
 	EmitVertex();
-	gl_Position = P * (pos + vec4(+final_point_size, +final_point_size, 0, 0));
+	gl_Position = P * (prevPos + vec4(+off2 - off1, 0, 0));
 	EmitVertex();
 
 	EndPrimitive();
