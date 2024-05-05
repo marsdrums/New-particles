@@ -13,6 +13,7 @@
 	<param name="forTex" type="int" default="4" />
 	<param name="obsTex" type="int" default="5" />
 	<param name="bounceTex" type="int" default="6" />
+	<param name="vertexBuf" type="int" default="7" />
 
 	//states
 	//<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
@@ -39,6 +40,7 @@
 		<bind param="forTex" program="fp" />
 		<bind param="obsTex" program="fp" />
 		<bind param="bounceTex" program="fp" />
+		<bind param="vertexBuf" program="fp" />
 		<bind param="texDim0" program="fp" />
 
 		//<bind param="modelViewProjectionMatrix" program="vp" />
@@ -87,6 +89,7 @@ layout (location = 2) out vec4 outAliveMat;
 layout (location = 3) out vec4 outBounce;
 
 uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, emiTex, forTex, obsTex, bounceTex;
+uniform samplerBuffer vertexBuf;
 uniform vec2 texDim0;
 uniform float numEmitters, numForces, numObstacles;
 uniform float time, frame, deltaTime;
@@ -113,7 +116,7 @@ struct new_particle{
 	vec3 vel;
 	vec3 emivel;
 	float size;
-	float type;
+	int type;
 	float speed;
 	float mass;
 	float mat;
@@ -255,12 +258,24 @@ void emit_particles(inout particle p){
 		vec4 lookup5 = texture(emiTex, vec2(f, 5.5));
 		newp.initial_vel = lookup5.xyz;
 		newp.mass = mix(lookup0.w, lookup3.w, RandomFloat01(p.rng));
-		newp.pos = lookup0.xyz;
-		newp.prevpos = lookup2.xyz;
 		newp.emivel = lookup3.xyz;
 		newp.speed = mix(lookup1.y, lookup4.w, RandomFloat01(p.rng));
 		newp.life_step = mix(lookup4.x, lookup4.y, RandomFloat01(p.rng));
 		newp.mat = lookup4.z;
+		newp.type = int(lookup1.x);
+
+		switch (newp.type) {
+			case 0:	//point emitter
+				newp.pos = lookup0.xyz;
+				newp.prevpos = lookup2.xyz;
+			    break;
+			case 1: //matrix emitter
+				vec2 start_lengthID = texture(emiTex, vec2(f, 6.5)).xy;
+				newp.pos = texelFetch(vertexBuf, int(start_lengthID.x + start_lengthID.y * RandomFloat01(p.rng))).xyz;
+				newp.prevpos = newp.pos;
+			    break;
+		} 
+
 		generate_particle(p, newp);
 		return;
 	}

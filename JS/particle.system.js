@@ -165,7 +165,7 @@ uvMat.exprfill(0, "cell[0]");
 uvMat.exprfill(1, "cell[1]");
 uvMat.op("+", 0.5, 0.5, 0.);
 
-//Part mesh ______________________________________________________________________________________
+//Particle mesh ______________________________________________________________________________________
 
 var nodePart = new JitterObject("jit.gl.node", drawto);
 nodePart.adapt = 0;
@@ -205,6 +205,8 @@ meshUvMat.setcell(1,1, "val", 1999.5, 1999.5);
 
 meshPart.input_type = 0;	meshPart.jit_matrix(meshPosMat.name);
 meshPart.input_type = 1;	meshPart.jit_matrix(meshUvMat.name);
+
+var concatMat = new JitterMatrix(3, "float32", 1);
 
 
 //Density grid ____________________________________________________________________________________
@@ -377,24 +379,71 @@ function read_and_parse(){
 	}
 }
 
+var inputMat = new JitterMatrix(3, "float32", 1, 1);
+var vertexMat = new JitterMatrix(3, "float32", 1, 1);
+var tempMat = new JitterMatrix(3, "float32", 1, 1);
+tempMat.usedstdim = 1;
+var totalConcatDim = 0;
+
+function concat_vertex_matrices(){
+     
+		if(totalConcatDim == 0){
+
+			vertexMat.dim = inputMat.dim;
+			vertexMat.frommatrix(inputMat.name);
+			totalConcatDim += vertexMat.dim[0];
+
+		} else {
+
+			tempMat.dim = [totalConcatDim + inputMat.dim[0], 1];
+
+			tempMat.dstdimstart = [0, 0];
+			tempMat.dstdimend = [totalConcatDim - 1, 0];
+			tempMat.frommatrix(vertexMat.name);
+
+			tempMat.dstdimstart = [totalConcatDim, 0];
+			tempMat.dstdimend = [tempMat.dim[0] - 1, 0];
+			tempMat.frommatrix(inputMat.name);
+
+			vertexMat.dim = tempMat.dim;
+			vertexMat.frommatrix(tempMat.name);
+
+			totalConcatDim = tempMat.dim[0];
+		}
+}
+
 
 function transfer_data_to_texture(){
 
 	if(emitters.length > 0){
-		emiMat.dim = [emitters.length, 6];
+
+		emiMat.dim = [emitters.length, 7];
 		emiTex.dim = emiMat.dim;
 		var emit_to;
+		totalConcatDim = 0;
+		var vertexStartID = 0;
+		var vertexLengthID;
 		for(var i = 0; i < emitters.length; i++){
+
 			emit_to = (counter + emitters[i].rate) % 4000000;
+
+			if(emitters[i].type == 1) {
+				inputMat = JitterMatrix(emitters[i].matrix);
+				vertexLengthID = inputMat.dim[0] - 1;
+				concat_vertex_matrices();
+			}
 			emiMat.setcell(i, 0, "val", emitters[i].mass_lo, emitters[i].position);
 			emiMat.setcell(i, 1, "val", emit_to, emitters[i].type, emitters[i].speed_lo, counter);
 			emiMat.setcell(i, 2, "val", emitters[i].enable, emitters[i].prevposition);
 			emiMat.setcell(i, 3, "val", emitters[i].mass_hi, emitters[i].velocity);
 			emiMat.setcell(i, 4, "val", emitters[i].speed_hi, emitters[i].life_lo, emitters[i].life_hi, emitters[i].material);
 			emiMat.setcell(i, 5, "val", 0., emitters[i].initial_velocity);
+			emiMat.setcell(i, 6, "val", 0, vertexStartID, vertexLengthID ,0);
 			counter = emit_to;
+			vertexStartID += vertexLengthID + 1;
 		}	
 		emiTex.jit_matrix(emiMat.name);	
+		if(totalConcatDim > 0) vertexBuf.jit_matrix(vertexMat.name);
 	}
 
 	if(forces.length > 0){
