@@ -15,10 +15,10 @@
 	<param name="bounceTex" type="int" default="6" />
 
 	//states
-	<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	//<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
 	<param name="textureMatrix0" type="mat4" state="TEXTURE0_MATRIX" />
-	<param name="position" type="vec3" state="POSITION" />
-	<param name="texcoord" type="vec2" state="TEXCOORD" />
+	<param name="pos" type="vec3" state="POSITION" />
+	<param name="uv" type="vec2" state="TEXCOORD" />
 	<param name="texDim0" type="vec2" state="TEXDIM0" />
 
 	//time
@@ -41,10 +41,10 @@
 		<bind param="bounceTex" program="fp" />
 		<bind param="texDim0" program="fp" />
 
-		<bind param="modelViewProjectionMatrix" program="vp" />
+		//<bind param="modelViewProjectionMatrix" program="vp" />
 		<bind param="textureMatrix0" program="vp" />
-		<bind param="position" program="vp" />
-		<bind param="texcoord" program="vp" />
+		<bind param="pos" program="vp" />
+		<bind param="uv" program="vp" />
 
 		<bind param="time" program="fp" />
 		<bind param="frame" program="fp" />
@@ -56,17 +56,17 @@
 <![CDATA[
 	#version 330 core
 	
-	in vec3 position;
-	in vec2 texcoord;
+	in vec3 pos;
+	in vec2 uv;
 	out jit_PerVertex {
 		vec2 texcoord;
 	} jit_out;
-	uniform mat4 modelViewProjectionMatrix;
+	//uniform mat4 modelViewProjectionMatrix;
 	uniform mat4 textureMatrix0;
 	
 	void main(void) {
-		gl_Position = modelViewProjectionMatrix*vec4(position, 1.);
-		jit_out.texcoord = vec2(textureMatrix0*vec4(texcoord, 0., 1.));
+		gl_Position = vec4(pos, 1.);
+		jit_out.texcoord = uv;
 	}
 ]]>
 </program>
@@ -511,6 +511,23 @@ float plane_intersect(in particle p, in obstacle o, out vec3 hit_normal){
 	return -1;
 }
 
+// axis aligned box centered at the origin, with size boxSize
+float box_intersect(in particle p, in obstacle o, out vec3 hit_normal) 
+{
+    vec3 m = 1.0/p.dir; // can precompute if traversing a set of aligned boxes
+    vec3 n = m*p.pos;   // can precompute if traversing a set of aligned boxes
+    vec3 k = abs(m)*o.scale;
+    vec3 t1 = -n - k;
+    vec3 t2 = -n + k;
+    float tN = max( max( t1.x, t1.y ), t1.z );
+    float tF = min( min( t2.x, t2.y ), t2.z );
+    if( tN>tF || tF<0.0) return -1.0; // no intersection
+    hit_normal = (tN>0.0) ? step(vec3(tN),t1) : // ro ouside the box
+                           	step(t2,vec3(tF));  // ro inside the box
+    hit_normal *= -sign(p.dir);
+    return tF;//vec2( tN, tF );
+}
+
 void apply_obstacles(inout particle p){
 
 	if(p.alive < 1 || numObstacles < 1) return;
@@ -569,6 +586,9 @@ void apply_obstacles(inout particle p){
 			case 1:
 			    t0 = sphere_intersect(p, o, hit_normal);
 			    break;
+			case 2:
+			    t0 = box_intersect(p, o, hit_normal);
+			    break;
 		} 
 
 		if(t0 > vel_length || t0 < 0) continue; //not intersected
@@ -579,8 +599,10 @@ void apply_obstacles(inout particle p){
 
 		if(p.alive < 1) return;
 
-		p.dir = reflect(p.dir, hit_normal);
-		p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
+		p.dir *= -1;
+		//p.dir = reflect(p.dir, hit_normal);
+		//p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
+
 		p.bounced_pos += p.dir*(vel_length - t0);
 		p.vel = p.dir*vel_length;
 		p.vel /= o.softness + 1;

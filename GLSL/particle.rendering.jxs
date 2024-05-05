@@ -45,7 +45,7 @@ layout (points) in;
 layout (triangle_strip, max_vertices=4) out;
 
 uniform mat4 MVP, MV, P;
-uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, densityMap;
+uniform sampler2DRect posAgeTex, velMassTex, aliveMatTex, densityMap, prevPosTex;
 uniform float point_size;
 uniform vec3 eye;
 //uniform sampler2D densityMap;
@@ -198,21 +198,21 @@ void main() {
 
 	vec4 lookup = texture(posAgeTex, gl_in[0].gl_Position.xy);
 
-	if(lookup.w <= 0) return;
+	if(lookup.w <= 0.) return;
 
 	uint seed = uint(gl_in[0].gl_Position.x*3772*2000) + uint(gl_in[0].gl_Position.y*78223*2000) + uint(26699 + lookup.x*2000 + lookup.z*4493 + lookup.y*4431);
 
 	vec3 V = normalize(lookup.xyz - eye);
 	vec3 ligDir = normalize(vec3(1,1,1));
 
-	float diff = 0;
+	float dif = 0;
 	vec3 N;
 	for(int i = 0; i < 10; i++){
 		N = randomUnitVector3(seed);
 		N *= dot(N, V) < 0 ? 1 : -1;
-		diff += max(0, dot(ligDir, N));	
+		dif += max(0, dot(ligDir, N));	
 	}
-	diff /= 10;
+	dif /= 10;
 
 	//ligDir = normalize(ligDir + randomUnitVector3(seed)*0.3);
 
@@ -220,7 +220,7 @@ void main() {
 	vec3 vel = texture(velMassTex, gl_in[0].gl_Position.xy).xyz;
 	vec3 alb = vec3(0.5);// + min(vec3(1), 20*abs(texture(velMassTex, gl_in[0].gl_Position.xy).xyz));//mix(vec3(0.1, 0.7, 0.1), vec3(0.8, 0.2, 0.1), min(1, length(vel)*1000))*0.3;
 
-	color.rgb += alb*vec3(3)*calcShadow(lookup.xyz, ligDir)*diff*4;
+	color.rgb += alb*vec3(3)*calcShadow(lookup.xyz, ligDir)*dif*4;
 	color.rgb += alb*calcAO(lookup.xyz, V)*vec3(1,2,3)*0.4;
 
 	//color.rgb = vec3(diff);
@@ -231,7 +231,9 @@ void main() {
 	vec4 prevPos = MV * vec4(lookup.xyz - vel, 1);
 	vec4 Ppos = P * pos;
 	vec4 PprevPos = P * prevPos;
-	vec2 off1 = normalize(pos.xy - prevPos.xy)*point_size;
+
+	vec2 diff = pos.xy - prevPos.xy;
+	vec2 off1 = (diff.x == 0 && diff.y == 0) ? vec2(point_size, 0) : normalize(pos.xy - prevPos.xy)*point_size;
 	vec2 off2 = vec2(off1.y, -off1.x);
 
 	float final_point_size = point_size;// * lookup.w;// * (0.1 + length(vel)*2);//(1 - min(1, length(vel)*10));// * (cos(lookup.w*6.283185)*(-0.5) + 0.5);
@@ -246,6 +248,7 @@ void main() {
 	EmitVertex();
 
 	EndPrimitive();
+
 }
 ]]>
 		</program>

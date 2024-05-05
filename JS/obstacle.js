@@ -23,6 +23,11 @@ function shape(){
 	  	case 1:
 	  		_shape = 1;
 	    break;
+
+	  	case "box":
+	  	case 2:
+	  		_shape = 2;
+	    break;
 	}
 }
 function position(){

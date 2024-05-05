@@ -40,6 +40,42 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-50",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 133.5, 317.0, 589.0, 22.0 ],
+					"text" : "jit.particle.obstacle @shape sphere @action bounce @softness 0 @radius 0.5 @scale 1 1 1 @roughness 0.5"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-38",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 234.0, 407.0, 391.0, 22.0 ],
+					"text" : "jit.particle.force @type point_attractor @amount 0.01 @position -1.2 0 0"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-19",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 466.0, 208.0, 159.0, 22.0 ],
+					"text" : "life 600, mass 5, speed 0.02"
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-92",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
@@ -395,7 +431,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "float" ],
 					"patching_rect" : [ 765.0, 269.0, 33.0, 22.0 ],
-					"text" : "* 0.1"
+					"text" : "* 0.3"
 				}
 
 			}
@@ -681,7 +717,6 @@
 						"style" : "",
 						"subpatcher_template" : "",
 						"assistshowspatchername" : 0,
-						"visible" : 1,
 						"boxes" : [ 							{
 								"box" : 								{
 									"id" : "obj-14",
@@ -689,8 +724,8 @@
 									"numinlets" : 1,
 									"numoutlets" : 1,
 									"outlettype" : [ "" ],
-									"patching_rect" : [ 130.0, 360.0, 197.0, 22.0 ],
-									"text" : "vexpr $f1 * 1. + 0.4 @scalarmode 1"
+									"patching_rect" : [ 130.0, 360.0, 204.0, 22.0 ],
+									"text" : "vexpr $f1 * 1.2 + 0.4 @scalarmode 1"
 								}
 
 							}
@@ -1281,7 +1316,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 502.0, 15.0, 111.0, 22.0 ],
+					"patching_rect" : [ 604.0, 15.0, 111.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -2092,7 +2127,7 @@
  ]
 					}
 ,
-					"patching_rect" : [ 506.0, 51.0, 111.0, 22.0 ],
+					"patching_rect" : [ 132.0, 175.0, 111.0, 22.0 ],
 					"saved_object_attributes" : 					{
 						"description" : "",
 						"digest" : "",
@@ -2411,8 +2446,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 257.0, 443.0, 230.0, 22.0 ],
-					"text" : "jit.particle.force @type drag @amount 0.9"
+					"patching_rect" : [ 225.0, 445.0, 230.0, 22.0 ],
+					"text" : "jit.particle.force @type drag @amount 0.6"
 				}
 
 			}
@@ -2436,7 +2471,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 96.0, 253.0, 409.0, 22.0 ],
-					"text" : "jit.particle.emitter @rate 2000 @speed 0.01 0.02 @mass 4 6 @life 150 200"
+					"text" : "jit.particle.emitter @rate 1000 @speed 0.01 0.02 @mass 4 6 @life 300 500"
 				}
 
 			}
@@ -2497,8 +2532,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 157.0, 295.0, 414.0, 22.0 ],
-					"text" : "jit.particle.obstacle @shape sphere @action bounce @radius 1 @softness 0"
+					"patching_rect" : [ 119.0, 286.0, 494.0, 22.0 ],
+					"text" : "jit.particle.obstacle @shape box @action bounce @softness 0 @scale 1 1 1 @roughness 0"
 				}
 
 			}
@@ -2591,6 +2626,13 @@
 				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
 					"source" : [ "obj-18", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-27", 0 ],
+					"source" : [ "obj-19", 0 ]
 				}
 
 			}
@@ -2807,13 +2849,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-45", 0 ],
 					"source" : [ "obj-44", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-45", 0 ]
 				}
 
 			}
@@ -3100,13 +3135,6 @@
 				"patchline" : 				{
 					"destination" : [ "obj-3", 0 ],
 					"source" : [ "obj-9", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-1", 0 ],
-					"source" : [ "obj-90", 0 ]
 				}
 
 			}

@@ -84,7 +84,7 @@ destroyFindCTX.local = 1;
 function notifydeleted() {
     destroyFindCTX();
     mesh.freepeer();
-    partShader.freepeer();
+    shaderPart.freepeer();
     //uvMat.freepeer();
     //nodeDensity.freepeer();
     //meshDensity.freepeer();
@@ -113,7 +113,7 @@ var emitters = [];
 var forces = [];
 var obstacles = [];
 
-//Textures and particle shader__________________________________________________________________________
+//Textures _________________________________________________________________________________________
 var emiMat = new JitterMatrix(4, "float32", 1,2);
 var forMat = new JitterMatrix(4, "float32", 1,2);
 var obsMat = new JitterMatrix(4, "float32", 1,2);
@@ -125,14 +125,6 @@ var obsTex = new JitterObject("jit.gl.texture", drawto);
 emiTex.adapt = 0;	emiTex.type = "float32";	emiTex.rectangle = 1;	emiTex.filter = "nearest";
 forTex.adapt = 0;	forTex.type = "float32";	forTex.rectangle = 1;	forTex.filter = "nearest";
 obsTex.adapt = 0;	obsTex.type = "float32";	obsTex.rectangle = 1;	obsTex.filter = "nearest";
-
-var partShader = new JitterObject("jit.gl.slab", drawto);
-partShader.inputs = 7;
-partShader.outputs = 4;
-partShader.file = "particle.system.jxs";
-partShader.adapt = 0;
-partShader.type = "float32";
-partShader.dim = [2000, 2000];
 
 var inPosAgeTex = new JitterObject("jit.gl.texture", drawto);
 inPosAgeTex.adapt = 0;
@@ -166,18 +158,52 @@ inBounceTex.rectangle = 1;
 inBounceTex.defaultimage = "black";
 inBounceTex.filter = "nearest";
 
-partShader.activeinput = 6; partShader.jit_gl_texture(inBounceTex.name);
-partShader.activeinput = 5;	partShader.jit_gl_texture(obsTex.name);
-partShader.activeinput = 4;	partShader.jit_gl_texture(forTex.name);
-partShader.activeinput = 3;	partShader.jit_gl_texture(emiTex.name);
-partShader.activeinput = 2;	partShader.jit_gl_texture(inAliveMatTex.name);
-partShader.activeinput = 1;	partShader.jit_gl_texture(inVelMassTex.name);
-partShader.activeinput = 0;	partShader.jit_gl_texture(inPosAgeTex.name);
-
 var uvMat = new JitterMatrix(3, "float32", 2000, 2000);
 uvMat.exprfill(0, "cell[0]");
 uvMat.exprfill(1, "cell[1]");
 uvMat.op("+", 0.5, 0.5, 0.);
+
+//Part mesh ______________________________________________________________________________________
+
+var nodePart = new JitterObject("jit.gl.node", drawto);
+nodePart.adapt = 0;
+nodePart.dim = [2000, 2000];
+nodePart.capture = 4;
+nodePart.type = "float32";
+nodePart.erase_color = [0,0,0,0];
+
+var shaderPart = new JitterObject("jit.gl.shader");
+shaderPart.file = "particle.system.jxs";
+
+var meshPart = new JitterObject("jit.gl.mesh", nodePart.name);
+meshPart.shader = shaderPart.name;
+meshPart.texture = [	inPosAgeTex.name,
+						inVelMassTex.name,
+						inAliveMatTex.name,
+						emiTex.name,
+						forTex.name,
+						obsTex.name,
+						inBounceTex.name
+					];
+
+var vertexBuf = new JitterObject("jit.gl.buffer.wrapper");
+vertexBuf.type = "vertex_attr0";
+vertexBuf.texbuf = 1;
+meshPart.input_type = 7;
+meshPart.jit_gl_buffer(vertexBuf.name);
+
+var meshPosMat = new JitterMatrix(3, "float32", 2, 2);
+meshPosMat.exprfill(0, "snorm[0]");
+meshPosMat.exprfill(1, "snorm[1]");
+var meshUvMat = new JitterMatrix(2, "float32", 2, 2);
+meshUvMat.setcell(0,0, "val", 0.5, 0.5);
+meshUvMat.setcell(1,0, "val", 1999.5, 0.5);
+meshUvMat.setcell(0,1, "val", 0.5, 1999.5);
+meshUvMat.setcell(1,1, "val", 1999.5, 1999.5);
+
+meshPart.input_type = 0;	meshPart.jit_matrix(meshPosMat.name);
+meshPart.input_type = 1;	meshPart.jit_matrix(meshUvMat.name);
+
 
 //Density grid ____________________________________________________________________________________
 
@@ -213,6 +239,7 @@ var defaultAliveMatTex = new JitterMatrix(4, "float32", 2000,2000);
 	inPosAgeTex.jit_matrix(defaultPosAgeTex.name);
 	inVelMassTex.jit_matrix(defaultVelMassTex.name);
 	inAliveMatTex.jit_matrix(defaultAliveMatTex.name);
+	inBounceTex.jit_matrix(defaultPosAgeTex.name);
 
 //rendering tools___________________________________________________________________________________
 var renderNode = new JitterObject("jit.gl.node", drawto);
@@ -400,18 +427,18 @@ function transfer_data_to_texture(){
 
 function process_particles(){
 
-	partShader.param("numEmitters", emitters.length);
-	partShader.param("numForces", forces.length);
-	partShader.param("numObstacles", obstacles.length);
-	partShader.draw();
+	shaderPart.param("numEmitters", emitters.length);
+	shaderPart.param("numForces", forces.length);
+	shaderPart.param("numObstacles", obstacles.length);
+	//shaderPart.draw();
 }
 
 function feedback_textures(){
 
-	inBounceTex.jit_gl_texture(partShader.out_name[3]);
-	inAliveMatTex.jit_gl_texture(partShader.out_name[2]);
-	inVelMassTex.jit_gl_texture(partShader.out_name[1]);
-	inPosAgeTex.jit_gl_texture(partShader.out_name[0]); 
+	inBounceTex.jit_gl_texture(nodePart.out_names[3]);
+	inAliveMatTex.jit_gl_texture(nodePart.out_names[2]);
+	inVelMassTex.jit_gl_texture(nodePart.out_names[1]);
+	inPosAgeTex.jit_gl_texture(nodePart.out_names[0]); 
 }
 
 function fill_density_grid(){
