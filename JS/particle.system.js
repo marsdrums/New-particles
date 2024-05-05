@@ -85,6 +85,8 @@ function notifydeleted() {
     destroyFindCTX();
     mesh.freepeer();
     shaderPart.freepeer();
+    meshPart.freepeer();
+    nodePart.freepeer();
     //uvMat.freepeer();
     //nodeDensity.freepeer();
     //meshDensity.freepeer();
