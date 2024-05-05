@@ -429,7 +429,7 @@ function transfer_data_to_texture(){
 
 			if(emitters[i].type == 1) {
 				inputMat = JitterMatrix(emitters[i].matrix);
-				vertexLengthID = inputMat.dim[0] - 1;
+				vertexLengthID = inputMat.dim[0];
 				concat_vertex_matrices();
 			}
 			emiMat.setcell(i, 0, "val", emitters[i].mass_lo, emitters[i].position);

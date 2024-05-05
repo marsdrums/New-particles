@@ -273,6 +273,8 @@ void emit_particles(inout particle p){
 				vec2 start_lengthID = texture(emiTex, vec2(f, 6.5)).xy;
 				newp.pos = texelFetch(vertexBuf, int(start_lengthID.x + start_lengthID.y * RandomFloat01(p.rng))).xyz;
 				newp.prevpos = newp.pos;
+				newp.pos += lookup0.xyz;
+				newp.prevpos += lookup2.xyz;
 			    break;
 		} 
 
