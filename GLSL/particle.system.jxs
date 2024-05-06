@@ -16,7 +16,6 @@
 	<param name="vertexBuf" type="int" default="7" />
 
 	//states
-	//<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
 	<param name="textureMatrix0" type="mat4" state="TEXTURE0_MATRIX" />
 	<param name="pos" type="vec3" state="POSITION" />
 	<param name="uv" type="vec2" state="TEXCOORD" />
@@ -43,7 +42,6 @@
 		<bind param="vertexBuf" program="fp" />
 		<bind param="texDim0" program="fp" />
 
-		//<bind param="modelViewProjectionMatrix" program="vp" />
 		<bind param="textureMatrix0" program="vp" />
 		<bind param="pos" program="vp" />
 		<bind param="uv" program="vp" />
@@ -60,10 +58,11 @@
 	
 	in vec3 pos;
 	in vec2 uv;
+
 	out jit_PerVertex {
 		vec2 texcoord;
 	} jit_out;
-	//uniform mat4 modelViewProjectionMatrix;
+
 	uniform mat4 textureMatrix0;
 	
 	void main(void) {
@@ -178,7 +177,6 @@ void get_particle_current_state(inout particle p){
 	p.bounced = lookup2.w;
 	if(p.bounced == 1) p.bounced_pos = texture(bounceTex, jit_in.texcoord).xyz;
 
-	//*** p.dir is missing. Figure out where to compute it
 }
 
 void update_age(inout particle p){
@@ -221,7 +219,6 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.vel += newp.initial_vel;
 	p.pos = mix(newp.pos, newp.prevpos, RandomFloat01(p.rng));
 	p.pos += p.vel * RandomFloat01(p.rng);
-	//p.vel *= RandomFloat01(p.rng);
 	p.mass = newp.mass;
 	p.life_step = newp.life_step;
 	p.mat = newp.mat;
@@ -616,9 +613,9 @@ void apply_obstacles(inout particle p){
 
 		if(p.alive < 1) return;
 
-		p.dir *= -1;
-		//p.dir = reflect(p.dir, hit_normal);
-		//p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
+		//p.dir *= -1;
+		p.dir = reflect(p.dir, hit_normal);
+		p.dir = o.roughness <= 0 ? p.dir : mix(p.dir, normalize(hit_normal + randomUnitVector(p.rng)), o.roughness);
 
 		p.bounced_pos += p.dir*(vel_length - t0);
 		p.vel = p.dir*vel_length;

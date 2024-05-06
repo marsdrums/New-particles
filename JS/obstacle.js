@@ -92,7 +92,7 @@ function materials(){
 
 	if(_materials_amt > 6){
 		_materials_amt = 6;
-		post("too many materials, the maximum is 6");
+		post("too many materials, the maximum is 6", "\n");
 	}
 
 	for(var i = 0; i < _materials_amt; i++){
