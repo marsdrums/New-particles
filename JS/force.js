@@ -168,13 +168,16 @@ function materials(){
 
 	_materials_amt = arguments.length;
 
-	if(_materials_amt > 6) post("too many materials, the maximum is 6");
+	if(_materials_amt > 6){
+		_materials_amt = 6;
+		post("too many materials, the maximum is 6");
+	}
 
 	for(var i = 0; i < _materials_amt; i++){
 		if( (typeof arguments[i]) == "number") _materials[i] = arguments[i];
 		else{
 			var id = 0;
-			for(var k = 0; k < Math.min(arguments[i].length, 6); k++){
+			for(var k = 0; k < arguments[i].length; k++){
 				id += arguments[i][k].charCodeAt()*prime[k%prime.length];
 			}
 			_materials[i] = id;	
