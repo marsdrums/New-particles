@@ -137,7 +137,6 @@ function material(){
 
 	if( (typeof arguments[0]) == "number"){
 		_material = arguments[0];
-		post(_material, "\n");
 		return;
 	} 
 	else{
@@ -146,7 +145,6 @@ function material(){
 			id += arguments[0][i].charCodeAt()*prime[i%prime.length];
 		}
 		_material = id;	
-		post(_material, "\n");
 		return;
 	}
 }
