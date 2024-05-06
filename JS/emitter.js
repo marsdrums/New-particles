@@ -23,22 +23,23 @@ var matrix_emitter = new JitterMatrix(3, "float32", 1,1);
 function jit_matrix(inname){
 
 	var mIn = new JitterMatrix(inname);
-	if(mIn.dim.length == 1) { 
+	if(mIn.dim.length == null) { 
+		post("monodimensional", "\n");
 		matrix_emitter.dim = [mIn.dim, 1]; 
-		for(var x = mIn.dim-1; x >= 0; x--){
-			matrix_emitter.setcell(x,0, "val", mIn.getcell(x).slice(0, 3));
+		for(var x = 0; x < mIn.dim; x++){
+			matrix_emitter.setcell(x, 0, "val", mIn.getcell(x).slice(0, 3));
 		}
 	}
 	else { 
+		post("bidimensional", "\n");
 		matrix_emitter.dim = [mIn.dim[0]*mIn.dim[1], 1]; 
 		var count = 0;
 		for(var x = 0; x < mIn.dim[0]; x++){
 			for(var y = 0; y < mIn.dim[1]; y++){
-				matrix_emitter.setcell(count++,0, "val", mIn.getcell(x,y).slice(0, 3));
+				matrix_emitter.setcell(count++, 0, "val", mIn.getcell(x,y).slice(0, 3));
 			}
 		}
 	}
-
 }
 
 function randintmix(a, b){ 
