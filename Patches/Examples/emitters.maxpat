@@ -40,13 +40,73 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
+					"id" : "obj-64",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"patching_rect" : [ 171.0, 113.0, 58.0, 22.0 ],
+					"text" : "loadbang"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-63",
+					"maxclass" : "button",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 13.0, 185.0, 24.0, 24.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-59",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 842.5, 612.0, 71.0, 22.0 ],
+					"text" : "s to_emitter"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-60",
+					"maxclass" : "newobj",
+					"numinlets" : 1,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 842.5, 574.0, 86.0, 22.0 ],
+					"text" : "prepend mode"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-61",
+					"items" : [ "constant", ",", "trigger" ],
+					"maxclass" : "umenu",
+					"numinlets" : 1,
+					"numoutlets" : 3,
+					"outlettype" : [ "int", "", "" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 801.5, 527.0, 100.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
 					"id" : "obj-57",
 					"maxclass" : "button",
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "bang" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 299.0, 50.0, 24.0, 24.0 ]
+					"patching_rect" : [ 141.0, 112.0, 24.0, 24.0 ]
 				}
 
 			}
@@ -58,7 +118,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 2,
 					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 289.0, 99.0, 104.0, 62.0 ],
+					"patching_rect" : [ 141.0, 148.0, 104.0, 62.0 ],
 					"text" : "jit.gl.model @file duck.dae @matrixoutput 1 @automatic 0"
 				}
 
@@ -70,8 +130,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 87.0, 325.0, 230.0, 22.0 ],
-					"text" : "jit.particle.force @type drag @amount 0.6"
+					"patching_rect" : [ 80.0, 324.0, 230.0, 22.0 ],
+					"text" : "jit.particle.force @type drag @amount 0.2"
 				}
 
 			}
@@ -202,23 +262,11 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-56",
-					"maxclass" : "newobj",
-					"numinlets" : 2,
-					"numoutlets" : 2,
-					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 49.0, 172.0, 75.0, 22.0 ],
-					"text" : "jit.- @val 0.5"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-55",
 					"maxclass" : "newobj",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 839.0, 509.0, 71.0, 22.0 ],
+					"patching_rect" : [ 842.5, 481.0, 71.0, 22.0 ],
 					"text" : "s to_emitter"
 				}
 
@@ -242,7 +290,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 839.0, 471.0, 79.0, 22.0 ],
+					"patching_rect" : [ 842.5, 443.0, 79.0, 22.0 ],
 					"text" : "prepend type"
 				}
 
@@ -256,7 +304,7 @@
 					"numoutlets" : 3,
 					"outlettype" : [ "int", "", "" ],
 					"parameter_enable" : 0,
-					"patching_rect" : [ 798.0, 424.0, 100.0, 22.0 ]
+					"patching_rect" : [ 801.5, 396.0, 100.0, 22.0 ]
 				}
 
 			}
@@ -458,7 +506,7 @@
 					"numinlets" : 0,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 144.0, 172.0, 69.0, 22.0 ],
+					"patching_rect" : [ 49.0, 186.0, 69.0, 22.0 ],
 					"text" : "r to_emitter"
 				}
 
@@ -598,42 +646,6 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 563.0, 429.0, 174.999999999999943, 22.0 ],
 					"text" : "pak position 0. 0. 0."
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-15",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
-					"patching_rect" : [ 49.0, 105.0, 58.0, 22.0 ],
-					"text" : "loadbang"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-11",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 2,
-					"outlettype" : [ "jit_matrix", "" ],
-					"patching_rect" : [ 49.0, 141.0, 119.0, 22.0 ],
-					"text" : "jit.noise 3 float32 3 3"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-10",
-					"maxclass" : "message",
-					"numinlets" : 2,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 72.0, 276.0, 35.0, 22.0 ],
-					"text" : "reset"
 				}
 
 			}
@@ -820,8 +832,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 49.0, 229.0, 355.0, 22.0 ],
-					"text" : "jit.particle.emitter @speed 0.02 @life 50 @rate 500 @type matrix"
+					"patching_rect" : [ 49.0, 243.0, 295.0, 22.0 ],
+					"text" : "jit.particle.emitter @speed 0.02 @life 200 @rate 1000"
 				}
 
 			}
@@ -865,20 +877,6 @@
  ],
 		"lines" : [ 			{
 				"patchline" : 				{
-					"destination" : [ "obj-4", 0 ],
-					"source" : [ "obj-10", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-56", 0 ],
-					"source" : [ "obj-11", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-2", 0 ],
 					"source" : [ "obj-12", 0 ]
 				}
@@ -913,13 +911,6 @@
 					"destination" : [ "obj-27", 0 ],
 					"order" : 1,
 					"source" : [ "obj-14", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
-					"destination" : [ "obj-11", 0 ],
-					"source" : [ "obj-15", 0 ]
 				}
 
 			}
@@ -1174,13 +1165,6 @@
 			}
 , 			{
 				"patchline" : 				{
-					"destination" : [ "obj-5", 0 ],
-					"source" : [ "obj-56", 0 ]
-				}
-
-			}
-, 			{
-				"patchline" : 				{
 					"destination" : [ "obj-53", 0 ],
 					"source" : [ "obj-57", 0 ]
 				}
@@ -1190,6 +1174,34 @@
 				"patchline" : 				{
 					"destination" : [ "obj-1", 0 ],
 					"source" : [ "obj-6", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-59", 0 ],
+					"source" : [ "obj-60", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-60", 0 ],
+					"source" : [ "obj-61", 1 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-5", 0 ],
+					"source" : [ "obj-63", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-57", 0 ],
+					"source" : [ "obj-64", 0 ]
 				}
 
 			}
@@ -1221,10 +1233,6 @@
 				"patcherrelativepath" : "../../JS",
 				"type" : "TEXT",
 				"implicit" : 1
-			}
-, 			{
-				"name" : "jit.*.mxo",
-				"type" : "iLaX"
 			}
 , 			{
 				"name" : "jit.particle.emitter.maxpat",
