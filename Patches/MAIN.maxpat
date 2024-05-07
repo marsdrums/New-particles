@@ -2265,12 +2265,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-54",
-					"linecount" : 12,
+					"linecount" : 13,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1158.0, 57.0, 462.0, 167.0 ],
-					"text" : "TODO:\n\n\n- split the code into separate files\n- add self-attracting forces\n- add first / nearest modes for obstacles\n- use mfi\n- add @bindto to connect modules to a particle system without explicit connection\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
+					"patching_rect" : [ 1158.0, 57.0, 462.0, 181.0 ],
+					"text" : "TODO:\n\n\n- split the code into separate files\n- move things to v8\n- add self-attracting forces\n- add first / nearest modes for obstacles\n- use mfi\n- add @bindto to connect modules to a particle system without explicit connection\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
 				}
 
 			}
