@@ -1,0 +1,55 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="uv" type="vec3" state="POSITION" />
+	<param name="posAgeTex" type="int" default="0" />
+	<param name="MVP" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	<language name="glsl" version="1.5">
+		<bind param="uv" program="vp" />
+		<bind param="posAgeTex" program="gp" />
+		<bind param="MVP" program="gp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+
+in vec3 uv;
+
+void main() {	
+	gl_Position = vec4(uv, 1.);	
+}
+]]>
+		</program>
+		<program name="gp" type="geometry">
+<![CDATA[
+#version 330 core
+
+layout (points) in;
+layout (points, max_vertices=1) out;
+
+uniform sampler2DRect posAgeTex;
+uniform mat4 MVP;
+
+void main() {
+
+	vec4 lookup = texture(posAgeTex, gl_in[0].gl_Position.xy);
+
+	if(lookup.w <= 0.) return; //if dead
+
+	gl_Position = MVP * vec4(lookup.xyz, 1);
+	EmitVertex();
+	EndPrimitive();
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+out vec4 color;
+
+void main() {
+	color = vec4(1,1,1,0.2);
+}	
+]]>
+		</program>
+	</language>
+</jittershader>

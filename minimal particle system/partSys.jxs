@@ -1,0 +1,142 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="position" type="vec3" state="POSITION" />
+	<param name="posAgeTex" type="int" default="0" />
+	<param name="velTex" type="int" default="1" />
+	<param name="time" type="float" state="TIME" />
+	<param name="counter" type="int" default="0" />
+	<param name="rate" type="int" default="100" />
+	<language name="glsl" version="1.5">
+		<bind param="posAgeTex" program="fp" />
+		<bind param="velTex" program="fp" />
+		<bind param="position" program="vp" />
+		<bind param="time" program="fp" />
+		<bind param="counter" program="fp" />
+		<bind param="rate" program="fp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+in vec3 position;
+
+out jit_PerVertex {
+	smooth vec2 uv;	
+} jit_out;
+
+void main() {	
+	gl_Position = vec4(position, 1.);	
+	jit_out.uv = (position.xy*vec2(0.5, -0.5) + 0.5)*1999 + 0.5; //to [0,5; 1999,5]
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+#define TWOPI 6.28318530718 
+
+in jit_PerVertex {
+	smooth vec2 uv;
+} jit_in;
+
+uniform sampler2DRect posAgeTex;
+uniform sampler2DRect velTex;
+uniform float time;
+uniform int counter;
+uniform int rate;
+
+layout (location = 0) out vec4 outPosAge;
+layout (location = 1) out vec4 outVel;
+
+struct particle{
+	int id;
+	float age;
+	vec3 pos;
+	vec3 vel;
+	uint seed;
+};
+
+//________ Random functions _______________________________
+uint wang_hash(inout uint seed){
+
+    seed = uint(seed ^ uint(61)) ^ uint(seed >> uint(16));
+    seed *= uint(9);
+    seed = seed ^ (seed >> 4);
+    seed *= uint(0x27d4eb2d);
+    seed = seed ^ (seed >> 15);
+    return seed;
+}
+ 
+float RandomFloat01(inout uint seed) { 
+	return float(wang_hash(seed)) / 4294967296.0; 
+}
+
+vec3 randomUnitVector3(inout uint seed){
+
+    float z = RandomFloat01(seed) * 2.0f - 1.0f;
+    float a = RandomFloat01(seed) * TWOPI;
+    float r = sqrt(1.0f - z * z);
+    float x = r * cos(a);
+    float y = r * sin(a);
+    return vec3(x, y, z);
+}
+//_____________________________________________________________
+
+void get_particle_id(out particle p){
+
+	p.id = int(floor(jit_in.uv.x) + floor(jit_in.uv.y)*2000);
+	p.seed = uint(gl_FragCoord.x*3772) + uint(gl_FragCoord.y*78223) + uint(time)*uint(26699);
+}
+
+void get_particle_state(inout particle p){
+
+	vec4 posAge = texture(posAgeTex, jit_in.uv);
+	p.pos = posAge.xyz;
+	p.age = posAge.w;
+	p.vel = texture(velTex, jit_in.uv).xyz;
+}
+
+void update_age(inout particle p){
+
+	if(p.age <= 0) return; //if dead
+	float life_length = 100;
+	p.age = max(0., p.age - 1/life_length); //subtract life step
+}
+
+void update_position(inout particle p){
+
+	if(p.age <= 0) return; //if dead	
+	p.pos += p.vel;
+}
+
+void emit_particle(inout particle p){
+
+	if(p.id >= counter && p.id < (counter + rate) ){ //
+		p.pos = vec3(0);
+		float speed = RandomFloat01(p.seed);
+		p.vel = randomUnitVector3(p.seed)*0.02*speed;
+		p.age = 1.0;
+	}
+}
+
+void output_textures(in particle p){
+	
+	if(p.age <= 0) return;
+	outPosAge = vec4(p.pos, p.age);
+	outVel = vec4(p.vel, 1);
+}
+
+void main() {
+
+	particle p;
+
+	get_particle_id(p);
+	get_particle_state(p);
+	emit_particle(p);
+	update_age(p);
+	update_position(p);
+	output_textures(p);
+
+}	
+]]>
+		</program>
+	</language>
+</jittershader>
