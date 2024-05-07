@@ -206,9 +206,6 @@ meshUvMat.setcell(1,1, "val", 1999.5, 1999.5);
 meshPart.input_type = 0;	meshPart.jit_matrix(meshPosMat.name);
 meshPart.input_type = 1;	meshPart.jit_matrix(meshUvMat.name);
 
-var concatMat = new JitterMatrix(3, "float32", 1);
-
-
 //Density grid ____________________________________________________________________________________
 
 var nodeDensity = new JitterObject("jit.gl.node", drawto);
