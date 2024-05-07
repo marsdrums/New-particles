@@ -47,7 +47,7 @@
 					"numoutlets" : 0,
 					"patching_rect" : [ 1268.0, 239.0, 576.0, 114.0 ],
 					"presentation_linecount" : 8,
-					"text" : "OPEN QUESTIONS:\n\n- how to include @bindto to connect modules to a particle system without explicit connections ?\n- how to handle matrix/geometry rotation and scaling (CPU vs. GPU) ? Should we store rot/sca velocity ?\n- Which rendering mode should we include? Which one should be defaulted?\n- Figure out a way to put in relation particle attributes and rendering in a flexible manner\n- how to present the objects? mfi? other methods?\n- Figure out a more solid apprach for retrieving particle attributes from emitter, force, and obstacle modules"
+					"text" : "OPEN QUESTIONS:\n\n- how to connect modules to a particle system without explicit connections ?\n- how to handle matrix/geometry rotation and scaling (CPU vs. GPU) ? Should we store rot/sca velocity ?\n- Which rendering mode should we include? Which one should be defaulted?\n- Figure out a way to put in relation particle attributes and rendering in a flexible manner\n- how to present the objects? mfi? other methods?\n- Figure out a more solid apprach for retrieving particle attributes from emitter, force, and obstacle modules"
 				}
 
 			}
