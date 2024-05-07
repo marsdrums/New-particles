@@ -1946,7 +1946,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1268.0, 43.0, 576.0, 154.0 ],
-					"text" : "TODO:\n\n\n- move shader functions to separate files and break jxs code into multiple files\n- move things to v8\n- add self-attracting forces\n- add first / nearest modes for obstacles\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
+					"text" : "TO DO:\n\n\n- move shader functions to separate files and break jxs code into multiple files\n- move things to v8\n- add self-attracting forces\n- add first / nearest modes for obstacles\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
 				}
 
 			}
