@@ -118,13 +118,12 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 129.0, 153.0, 69.0, 22.0 ],
+					"patching_rect" : [ 129.0, 153.0, 73.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"filename" : "emitter.js",
 						"parameter_enable" : 0
 					}
 ,
-					"text" : "js emitter.js"
+					"text" : "v8 emitter.js"
 				}
 
 			}
@@ -136,8 +135,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 92.0, 192.0, 197.0, 62.0 ],
-					"text" : "emitter 1 3000 0.39875 -0.260592 -0.497058 0.01 0.01 60 60 0.390348 -0.239336 -0.49875 u621010408 1 0.01 0.01 0 0 0 0"
+					"patching_rect" : [ 92.0, 192.0, 198.0, 62.0 ],
+					"text" : "emitter 0 1000 0.405395 -0.067086 0.498451 0.01 0.01 1 1 0.401997 -0.05683 0.497762 u375010499 1 100 100 0 0 0 0 0"
 				}
 
 			}

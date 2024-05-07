@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 70.0, 356.0, 640.0, 480.0 ],
+		"rect" : [ 632.0, 293.0, 1300.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -106,13 +106,12 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 94.0, 166.0, 77.0, 22.0 ],
+					"patching_rect" : [ 94.0, 166.0, 81.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"filename" : "obstacle.js",
 						"parameter_enable" : 0
 					}
 ,
-					"text" : "js obstacle.js"
+					"text" : "v8 obstacle.js"
 				}
 
 			}
@@ -136,8 +135,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 41.0, 209.0, 99.0, 49.0 ],
-					"text" : "obstacle 1 0 0 0 0 1 0 1 1 1 1 1 1 1 3"
+					"patching_rect" : [ 41.0, 209.0, 105.0, 49.0 ],
+					"text" : "obstacle 0 0 0 0 0 1 0 1 1 1 0 0 0 1 1 -1 -1 -1 -1 -1 -1 -1"
 				}
 
 			}

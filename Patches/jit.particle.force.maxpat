@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 403.0, 210.0, 640.0, 480.0 ],
+		"rect" : [ 719.0, 234.0, 640.0, 480.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -106,13 +106,12 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 94.0, 166.0, 59.0, 22.0 ],
+					"patching_rect" : [ 94.0, 166.0, 63.0, 22.0 ],
 					"saved_object_attributes" : 					{
-						"filename" : "force.js",
 						"parameter_enable" : 0
 					}
 ,
-					"text" : "js force.js"
+					"text" : "v8 force.js"
 				}
 
 			}
@@ -136,8 +135,8 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 41.0, 209.0, 96.0, 156.0 ],
-					"text" : "force 0 0 -1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1 -1 <undefined> <undefined> <undefined> <undefined> <undefined> <undefined> <undefined> <undefined>"
+					"patching_rect" : [ 41.0, 209.0, 44.0, 156.0 ],
+					"text" : "force 0 0 -1 0 0 0 0 0 -1 0 0 0 0 0 0 3 3 3 5 1 -1 -1 -1 -1 -1 -1 -1"
 				}
 
 			}

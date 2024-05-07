@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 472.0, 100.0, 644.0, 898.0 ],
+		"rect" : [ 581.0, 125.0, 644.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -462,12 +462,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-12",
-					"linecount" : 9,
+					"linecount" : 11,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 865.0, 790.0, 288.0, 127.0 ],
-					"text" : "change log (may 1):\n\n- Changed names: jit.gl.particles -> jit.particles\n@target_material -> @materials\n- added early quit in forces and obstacles functions\n- working density maps\n- changed material IDs to strings\n- added matrix emitters\n- added box obstacle"
+					"patching_rect" : [ 865.0, 790.0, 288.0, 154.0 ],
+					"text" : "change log \n\n- Changed names: jit.gl.particles -> jit.particles\n@target_material -> @materials\n- added early quit in forces and obstacles functions\n- working density maps\n- changed material IDs to strings\n- added matrix emitters\n- added box obstacle\n- added radius to forces\n- added mass_increment to emitters"
 				}
 
 			}
@@ -2271,7 +2271,7 @@
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 225.0, 445.0, 220.0, 22.0 ],
-					"text" : "jit.particle.force @type drag @amount 2"
+					"text" : "jit.particle.force @type drag @amount 3"
 				}
 
 			}
@@ -2294,8 +2294,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 253.0, 570.0, 22.0 ],
-					"text" : "jit.particle.emitter @rate 3000 @speed 0.01 0.01 @mass 60 @life 100 @type matrix @mass_increment 0"
+					"patching_rect" : [ 96.0, 253.0, 577.0, 22.0 ],
+					"text" : "jit.particle.emitter @rate 3000 @speed 0.005 0.01 @mass 60 @life 100 @type matrix @mass_increment 0"
 				}
 
 			}
