@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 71.0, 100.0, 941.0, 898.0 ],
+		"rect" : [ 638.0, 103.0, 941.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -199,30 +199,6 @@
 			}
 , 			{
 				"box" : 				{
-					"id" : "obj-50",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 133.5, 317.0, 589.0, 22.0 ],
-					"text" : "jit.particle.obstacle @shape sphere @action bounce @softness 0 @radius 0.5 @scale 1 1 1 @roughness 0.5"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-38",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 234.0, 407.0, 391.0, 22.0 ],
-					"text" : "jit.particle.force @type point_attractor @amount 0.01 @position -1.2 0 0"
-				}
-
-			}
-, 			{
-				"box" : 				{
 					"id" : "obj-19",
 					"maxclass" : "message",
 					"numinlets" : 2,
@@ -230,30 +206,6 @@
 					"outlettype" : [ "" ],
 					"patching_rect" : [ 466.0, 208.0, 159.0, 22.0 ],
 					"text" : "life 600, mass 5, speed 0.02"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-92",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 216.0, 378.0, 391.0, 22.0 ],
-					"text" : "jit.particle.force @type point_attractor @amount 0.01 @position -1.2 0 0"
-				}
-
-			}
-, 			{
-				"box" : 				{
-					"id" : "obj-91",
-					"maxclass" : "newobj",
-					"numinlets" : 1,
-					"numoutlets" : 1,
-					"outlettype" : [ "" ],
-					"patching_rect" : [ 190.0, 347.0, 387.0, 22.0 ],
-					"text" : "jit.particle.force @type point_attractor @amount -0.005 @position 0 0 0"
 				}
 
 			}
@@ -797,12 +749,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-12",
-					"linecount" : 5,
+					"linecount" : 9,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 865.0, 790.0, 288.0, 74.0 ],
-					"text" : "change log (may 1):\n\n- Changed names: jit.gl.particles -> jit.particles\n@target_material -> @materials\n- added early quit in forces and obstacles functions"
+					"patching_rect" : [ 865.0, 790.0, 288.0, 127.0 ],
+					"text" : "change log (may 1):\n\n- Changed names: jit.gl.particles -> jit.particles\n@target_material -> @materials\n- added early quit in forces and obstacles functions\n- working density maps\n- changed material IDs to strings\n- added matrix emitters\n- added box obstacle"
 				}
 
 			}
@@ -2313,12 +2265,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-54",
-					"linecount" : 7,
+					"linecount" : 10,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 695.5, 113.0, 462.0, 100.0 ],
-					"text" : "TODO:\n\n-add self-attracting forces\n-add first / nearest modes for obstacles\n-use mfi\n-add @bindto to connect modules to a particle system without explicit connection\n- add geometry emitters"
+					"patching_rect" : [ 1183.5, 42.0, 462.0, 141.0 ],
+					"text" : "TODO:\n\n-add self-attracting forces\n-add first / nearest modes for obstacles\n-use mfi\n-add @bindto to connect modules to a particle system without explicit connection\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
 				}
 
 			}
@@ -2691,7 +2643,7 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 126.0, 280.0, 494.0, 22.0 ],
+					"patching_rect" : [ 127.0, 291.0, 494.0, 22.0 ],
 					"text" : "jit.particle.obstacle @shape box @action bounce @softness 0 @scale 1 1 1 @roughness 0"
 				}
 
@@ -3413,11 +3365,7 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "jit.*.mxo",
-				"type" : "iLaX"
-			}
-, 			{
-				"name" : "jit.-.mxo",
+				"name" : "jit.>.mxo",
 				"type" : "iLaX"
 			}
 , 			{
