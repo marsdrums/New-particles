@@ -371,7 +371,8 @@ function read_and_parse(){
 			    				life_lo: agent[15],
 			    				life_hi: agent[16],
 			    				material: agent[17],
-			    				initial_velocity: [agent[18], agent[19], agent[20]]
+			    				initial_velocity: [agent[18], agent[19], agent[20]],
+			    				mass_increment: agent[21]
 			    			});
 			    break;
 			}
@@ -412,7 +413,6 @@ function concat_vertex_matrices(){
 		}
 }
 
-
 function transfer_data_to_texture(){
 
 	if(emitters.length > 0){
@@ -437,7 +437,7 @@ function transfer_data_to_texture(){
 			emiMat.setcell(i, 2, "val", emitters[i].enable, emitters[i].prevposition);
 			emiMat.setcell(i, 3, "val", emitters[i].mass_hi, emitters[i].velocity);
 			emiMat.setcell(i, 4, "val", emitters[i].speed_hi, emitters[i].life_lo, emitters[i].life_hi, emitters[i].material);
-			emiMat.setcell(i, 5, "val", 0., emitters[i].initial_velocity);
+			emiMat.setcell(i, 5, "val", emitters[i].mass_increment, emitters[i].initial_velocity);
 			emiMat.setcell(i, 6, "val", 0, vertexStartID, vertexLengthID ,0);
 			counter = emit_to;
 			vertexStartID += vertexLengthID + 1;

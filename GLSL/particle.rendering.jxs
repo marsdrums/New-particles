@@ -187,7 +187,7 @@ float calcShadow(vec3 s, vec3 rd){
 		vec3 dist = voxIncr*deltaT;
 		T += dist;
 		v += voxIncr*step;
-		density -= readDensity(v)*(dist.x + dist.y + dist.z)*0.05;
+		density -= readDensity(v)*(dist.x + dist.y + dist.z)*0.1;
 		if(density <= 0) return 0.;
 	}
 	return density;

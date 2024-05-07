@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 342.0, 366.0, 866.0, 557.0 ],
+		"rect" : [ 605.0, 343.0, 866.0, 557.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -106,7 +106,7 @@
 					"maxclass" : "inlet",
 					"numinlets" : 0,
 					"numoutlets" : 1,
-					"outlettype" : [ "bang" ],
+					"outlettype" : [ "jit_matrix" ],
 					"patching_rect" : [ 156.0, 107.0, 30.0, 30.0 ]
 				}
 
@@ -136,20 +136,20 @@
 					"numinlets" : 2,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 92.0, 192.0, 194.0, 62.0 ],
-					"text" : "emitter 0 4000 -0.379628 -1.989537 -0.5505 0.01 0.04 10 10 -0.533642 -1.982637 -0.457057 u298008712 1 0.01 0.003333 1"
+					"patching_rect" : [ 92.0, 192.0, 197.0, 62.0 ],
+					"text" : "emitter 1 3000 0.39875 -0.260592 -0.497058 0.01 0.01 60 60 0.390348 -0.239336 -0.49875 u621010408 1 0.01 0.01 0 0 0 0"
 				}
 
 			}
 , 			{
 				"box" : 				{
 					"id" : "obj-4",
-					"linecount" : 14,
+					"linecount" : 15,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 319.0, 100.0, 318.0, 194.0 ],
-					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed_lo,\n_speed_hi, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi,\n_initial_velocity"
+					"patching_rect" : [ 319.0, 100.0, 318.0, 208.0 ],
+					"text" : "Emitter:\n_type, \n_rate, \n_position, \n_speed_lo,\n_speed_hi, \n_mass_lo, \n_mass_hi, \n_prev_positi\nmatrix_emitt\n_enable,\n_life_lo,\n_life_hi,\n_initial_velocity\n_mass_increment"
 				}
 
 			}

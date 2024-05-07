@@ -17,6 +17,7 @@ var _life_hi = 100;
 var _material = 0;
 var _mode = 0;
 var _initial_velocity = [0,0,0];
+var _mass_increment = 0;
 
 var matrix_emitter = new JitterMatrix(3, "float32", 1,1);
 
@@ -63,7 +64,8 @@ function output_list(){
 				_life_lo,
 				_life_hi,
 				_material,
-				_initial_velocity
+				_initial_velocity,
+				_mass_increment
 				);
 }
 
@@ -191,6 +193,10 @@ function mode(){
 
 function initial_velocity(){
 	_initial_velocity = [arguments[0], arguments[1], arguments[2]];
+}
+
+function mass_increment(){
+	_mass_increment = arguments[0];
 }
 
 function compute(){

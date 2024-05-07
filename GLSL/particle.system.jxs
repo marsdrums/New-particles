@@ -101,6 +101,7 @@ struct particle{
 	float age;
 	float alive;
 	float mass;
+	float mass_increment;
 	float mat; 
 	float id;
 	uint rng;
@@ -118,6 +119,7 @@ struct new_particle{
 	int type;
 	float speed;
 	float mass;
+	float mass_increment;
 	float mat;
 	float life_step;
 	vec3 initial_vel;
@@ -167,6 +169,7 @@ void get_particle_current_state(inout particle p){
 	vec4 lookup0 = texture(posAgeTex, jit_in.texcoord);
 	vec4 lookup1 = texture(velMassTex, jit_in.texcoord);
 	vec4 lookup2 = texture(aliveMatTex, jit_in.texcoord);
+	vec4 lookup3 = texture(bounceTex, jit_in.texcoord);
 	p.pos = lookup0.xyz;
 	p.age = lookup0.w;
 	p.vel = lookup1.xyz;
@@ -175,8 +178,8 @@ void get_particle_current_state(inout particle p){
 	p.mat = lookup2.y;
 	p.life_step = lookup2.z;
 	p.bounced = lookup2.w;
-	if(p.bounced == 1) p.bounced_pos = texture(bounceTex, jit_in.texcoord).xyz;
-
+	p.bounced_pos = lookup3.xyz;
+	p.mass_increment = lookup3.w;
 }
 
 void update_age(inout particle p){
@@ -207,6 +210,11 @@ void update_particle_position(inout particle p){
 	//also, use DELTA to control aging in ms and indipendently of frame rate
 }
 
+void update_mass(inout particle p){
+
+	p.mass = max(0.0000001, p.mass + p.mass_increment);
+}
+
 //______ EMITTERS __________________________________________________________________________________________
 
 void generate_particle(inout particle p, in new_particle newp){
@@ -223,6 +231,7 @@ void generate_particle(inout particle p, in new_particle newp){
 	p.life_step = newp.life_step;
 	p.mat = newp.mat;
 	p.bounced = 0;
+	p.mass_increment = newp.mass_increment;
 }
 
 bool to_generate(float id, float emiFrom, float emiTo){
@@ -255,6 +264,7 @@ void emit_particles(inout particle p){
 		vec4 lookup5 = texture(emiTex, vec2(f, 5.5));
 		newp.initial_vel = lookup5.xyz;
 		newp.mass = mix(lookup0.w, lookup3.w, RandomFloat01(p.rng));
+		newp.mass_increment = lookup5.w;
 		newp.emivel = lookup3.xyz;
 		newp.speed = mix(lookup1.y, lookup4.w, RandomFloat01(p.rng));
 		newp.life_step = mix(lookup4.x, lookup4.y, RandomFloat01(p.rng));
@@ -631,7 +641,7 @@ void output_textures(in particle p){
 	outPosAge = vec4(p.pos, p.age);
 	outVelMass = vec4(p.vel, p.mass);
 	outAliveMat = vec4(p.alive, p.mat, p.life_step, p.bounced);
-	outBounce = vec4(p.bounced_pos,0);
+	outBounce = vec4(p.bounced_pos, p.mass_increment);
 }
 
 void main(void) {
@@ -641,6 +651,7 @@ void main(void) {
 	get_particle_current_state(p);
 	update_age(p);
 	update_particle_position(p);
+	update_mass(p);
 	emit_particles(p);
 	apply_forces(p);
 	apply_obstacles(p);

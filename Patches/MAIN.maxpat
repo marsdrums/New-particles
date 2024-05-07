@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 638.0, 103.0, 941.0, 898.0 ],
+		"rect" : [ 472.0, 100.0, 644.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -40,14 +40,51 @@
 		"assistshowspatchername" : 0,
 		"boxes" : [ 			{
 				"box" : 				{
-					"id" : "obj-46",
-					"linecount" : 8,
+					"id" : "obj-67",
+					"maxclass" : "message",
+					"numinlets" : 2,
+					"numoutlets" : 1,
+					"outlettype" : [ "" ],
+					"patching_rect" : [ 311.0, 409.0, 97.0, 22.0 ],
+					"text" : "mass_increment"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"format" : 6,
+					"id" : "obj-65",
+					"maxclass" : "flonum",
+					"numinlets" : 1,
+					"numoutlets" : 2,
+					"outlettype" : [ "", "bang" ],
+					"parameter_enable" : 0,
+					"patching_rect" : [ 325.0, 372.0, 50.0, 22.0 ]
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-50",
+					"linecount" : 5,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1268.0, 239.0, 576.0, 114.0 ],
-					"presentation_linecount" : 8,
-					"text" : "OPEN QUESTIONS:\n\n- how to connect modules to a particle system without explicit connections ?\n- how to handle matrix/geometry rotation and scaling (CPU vs. GPU) ? Should we store rot/sca velocity ?\n- Which rendering mode should we include? Which one should be defaulted?\n- Figure out a way to put in relation particle attributes and rendering in a flexible manner\n- how to present the objects? mfi? other methods?\n- Figure out a more solid apprach for retrieving particle attributes from emitter, force, and obstacle modules"
+					"patching_rect" : [ 1268.0, 362.0, 576.0, 74.0 ],
+					"presentation_linecount" : 5,
+					"text" : "FEATURE REQUESTS:\n\n- more than 8 textures/buffers bindings. Nothing really blocking, but it would facilitate and simplify lots of things\n- OIT"
+				}
+
+			}
+, 			{
+				"box" : 				{
+					"id" : "obj-46",
+					"linecount" : 9,
+					"maxclass" : "comment",
+					"numinlets" : 1,
+					"numoutlets" : 0,
+					"patching_rect" : [ 1268.0, 193.0, 576.0, 127.0 ],
+					"text" : "OPEN QUESTIONS:\n\n- how to connect modules to a particle system without explicit connections ?\n- how to handle matrix/geometry rotation and scaling (CPU vs. GPU) ? Should we store rot/sca velocity ?\n- Which rendering mode should we include? Which one should be defaulted?\n- Figure out a way to put in relation particle attributes and rendering in a flexible manner\n- how to present the objects? mfi? other methods?\n- Figure out a more solid apprach for retrieving particle attributes from emitter, force, and obstacle modules\n- Shoul we include mass loss?"
 				}
 
 			}
@@ -1941,12 +1978,12 @@
 , 			{
 				"box" : 				{
 					"id" : "obj-54",
-					"linecount" : 11,
+					"linecount" : 10,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 1268.0, 43.0, 576.0, 154.0 ],
-					"text" : "TO DO:\n\n\n- move shader functions to separate files and break jxs code into multiple files\n- move things to v8\n- add self-attracting forces\n- add first / nearest modes for obstacles\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
+					"patching_rect" : [ 1268.0, 43.0, 576.0, 141.0 ],
+					"text" : "TO DO:\n\n- move shader functions to separate files and break jxs code into multiple files\n- move things to v8\n- add self-attracting forces\n- add first / nearest modes for obstacles\n- add geometry emitters\n- fix and add other fields\n- add 4D fields + relative controls\n- start thinking about particle rendering"
 				}
 
 			}
@@ -1967,12 +2004,12 @@
 				"box" : 				{
 					"bgcolor" : [ 0.0, 0.0, 0.0, 0.35 ],
 					"id" : "obj-8",
-					"linecount" : 19,
+					"linecount" : 20,
 					"maxclass" : "comment",
 					"numinlets" : 1,
 					"numoutlets" : 0,
-					"patching_rect" : [ 40.0, 754.0, 210.0, 275.0 ],
-					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float / vec2\n@mass float / vec2\n@life float / vec2\n@material int\n@initial_velocity vec3\n@enable bool\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@override bool (generate new part despite it's still alive)\n"
+					"patching_rect" : [ 40.0, 754.0, 210.0, 288.0 ],
+					"text" : "Emitter\n@type \"point\" / \"matrix\" / \"geometry\"\n@mode \"constant\" / \"trigger\"\n@position vec3\n@rate float / vec2\n@speed float / vec2\n@mass float / vec2\n@life float / vec2\n@material int\n@initial_velocity vec3\n@enable bool\n@mass_increment float\n\n__still to add:\n(for matrix emitters)\n@rotatexyz vec3\n@scale vec3\n\n@override bool (generate new part despite it's still alive)\n"
 				}
 
 			}
@@ -2233,8 +2270,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 225.0, 445.0, 230.0, 22.0 ],
-					"text" : "jit.particle.force @type drag @amount 0.6"
+					"patching_rect" : [ 225.0, 445.0, 220.0, 22.0 ],
+					"text" : "jit.particle.force @type drag @amount 2"
 				}
 
 			}
@@ -2257,8 +2294,8 @@
 					"numinlets" : 1,
 					"numoutlets" : 1,
 					"outlettype" : [ "" ],
-					"patching_rect" : [ 96.0, 253.0, 490.0, 22.0 ],
-					"text" : "jit.particle.emitter @rate 1000 1000 @speed 0.01 0.01 @mass 4 6 @life 100 @type matrix"
+					"patching_rect" : [ 96.0, 253.0, 570.0, 22.0 ],
+					"text" : "jit.particle.emitter @rate 3000 @speed 0.01 0.01 @mass 60 @life 100 @type matrix @mass_increment 0"
 				}
 
 			}
@@ -2764,6 +2801,20 @@
 				"patchline" : 				{
 					"destination" : [ "obj-42", 0 ],
 					"source" : [ "obj-64", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-67", 0 ],
+					"source" : [ "obj-65", 0 ]
+				}
+
+			}
+, 			{
+				"patchline" : 				{
+					"destination" : [ "obj-27", 0 ],
+					"source" : [ "obj-67", 0 ]
 				}
 
 			}
