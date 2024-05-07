@@ -10,7 +10,7 @@
 		}
 ,
 		"classnamespace" : "box",
-		"rect" : [ 581.0, 125.0, 644.0, 898.0 ],
+		"rect" : [ 581.0, 100.0, 644.0, 898.0 ],
 		"bglocked" : 0,
 		"openinpresentation" : 0,
 		"default_fontsize" : 12.0,
@@ -71,7 +71,6 @@
 					"numinlets" : 1,
 					"numoutlets" : 0,
 					"patching_rect" : [ 1268.0, 362.0, 576.0, 74.0 ],
-					"presentation_linecount" : 5,
 					"text" : "FEATURE REQUESTS:\n\n- more than 8 textures/buffers bindings. Nothing really blocking, but it would facilitate and simplify lots of things\n- OIT"
 				}
 
@@ -2876,7 +2875,11 @@
 				"implicit" : 1
 			}
 , 			{
-				"name" : "jit.>.mxo",
+				"name" : "jit.*.mxo",
+				"type" : "iLaX"
+			}
+, 			{
+				"name" : "jit.-.mxo",
 				"type" : "iLaX"
 			}
 , 			{

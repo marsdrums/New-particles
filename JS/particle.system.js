@@ -23,7 +23,7 @@ function implicit_callback(event) {
 	if(!explicitdrawto && implicitdrawto != implicit_tracker.drawto[0]) {
 		// important! drawto is an array so get first element
 		implicitdrawto = implicit_tracker.drawto[0];
-        FF_Utils.Print("IMPLICIT CLL", implicitdrawto);
+        //FF_Utils.Print("IMPLICIT CLL", implicitdrawto);
 		dosetdrawto(implicitdrawto);
 	}
 }
@@ -37,7 +37,7 @@ function setDrawto(val) {
 function dosetdrawto(newdrawto) {
 	if(newdrawto == drawto || !newdrawto) {
 		// bounce
-        FF_Utils.Print("bouncer");
+        //FF_Utils.Print("bouncer");
 		return;
 	}
 	if(proxy !== undefined) {
@@ -51,8 +51,8 @@ function dosetdrawto(newdrawto) {
 				proxydrawto = proxy.send("getdrawto"); // prendi drawto di world che sarebbe nome del node
 				// recurse until we get root
 				// important! drawto is an array so get first element
-                FF_Utils.Print("proxy class", proxy.class);
-                FF_Utils.Print("DIVERSo da contxt_view", implicitdrawto);
+                //FF_Utils.Print("proxy class", proxy.class);
+                //FF_Utils.Print("DIVERSo da contxt_view", implicitdrawto);
 
 				return dosetdrawto(proxydrawto[0]);
 			}
@@ -61,13 +61,13 @@ function dosetdrawto(newdrawto) {
             // viene chiamato se non abbiamo classe
 			proxydrawto = proxy.send("getdrawto");
 			if(proxydrawto !== null && proxydrawto !== undefined) {
-                FF_Utils.Print("SE E NODE??", proxydrawto[0]);
+                //FF_Utils.Print("SE E NODE??", proxydrawto[0]);
 
 				return dosetdrawto(proxydrawto[0]);  // name of the internal node
 			}
 		}
 	}
-    FF_Utils.Print("ASSEGNA drawto", newdrawto);
+    //FF_Utils.Print("ASSEGNA drawto", newdrawto);
     drawto = newdrawto;
     // chiama cose che vanno inizializzate quando c'è il drawto
     // assegna listener per ctx
@@ -103,7 +103,7 @@ var swapCallback = function(event) {
         //    FF_Utils.Print("MOUSE", event.args)
         //    break;
         case "willfree":
-            FF_Utils.Print("DESTROY")
+            //FF_Utils.Print("DESTROY")
             break;
         default: 
             break;
