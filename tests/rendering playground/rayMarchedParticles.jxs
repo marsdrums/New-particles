@@ -1,0 +1,170 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="pos" type="vec3" state="POSITION" />
+	<param name="instancePos" type="vec3" state="VERTEX_ATTR0" />
+	<param name="MV" type="mat4" state="MODELVIEW_MATRIX" />
+	<param name="invV" type="mat4" state="VIEW_MATRIX" transform="INVERSE" />
+	<param name="P" type="mat4" state="PROJECTION_MATRIX" />
+	<param name="eye" type="vec3" state="CAMERA_POSITION" />
+	<param name="nearClip" type="float" state="NEAR_CLIP" />
+	<param name="farClip" type="float" state="FAR_CLIP" />
+	<param name="radius" type="float" default="0.03" />
+	<param name="time" type="float" state="TIME" />
+	<language name="glsl" version="1.5">
+		<bind param="pos" program="vp" />
+		<bind param="instancePos" program="vp" />
+		<bind param="MV" program="vp" />
+		<bind param="invV" program="vp" />
+		<bind param="P" program="vp" />
+		<bind param="eye" program="vp" />
+		<bind param="eye" program="fp" />
+		<bind param="nearClip" program="fp" />
+		<bind param="farClip" program="fp" />
+		<bind param="radius" program="vp" />
+		<bind param="radius" program="fp" />
+		<bind param="time" program="vp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+uniform mat4 MV, invV, P;
+in vec3 pos, instancePos;
+uniform vec3 eye;
+uniform float radius, time;
+
+out jit_PerVertex {
+	smooth vec3 wPos;
+	smooth vec3 rd;
+	flat vec3 ce;
+	smooth float rdNormalizer;
+	flat float animator;
+	flat float maxDist;
+} jit_out;
+
+void main() {	
+
+	jit_out.ce = instancePos;
+	vec4 vPos = MV*vec4(instancePos,1) + vec4(pos*radius,0);
+	jit_out.wPos = (invV * vPos).xyz;
+	jit_out.rd = jit_out.wPos - eye;
+	float rdLen = length(jit_out.rd);
+	jit_out.rdNormalizer = 1 / rdLen;
+	gl_Position = P * vPos;
+	jit_out.animator = sin(time*3 + jit_out.ce.y*10)*0.5 + 0.5;
+	jit_out.maxDist = rdLen + radius;
+
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+#define MAX_STEPS 20 //The maximum amount of marching steps
+#define MIN_DIST 0.0001 //The distance below which we consider a shape being hit
+
+uniform vec3 eye;
+uniform float nearClip, farClip, radius;
+
+in jit_PerVertex {
+	smooth vec3 wPos;
+	smooth vec3 rd;
+	flat vec3 ce;
+	smooth float rdNormalizer;
+	flat float animator;
+	flat float maxDist;
+} jit_in;
+
+struct ray{
+	vec3 o;
+	vec3 d;
+};
+
+struct obj{
+	vec3 ce;
+	float ra;
+	float dist;
+	vec3 nor;
+	vec3 pos;
+};
+
+out vec4 color;
+
+void get_ray_info(out ray r){
+	r.o = eye;
+	r.d = jit_in.rd * jit_in.rdNormalizer;
+}
+
+void get_obj_info(out obj o){
+	o.ce = jit_in.ce;
+	o.ra = radius;
+}
+
+float SDFbox(vec3 p, in obj o){
+	vec3 d = abs(p - o.ce) - o.ra;
+	return min(max(d.x, max(d.y, d.z)), 0.) + length(max(d, 0.));
+}
+
+float SDFsphere(vec3 p, in obj o){
+	return length(p - o.ce) - o.ra;
+}
+
+float scene(vec3 p, in obj o){
+	return mix(SDFbox(p,o) - 0.01, SDFsphere(p,o), jit_in.animator);
+}
+
+void set_FragDepth(in obj o){
+	gl_FragDepth = o.dist / farClip;
+}
+
+vec3 getNorm(in obj o){
+
+	vec2 eps = vec2(0.00001, 0.);
+	float shiftX = scene(o.pos + eps.xyy,o) - scene(o.pos - eps.xyy,o);
+	float shiftY = scene(o.pos + eps.yxy,o) - scene(o.pos - eps.yxy,o);
+	float shiftZ = scene(o.pos + eps.yyx,o) - scene(o.pos - eps.yyx,o);
+
+	return normalize(vec3(shiftX, shiftY, shiftZ));
+}
+
+void march(in ray r, inout obj o){
+
+	o.dist = 0.;
+	o.ra *= 0.3;
+	float d;
+	vec3 p;
+	float roundness = 0.01;
+
+	for(int i = 0; i < MAX_STEPS; i++){
+		p = r.o + r.d*o.dist;
+		d = scene(p,o);
+		o.dist += d;
+		if(o.dist > jit_in.maxDist){
+			discard;
+			return;
+		}
+		if (d < MIN_DIST){
+			o.pos = r.o + r.d*o.dist;
+			o.nor = getNorm(o);
+			return;
+		}
+	}
+	discard;
+	return;
+}
+
+void main() {
+
+	ray r;	
+	obj o;
+
+	get_ray_info(r);
+	get_obj_info(o);
+
+	march(r,o);
+
+	set_FragDepth(o);
+	color = vec4(o.nor, 1);
+}	
+]]>
+		</program>
+	</language>
+</jittershader>

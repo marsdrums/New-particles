@@ -202,6 +202,7 @@ void main() {
 
 	uint seed = uint(gl_in[0].gl_Position.x*3772*2000) + uint(gl_in[0].gl_Position.y*78223*2000) + uint(26699 + lookup.x*2000 + lookup.z*4493 + lookup.y*4431);
 
+
 	vec3 V = normalize(lookup.xyz - eye);
 	vec3 ligDir = normalize(vec3(1,1,1));
 

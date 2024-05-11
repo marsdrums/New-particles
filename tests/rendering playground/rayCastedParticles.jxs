@@ -1,0 +1,144 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="pos" type="vec3" state="POSITION" />
+	<param name="instancePos" type="vec3" state="VERTEX_ATTR0" />
+	<param name="MV" type="mat4" state="MODELVIEW_MATRIX" />
+	<param name="invV" type="mat4" state="VIEW_MATRIX" transform="INVERSE" />
+	<param name="P" type="mat4" state="PROJECTION_MATRIX" />
+	<param name="eye" type="vec3" state="CAMERA_POSITION" />
+	<param name="nearClip" type="float" state="NEAR_CLIP" />
+	<param name="farClip" type="float" state="FAR_CLIP" />
+	<param name="radius" type="float" default="0.03" />
+	<language name="glsl" version="1.5">
+		<bind param="pos" program="vp" />
+		<bind param="instancePos" program="vp" />
+		<bind param="MV" program="vp" />
+		<bind param="invV" program="vp" />
+		<bind param="P" program="vp" />
+		<bind param="eye" program="vp" />
+		<bind param="eye" program="fp" />
+		<bind param="nearClip" program="fp" />
+		<bind param="farClip" program="fp" />
+		<bind param="radius" program="vp" />
+		<bind param="radius" program="fp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+uniform mat4 MV, invV, P;
+in vec3 pos, instancePos;
+uniform vec3 eye;
+uniform float radius;
+
+out jit_PerVertex {
+	smooth vec3 wPos;
+	smooth vec3 rd;
+	flat vec3 ce;
+	smooth float rdNormalizer;
+} jit_out;
+
+void main() {	
+
+	jit_out.ce = instancePos;
+	vec4 vPos = MV*vec4(instancePos,1) + vec4(pos*radius*1.1,0);
+	jit_out.wPos = (invV * vPos).xyz;
+	jit_out.rd = jit_out.wPos - eye;
+	jit_out.rdNormalizer = 1 / length(jit_out.rd);
+	gl_Position = P * vPos;
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+uniform vec3 eye;
+uniform float nearClip, farClip, radius;
+
+in jit_PerVertex {
+	smooth vec3 wPos;
+	smooth vec3 rd;
+	flat vec3 ce;
+	smooth float rdNormalizer;
+} jit_in;
+
+struct ray{
+	vec3 o;
+	vec3 d;
+};
+
+struct obj{
+	vec3 ce;
+	float ra;
+	float dist;
+	vec3 nor;
+	vec3 pos;
+};
+
+out vec4 color;
+
+void get_ray_info(out ray r){
+	r.o = eye;
+	r.d = jit_in.rd * jit_in.rdNormalizer;
+}
+
+void get_obj_info(out obj o){
+	o.ce = jit_in.ce;
+	o.ra = radius;
+}
+
+bool ray_sphere_intersect(in ray r, inout obj o){
+
+/*
+	vec3 oc = r.o - o.ce;
+    float b = dot( oc, r.d );
+    float c = dot( oc, oc ) - o.ra*o.ra;
+    float h = b*b - c;
+
+    if( h<0.0 ) return false; // no intersection
+
+    h = sqrt( h );
+    o.dist -b-h; //for exit dist: -b+h
+    o.pos = r.o + r.d*o.dist;
+    o.nor = (o.pos - o.ce) / o.ra;
+    return true;
+*/
+
+    vec3 oc = r.o - o.ce;
+    float a = dot(r.d, r.d);
+    float b = 2.0 * dot(oc, r.d);
+    float c = dot(oc,oc) - o.ra*o.ra;
+    float discriminant = b*b - 4*a*c;
+
+    if(discriminant < 0) return false; 
+
+    o.dist = (-b - sqrt(discriminant)) / (2.0*a);
+    o.pos = r.o + r.d*o.dist;
+    o.nor = (o.pos - o.ce) / o.ra;
+    return true;
+
+}
+
+void set_FragDepth(in obj o){
+	gl_FragDepth = o.dist / farClip;
+}
+
+void main() {
+
+	ray r;	
+	obj o;
+
+	get_ray_info(r);
+	get_obj_info(o);
+
+	if(!ray_sphere_intersect(r, o)){
+		discard;
+		return;
+	}
+
+	set_FragDepth(o);
+	color = vec4(o.nor, 1);
+}	
+]]>
+		</program>
+	</language>
+</jittershader>

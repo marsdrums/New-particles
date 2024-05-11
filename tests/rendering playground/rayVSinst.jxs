@@ -1,0 +1,56 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="pos" type="vec3" state="POSITION" />
+	<param name="instancePos" type="vec3" state="VERTEX_ATTR0" />
+	<param name="MVP" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	<param name="M" type="mat4" state="WORLD_MATRIX" />
+	<param name="nor" type="vec3" state="NORMAL" />
+	<language name="glsl" version="1.5">
+		<bind param="pos" program="vp" />
+		<bind param="instancePos" program="vp" />
+		<bind param="MVP" program="vp" />
+		<bind param="M" program="vp" />
+		<bind param="nor" program="vp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+uniform mat4 MVP, M;
+in vec3 pos, instancePos;
+in vec3 nor;
+
+out jit_PerVertex {
+	smooth vec3 nor;
+	smooth vec3 wPos;
+} jit_out;
+
+void main() {	
+
+	vec3 p = instancePos + pos;
+	gl_Position = MVP * vec4(p,1);
+	jit_out.wPos = (M * vec4(p,1)).xyz;
+	jit_out.nor = (M * vec4(nor, 0.)).xyz;
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+in jit_PerVertex {
+	smooth vec3 nor;
+	smooth vec3 wPos;
+} jit_in;
+
+
+out vec4 color;
+
+
+void main() {
+
+	vec3 nor = normalize(jit_in.nor);
+	color = vec4(nor, 1);
+}	
+]]>
+		</program>
+	</language>
+</jittershader>
