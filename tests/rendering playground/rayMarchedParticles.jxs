@@ -58,7 +58,7 @@ void main() {
 		<program name="fp" type="fragment">
 <![CDATA[
 #version 330 core
-#define MAX_STEPS 20 //The maximum amount of marching steps
+#define MAX_STEPS 10 //The maximum amount of marching steps
 #define MIN_DIST 0.0001 //The distance below which we consider a shape being hit
 
 uniform vec3 eye;
@@ -109,6 +109,7 @@ float SDFsphere(vec3 p, in obj o){
 
 float scene(vec3 p, in obj o){
 	return mix(SDFbox(p,o) - 0.01, SDFsphere(p,o), jit_in.animator);
+	//return SDFbox(p,o) - 0.01;
 }
 
 void set_FragDepth(in obj o){
@@ -125,30 +126,27 @@ vec3 getNorm(in obj o){
 	return normalize(vec3(shiftX, shiftY, shiftZ));
 }
 
-void march(in ray r, inout obj o){
+bool march(in ray r, inout obj o){
 
-	o.dist = 0.;
+	o.dist = jit_in.maxDist - o.ra*2;
 	o.ra *= 0.3;
 	float d;
 	vec3 p;
-	float roundness = 0.01;
 
 	for(int i = 0; i < MAX_STEPS; i++){
 		p = r.o + r.d*o.dist;
 		d = scene(p,o);
 		o.dist += d;
-		if(o.dist > jit_in.maxDist){
-			discard;
-			return;
-		}
+
+		if(o.dist > jit_in.maxDist) return false;
+
 		if (d < MIN_DIST){
 			o.pos = r.o + r.d*o.dist;
 			o.nor = getNorm(o);
-			return;
+			return true;
 		}
 	}
-	discard;
-	return;
+	return false;
 }
 
 void main() {
@@ -159,7 +157,10 @@ void main() {
 	get_ray_info(r);
 	get_obj_info(o);
 
-	march(r,o);
+	if(!march(r,o)){
+		discard;
+		return;
+	}
 
 	set_FragDepth(o);
 	color = vec4(o.nor, 1);
