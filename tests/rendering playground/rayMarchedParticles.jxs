@@ -43,7 +43,7 @@ out jit_PerVertex {
 void main() {	
 
 	jit_out.ce = instancePos;
-	vec4 vPos = MV*vec4(instancePos,1) + vec4(pos*radius,0);
+	vec4 vPos = MV*vec4(instancePos,1) + vec4(pos*radius*1.1,0);
 	jit_out.wPos = (invV * vPos).xyz;
 	jit_out.rd = jit_out.wPos - eye;
 	float rdLen = length(jit_out.rd);
@@ -98,17 +98,17 @@ void get_obj_info(out obj o){
 	o.ra = radius;
 }
 
-float SDFbox(vec3 p, in obj o){
-	vec3 d = abs(p - o.ce) - o.ra;
+float SDFbox(vec3 p, vec3 ce, float ra){
+	vec3 d = abs(p - ce) - ra;
 	return min(max(d.x, max(d.y, d.z)), 0.) + length(max(d, 0.));
 }
 
-float SDFsphere(vec3 p, in obj o){
-	return length(p - o.ce) - o.ra;
+float SDFsphere(vec3 p, vec3 ce, float ra){
+	return length(p - ce) - ra;
 }
 
 float scene(vec3 p, in obj o){
-	return mix(SDFbox(p,o) - 0.01, SDFsphere(p,o), jit_in.animator);
+	return mix(SDFbox(p,o.ce, o.ra*0.4) - 0.002, SDFsphere(p,o.ce, o.ra), jit_in.animator);
 	//return SDFbox(p,o) - 0.01;
 }
 
@@ -129,7 +129,6 @@ vec3 getNorm(in obj o){
 bool march(in ray r, inout obj o){
 
 	o.dist = jit_in.maxDist - o.ra*2;
-	o.ra *= 0.3;
 	float d;
 	vec3 p;
 
