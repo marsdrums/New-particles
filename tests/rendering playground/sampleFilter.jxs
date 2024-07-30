@@ -1,0 +1,147 @@
+<jittershader name="default">
+	<description>Default Slab </description>
+	<param name="tex0" type="int" default="0" />
+	<param name="modelViewProjectionMatrix" type="mat4" state="MODELVIEW_PROJECTION_MATRIX" />
+	<param name="textureMatrix0" type="mat4" state="TEXTURE0_MATRIX" />
+	<param name="position" type="vec3" state="POSITION" />
+	<param name="texcoord" type="vec2" state="TEXCOORD" />
+	<language name="glsl" version="1.5">
+		<bind param="tex0" program="fp" />
+		<bind param="modelViewProjectionMatrix" program="vp" />
+		<bind param="textureMatrix0" program="vp" />
+		<bind param="position" program="vp" />
+		<bind param="texcoord" program="vp" />
+		<program name="vp" type="vertex"  >
+		<![CDATA[
+			#version 330 core
+			
+			in vec3 position;
+			in vec2 texcoord;
+			out jit_PerVertex {
+				vec2 texcoord;
+			} jit_out;
+			uniform mat4 modelViewProjectionMatrix;
+			uniform mat4 textureMatrix0;
+			
+			void main(void) {
+				gl_Position = modelViewProjectionMatrix*vec4(position, 1.);
+				jit_out.texcoord = vec2(textureMatrix0*vec4(texcoord, 0., 1.));
+			}
+		]]>
+		</program>
+		
+<program name="fp" type="fragment"  >
+<![CDATA[
+#version 330 core
+
+in jit_PerVertex {
+	vec2 texcoord;
+} jit_in;
+layout (location = 0) out vec4 outColor;
+
+uniform sampler2DRect tex0;
+
+#define PI 3.14159265359
+#define TWOPI 6.28318530718 
+
+uint wang_hash(inout uint seed){
+
+    seed = uint(seed ^ uint(61)) ^ uint(seed >> uint(16));
+    seed *= uint(9);
+    seed = seed ^ (seed >> 4);
+    seed *= uint(0x27d4eb2d);
+    seed = seed ^ (seed >> 15);
+    return seed;
+}
+ 
+float RandomFloat01(inout uint seed) { 
+	return float(wang_hash(seed)) / 4294967296.0; 
+}
+
+vec2 RandomVec201(inout uint seed) { 
+	return vec2( 	RandomFloat01(seed),
+					RandomFloat01(seed)); 
+}
+
+vec3 RandomVec301(inout uint seed) { 
+	return vec3( 	RandomFloat01(seed),
+					RandomFloat01(seed),
+					RandomFloat01(seed)); 
+}
+
+vec4 RandomVec401(inout uint seed) { 
+	return vec4( 	RandomFloat01(seed),
+					RandomFloat01(seed),
+					RandomFloat01(seed),
+					RandomFloat01(seed)); 
+}
+
+vec2 randomUnitVector2(inout uint seed){
+
+    float a = RandomFloat01(seed) * TWOPI;
+    return vec2( cos(a), sin(a) );
+}
+
+void main(void) {
+
+	vec4 lookup = texture(tex0, jit_in.texcoord);
+	vec3 res = lookup.rgb;
+	float thisDepth = lookup.a;
+
+	uint seed = uint(gl_FragCoord.x * 337281) + uint(gl_FragCoord.y * 83119) + uint(1993);
+	float depthStep = thisDepth / 5;
+
+	for(float d = thisDepth; d >= 0; d -= depthStep){
+
+		float minDist = 1000;
+
+		for(float x = -1; x <= 1; x+=1){
+			for(float y = -1; y <= 1; y+=1){
+
+				if(x == 0 && y == 0) continue;
+
+				minDist = min(minDist, texture(tex0, jit_in.texcoord + vec2(x,y)).w);
+			}
+		}			
+		
+
+		for(float x = -1; x <= 1; x+=1){
+			for(float y = -1; y <= 1; y+=1){
+
+				if(x == 0 && y == 0) continue;
+
+				vec4 lookup0 = texture(tex0, jit_in.texcoord + vec2(x,y));
+				if(lookup0.w == minDist){
+					res = mix(res, lookup0.rgb, 0.5);
+
+				}
+			}			
+		}
+
+
+		//vec2 dir = randomUnitVector2(seed);
+		//float d0 = RandomFloat01(seed)*100 + 1.5;
+		//float d1 = RandomFloat01(seed)*100 + 1.5;
+//
+		//vec2 uv0 = jit_in.texcoord + dir*d0;
+		//vec2 uv1 = jit_in.texcoord - dir*d1;
+//
+		////vec4 lookup0 = texture(tex0, uv0);
+		////vec4 lookup1 = texture(tex0, uv1);
+//
+		//vec4 lookup0 = texture(tex0, jit_in.texcoord - vec2(i,0));
+		//vec4 lookup1 = texture(tex0, jit_in.texcoord + vec2(i,0));
+//
+		//if(lookup0.w == lookup1.w && lookup0.w < depthRange.x && lookup0.w > depthRange.y){
+		//	vec3 meanCol = mix(lookup0.rgb, lookup1.rgb, 0.5);
+		//	res = mix(res, meanCol, 0.5);
+		//	break;
+
+	}
+
+	outColor = vec4(res,1);
+}
+]]>
+</program>
+	</language>
+</jittershader>

@@ -1,0 +1,59 @@
+<jittershader name="fill-flat-quads">
+	<description>Default Shader </description>
+	<param name="pos" type="vec3" state="POSITION" />
+	<param name="instancePos" type="vec3" state="VERTEX_ATTR0" />
+	<param name="prevInstancePos" type="vec3" state="VERTEX_ATTR1" />
+	<param name="MV" type="mat4" state="MODELVIEW_MATRIX" />
+	<param name="P" type="mat4" state="PROJECTION_MATRIX" />
+	<param name="size" type="float" default="0.003" />
+	<language name="glsl" version="1.5">
+		<bind param="pos" program="vp" />
+		<bind param="instancePos" program="vp" />
+		<bind param="prevInstancePos" program="vp" />
+		<bind param="MV" program="vp" />
+		<bind param="P" program="vp" />
+		<bind param="size" program="vp" />
+		<program name="vp" type="vertex">
+<![CDATA[
+#version 330 core
+in vec3 pos, instancePos, prevInstancePos;
+uniform float size;
+uniform mat4 MV, P;
+
+out jit_PerVertex {
+	smooth vec2 corner;
+} jit_out;
+
+void main() {	
+	jit_out.corner = pos.xy;
+	vec4 curr = MV * vec4(instancePos, 1);
+	vec4 prev = curr;//MV * vec4(prevInstancePos, 1);
+	vec2 diff = curr.xy - prev.xy;
+	vec4 center = (curr + prev)*0.5;
+	float dist = max(size, length(diff));
+	vec2 dir = diff/dist;
+	dir *= pos.xy*size;
+	gl_Position = P * ( center + vec4(dir,0,0) );
+}
+]]>
+		</program>
+		<program name="fp" type="fragment">
+<![CDATA[
+#version 330 core
+
+in jit_PerVertex {
+	smooth vec2 corner;
+} jit_in;
+
+out vec4 color;
+
+void main() {
+
+	if( dot(jit_in.corner, jit_in.corner) >= 1 ) discard;
+	color = vec4(1,1,1,1);
+
+}	
+]]>
+		</program>
+	</language>
+</jittershader>
